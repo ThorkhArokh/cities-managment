@@ -1,0 +1,53 @@
+<section class='tab buildings {{tab.cssClass}}' data-group='primary' data-tab='buildings'>
+  <div class="cm-cities-app-tab-header flexrow table-header no-wrap" style="gap:4px">
+    <div class="left">
+      <div class="field-label">{{localize "CM.app.tab.buildings.label"}}</div>
+    </div>
+    <div class="flex1 center" style="max-width: 40px;">
+      <div class="field-label">Nbr</div>
+    </div>
+    <div class="flex1 center" style="max-width: 80px;">
+      <div class="field-label"><span title="Buying price"><i title="{{localize " CM.currency.sp.label"}}"
+            class="fas fa-coins" style="color:silver"></i> Price</span></div>
+    </div>
+    <div class="flex1 center" style="max-width: 80px;">
+      <div class="field-label"><span title="Maintenance cost"><i title="{{localize " CM.currency.sp.label"}}"
+            class="fas fa-coins" style="color:silver"></i> Cost</span></div>
+    </div>
+    <div class="flex1 center" style="max-width: 40px;">
+      <div class="field-label"></div>
+    </div>
+  </div>
+  {{#each city.buildings}}
+  <div class="flexrow no-wrap cm-cities-app-tab-line" style="gap:4px">
+    <div>
+      <a class="flexrow no-wrap" style="gap:4px" data-action="showDetails" data-uuid="{{uuid}}">
+        <img style="flex: none" width="30px" height="30px" src="{{img}}" />
+        <span style="flex: auto;"><strong>{{name}}</strong></span>
+      </a>
+    </div>
+    <div class="flex1 center" style="max-width: 40px;">
+      <input class="field-value center" type="text" name="city.buildings.{{@key}}.nbr" value="{{nbr}}"
+        data-dtype="Number" {{#unless @root.isEditable}}disabled{{/unless}} />
+    </div>
+    <div class="flex1 center" style="max-width: 80px;">
+      <input class="field-value center" type="text" name="city.buildings.{{@key}}.price" value="{{price}}"
+        data-dtype="Number" {{#unless @root.isEditable}}disabled{{/unless}} />
+    </div>
+    <div class="flex1 center" style="max-width: 80px;">
+      <input class="field-value center" type="text" name="city.buildings.{{@key}}.cost" value="{{cost}}"
+        data-dtype="Number" {{#unless @root.isEditable}}disabled{{/unless}} />
+    </div>
+    <div class="flex1 center" style="max-width: 40px;">
+      {{#if @root.isEditable}}
+      <button type="button" data-action="removeBuilding" data-id="{{id}}"><i class='fas fa-trash'></i></button>
+      {{/if}}
+    </div>
+  </div>
+  {{/each}}
+  {{#if isEditable}}
+  <div class="drop-zone" data-drop-buildings="true">
+    {{#if hasNoBuildings}}<p class="center"><i>{{localize "CM.app.tab.buildings.empty"}}</i></p>{{/if}}
+  </div>
+  {{/if}}
+</section>

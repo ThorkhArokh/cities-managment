@@ -1,0 +1,58 @@
+<section class='tab armies {{tab.cssClass}}' data-group='primary' data-tab='armies'>
+    <div class="cm-cities-app-tab-header flexrow table-header no-wrap" style="gap:4px">
+        <div class="flex2 left">
+            <div class="field-label">Unité</div>
+        </div>
+        <div class="flex1 center">
+            <div class="field-label">Rôle</div>
+        </div>
+        <div class="flex1 center" style="max-width: 40px;">
+            <div class="field-label">Nbr</div>
+        </div>
+        <div class="flex1 center" style="max-width: 80px;">
+            <div class="field-label"><span title="Cost"><i title="{{localize " CM.currency.sp.label"}}"
+                        class="fas fa-coins" style="color:silver"></i> Cost</span></div>
+        </div>
+        <div class="flex1 center" style="max-width: 40px;">
+            <div class="field-label"></div>
+        </div>
+    </div>
+    {{#each city.armies.units}}
+    <div class="flexrow no-wrap cm-cities-app-tab-line" style="gap:4px">
+        <div class="flex2">
+            <a class="flexrow no-wrap" style="gap:4px" data-action="showDetails" data-uuid="{{uuid}}">
+                <img style="flex: none" width="30px" height="30px" src="{{img}}" />
+                <span style="flex: auto;"><strong>{{name}}</strong></span>
+            </a>
+        </div>
+        <div class="flex1 center">
+            <input class="field-value center" type="text" name="city.armies.units.{{@key}}.role" value="{{role}}"
+                {{#unless @root.isEditable}}disabled{{/unless}} />
+        </div>
+        <div class="flex1 center" style="max-width: 40px;">
+            <input class="field-value center" type="text" name="city.armies.units.{{@key}}.nbr" value="{{nbr}}"
+                {{#unless @root.isEditable}}disabled{{/unless}} />
+        </div>
+        <div class="flex1 center" style="max-width: 80px;">
+            <input class="field-value center" type="text" name="city.armies.units.{{@key}}.cost" value="{{cost}}"
+                {{#unless @root.isEditable}}disabled{{/unless}} />
+        </div>
+        <div class="flex1 center" style="max-width: 40px;">
+            {{#if @root.isEditable}}
+            <button style="flex: none" type="button" data-action="removeUnit" data-id="{{id}}"><i
+                    class='fas fa-trash'></i></button>
+            {{/if}}
+        </div>
+    </div>
+    {{/each}}
+    {{#if isEditable}}
+    <div class="drop-zone" data-drop-units="true">
+        {{#if hasNoUnits}}<p class="center"><i>{{localize "CM.app.tab.armies.units.empty"}}</i></p>{{/if}}
+        <!-- New entry button -->
+        <div class="right cm-cities-app-tab-line">
+            <button type="button" data-action="addNewUnit"><i class='fas fa-plus'></i> {{localize
+                "CM.app.tab.armies.units.new.btn"}}</button>
+        </div>
+    </div>
+    {{/if}}
+</section>

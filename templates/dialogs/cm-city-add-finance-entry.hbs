@@ -1,0 +1,16 @@
+<form>
+    <div class="flexrow no-wrap" style="gap:4px">
+        <div>
+            <input class="field-value center" type="text" name="label" placeholder="new label" value="label" />
+        </div>
+        <div class="flex1 center">
+            <select class="field-value center" name="type">
+                {{selectOptions @root.financeEntryTypes selected=type.key valueAttr="key" labelAttr="label"
+                localize=true}}
+            </select>
+        </div>
+        <div class="flex1 center">
+            <input class="field-value center" type="number" name="value" value="0" />
+        </div>
+    </div>
+</form>

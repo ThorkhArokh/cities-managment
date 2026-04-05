@@ -1,0 +1,38 @@
+<section class="cm-cities-app flexcol tab sidebar-tab directory" data-application-part="main">
+    <header class="cm-cities-app-header directory-header flexcol">
+
+        <div class="cm-cities-app-header-action-buttons header-actions action-buttons flexrow">
+            <button type="button" class="create-entry" data-action="createEntry" style="">
+                <i class="fa-solid fa-user" inert=""></i>
+                <span>{{localize "CM.sidebar.button.createCity"}}</span>
+            </button>
+            <button type="button" class="create-folder" data-action="createFolder">
+                <i class="fa-solid fa-folder" inert=""></i>
+                <span>Create Folder</span>
+            </button>
+            <button type="button" class="" data-action="deleteAllEntry">
+                <i class="fa-solid fa-folder" inert=""></i>
+                <span>Delete all</span>
+            </button>
+        </div>
+
+        <search>
+            <button type="button" class="inline-control toggle-search-mode icon fa-solid fa-magnifying-glass"
+                data-action="toggleSearch" data-tooltip="" aria-label="Search by Name only"></button>
+            <input type="search" name="search" autocomplete="off" placeholder="Search Cities"
+                aria-label="Search Cities">
+            <button type="button" class="inline-control toggle-sort icon fa-solid fa-arrow-down-a-z"
+                data-action="toggleSort" data-tooltip="" aria-label="Sort Alphabetically"></button>
+            <button type="button" class="inline-control collapse-all icon fa-duotone fa-folder-tree"
+                data-action="collapseFolders" data-tooltip="" aria-label="Collapse All Folders"></button>
+        </search>
+    </header>
+    <ol class="directory-list plain" data-application-part="directory">
+        {{#each cities}}
+        <li class="city-item directory-item entry document flexrow" data-id="{{id}}">
+            <img class="thumbnail" src="{{img}}"/>
+            <a class="entry-name ellipsis" data-action="activateEntry" data-index="{{@index}}" data-id="{{id}}">{{name}}</a>
+        </li>
+        {{/each}}
+    </ol>
+</section>

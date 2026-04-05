@@ -1,0 +1,48 @@
+<section class='tab chests {{tab.cssClass}}' data-group='primary' data-tab='chests'>
+
+  <div class="cm-cities-app-tab-header flexrow table-header no-wrap" style="gap:4px">
+    <div class="left">
+      <div class="field-label">Objet</div>
+    </div>
+    <div class="flex1 center" style="max-width: 40px;">
+      <div class="field-label">Nbr</div>
+    </div>
+    <div class="flex1 center" style="max-width: 80px;">
+      <div class="field-label"><span title="Buying price"><i title="{{localize " CM.currency.sp.label"}}"
+            class="fas fa-coins" style="color:silver"></i> Price</span></div>
+    </div>
+    <div class="flex1 center" style="max-width: 40px;">
+      <div class="field-label"></div>
+    </div>
+  </div>
+
+  {{#each city.chests}}
+  <div class="flexrow no-wrap cm-cities-app-tab-line" style="gap:4px">
+    <div>
+      <a class="flexrow no-wrap" style="gap:4px" data-action="showDetails" data-uuid="{{uuid}}">
+        <img style="flex: none" width="30px" height="30px" src="{{img}}" />
+        <span style="flex: auto;"><strong>{{name}}</strong></span>
+      </a>
+    </div>
+    <div class="flex1 center" style="max-width: 40px;">
+      <input class="field-value center" type="text" name="city.chests.{{@key}}.nbr" value="{{nbr}}" data-dtype="Number"
+        {{#unless @root.isEditable}}disabled{{/unless}} />
+    </div>
+    <div class="flex1 center" style="max-width: 80px;">
+      <input class="field-value center" type="text" name="city.chests.{{@key}}.price" value="{{price}}"
+        data-dtype="Number" {{#unless @root.isEditable}}disabled{{/unless}} />
+    </div>
+    <div class="flex1 center" style="max-width: 40px;">
+      {{#if @root.isEditable}}
+      <button style="flex: none" type="button" data-action="removeTreasury" data-id="{{id}}"><i
+          class='fas fa-trash'></i></button>
+      {{/if}}
+    </div>
+  </div>
+  {{/each}}
+  {{#if isEditable}}
+  <div class="drop-zone" data-drop-chests="true">
+    {{#if hasNoTreasures}}<p class="center"><i>{{localize "CM.app.tab.chests.empty"}}</i></p>{{/if}}
+  </div>
+  {{/if}}
+</section>

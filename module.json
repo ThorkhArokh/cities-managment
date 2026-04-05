@@ -1,0 +1,39 @@
+{
+  "id": "cities-managment",
+  "title": "Cities managment",
+  "description": "Allow to manage cities and domains",
+  "authors": [
+    {
+      "name": "Thorkh",
+      "flags": {}
+    }
+  ],
+  "version": "1.0.0",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13"
+  },
+  "flags": {
+    "canUpload": true
+  },
+  "esmodules": [
+    "scripts/init.js"
+  ],
+  "styles": [
+    "styles/cm-cities-app.css"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    },
+    {
+      "lang": "fr",
+      "name": "Français",
+      "path": "lang/fr.json"
+    }
+  ],
+  "packs": [],
+  "relationships": {}
+}
