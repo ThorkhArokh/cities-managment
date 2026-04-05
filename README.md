@@ -1,5 +1,5 @@
 <h1 style="text-align: center;">Cities Managment</h1>
-<p style="text-align: center;"><img src="" alt="GitHub release" /> <img src="" alt="GitHub all releases" /></p>
+<p style="text-align: center;"><img src="https://img.shields.io/github/v/release/ThorkhArokh/cities-managment?style=for-the-badge" alt="GitHub release" /> <img src="https://img.shields.io/github/downloads/ThorkhArokh/cities-managment/total?style=for-the-badge" alt="GitHub all releases" /></p>
 
 ## Installation Instructions
 
