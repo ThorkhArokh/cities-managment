@@ -9,6 +9,9 @@ permissions:
   contents: write
 
 jobs:
+  # ════════════════════════════════════════════════════════════════════════════
+  # JOB — Tag & Release sur main
+  # ════════════════════════════════════════════════════════════════════════════
   tag-and-release:
     name: Create Tag & Release
     runs-on: ubuntu-latest
@@ -116,3 +119,48 @@ jobs:
             module.zip
           draft: false
           prerelease: false
+
+      # ── Checkout develop ──────────────────────────────────────────────
+      - name: Checkout develop
+        uses: actions/checkout@v4
+        with:
+          ref: develop
+          fetch-depth: 0
+ 
+      # ── Bump minor version in module.json ──────────────────────────────────────────────
+      - name: Bump minor version in module.json
+        id: bump
+        run: |
+          CURRENT=$(jq -r '.version' module.json)
+          MAJOR=$(echo "$CURRENT" | cut -d. -f1)
+          MINOR=$(echo "$CURRENT" | cut -d. -f2)
+          # Incrémenter le minor, reset patch à 0
+          NEW_MINOR=$((MINOR + 1))
+          NEW_VERSION="${MAJOR}.${NEW_MINOR}.0"
+          NEW_TAG="v${NEW_VERSION}"
+ 
+          echo "🔢 $CURRENT → $NEW_VERSION"
+          echo "new_version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
+          echo "new_tag=$NEW_TAG"         >> "$GITHUB_OUTPUT"
+ 
+          # Mettre à jour tous les champs contenant l'ancienne version
+          # On remplace toutes les occurrences de l'ancien tag vX.Y.Z par le nouveau
+          OLD_TAG="v${CURRENT}"
+          sed -i "s|${OLD_TAG}|${NEW_TAG}|g" module.json
+ 
+          # Mettre à jour le champ "version" (valeur sans le "v")
+          jq --arg v "$NEW_VERSION" '.version = $v' module.json > module.tmp.json
+          mv module.tmp.json module.json
+ 
+          echo "✅ module.json updated:"
+          jq '{version, license, readme, changelog, download}' module.json
+ 
+      # ── Commit & push bumped ──────────────────────────────────────────────
+      - name: Commit & push bumped module.json
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add module.json
+          git commit -m "chore: bump version to ${{ steps.bump.outputs.new_version }} [skip ci]"
+          git push origin develop
+          echo "🚀 Pushed version bump to develop"
