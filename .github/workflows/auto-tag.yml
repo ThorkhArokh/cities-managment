@@ -127,16 +127,17 @@ jobs:
           ref: develop
           fetch-depth: 0
  
-      # ── Bump minor version in module.json ──────────────────────────────────────────────
+      # ── Bump patch version in module.json ──────────────────────────────────────────────
       - name: Bump minor version in module.json
         id: bump
         run: |
           CURRENT=$(jq -r '.version' module.json)
           MAJOR=$(echo "$CURRENT" | cut -d. -f1)
           MINOR=$(echo "$CURRENT" | cut -d. -f2)
-          # Incrémenter le minor, reset patch à 0
-          NEW_MINOR=$((MINOR + 1))
-          NEW_VERSION="${MAJOR}.${NEW_MINOR}.0"
+          PATCH=$(echo "$CURRENT" | cut -d. -f3)
+          # Incrémenter le patch
+          NEW_PATCH=$((PATCH + 1))
+          NEW_VERSION="${MAJOR}.${MINOR}.${NEW_PATCH}"
           NEW_TAG="v${NEW_VERSION}"
  
           echo "🔢 $CURRENT → $NEW_VERSION"
