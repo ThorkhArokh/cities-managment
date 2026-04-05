@@ -7,5 +7,5 @@ To install Cities-Managment, find Cities-Managment in the module browser, or pas
 the Setup menu of Foundry Virtual Tabletop:
 
 ```
-TODO
+https://github.com/ThorkhArokh/cities-managment/releases/latest/download/module.json
 ```
