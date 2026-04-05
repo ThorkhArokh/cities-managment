@@ -1,0 +1,118 @@
+name: Auto Tag & Release on Main
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  tag-and-release:
+    name: Create Tag & Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # ── Lire la version depuis module.json ──────────────────────────────────
+      - name: Read version from module.json
+        id: read_version
+        run: |
+          VERSION=$(jq -r '.version' module.json)
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
+
+      # ── Vérifier si le tag existe déjà ─────────────────────────────────────
+      - name: Check if tag already exists
+        id: check_tag
+        run: |
+          TAG="${{ steps.read_version.outputs.tag }}"
+          if git ls-remote --tags origin | grep -q "refs/tags/$TAG$"; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "⚠️  Tag $TAG already exists — will auto-increment patch."
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            echo "✅ Tag $TAG is new."
+          fi
+
+      # ── Si le tag existe, incrémenter le patch automatiquement ──────────────
+      - name: Compute final tag (auto-increment if needed)
+        id: final_tag
+        run: |
+          BASE_TAG="${{ steps.read_version.outputs.tag }}"
+          EXISTS="${{ steps.check_tag.outputs.exists }}"
+
+          if [ "$EXISTS" = "false" ]; then
+            echo "tag=$BASE_TAG" >> "$GITHUB_OUTPUT"
+          else
+            # Extraire major.minor.patch depuis la version de base
+            BASE_VERSION="${{ steps.read_version.outputs.version }}"
+            MAJOR=$(echo "$BASE_VERSION" | cut -d. -f1)
+            MINOR=$(echo "$BASE_VERSION" | cut -d. -f2)
+            PATCH=$(echo "$BASE_VERSION" | cut -d. -f3)
+
+            # Trouver le plus grand patch déjà taggé pour ce major.minor
+            LAST_PATCH=$(git ls-remote --tags origin \
+              | grep -oP "(?<=refs/tags/v)${MAJOR}\.${MINOR}\.\K[0-9]+" \
+              | sort -n | tail -1)
+
+            if [ -z "$LAST_PATCH" ]; then
+              NEXT_PATCH=$((PATCH + 1))
+            else
+              NEXT_PATCH=$((LAST_PATCH + 1))
+            fi
+
+            NEW_TAG="v${MAJOR}.${MINOR}.${NEXT_PATCH}"
+            echo "tag=$NEW_TAG" >> "$GITHUB_OUTPUT"
+            echo "ℹ️  Auto-incremented tag: $NEW_TAG"
+          fi
+
+      # ── Créer le zip du module ───────────────────────────────────────────────
+      - name: Build module zip
+        run: |
+          TAG="${{ steps.final_tag.outputs.tag }}"
+          zip -r module.zip . \
+            --exclude ".git/*" \
+            --exclude ".github/*" \
+            --exclude "*.zip"
+          echo "✅ module.zip created"
+
+      # ── Pousser le tag ───────────────────────────────────────────────────────
+      - name: Create and push tag
+        run: |
+          TAG="${{ steps.final_tag.outputs.tag }}"
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag "$TAG" -m "Release $TAG"
+          git push origin "$TAG"
+          echo "🏷️  Tag $TAG pushed"
+
+      # ── Créer la GitHub Release ──────────────────────────────────────────────
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.final_tag.outputs.tag }}
+          name: Release ${{ steps.final_tag.outputs.tag }}
+          body: |
+            ## 🏙️ Cities Managment — ${{ steps.final_tag.outputs.tag }}
+
+            Auto-generated release on push to `main`.
+
+            **Commit :** ${{ github.sha }}
+            **Message :** ${{ github.event.head_commit.message }}
+
+            ### Installation Foundry VTT
+            Colle cette URL dans *Install Module* :
+            ```
+            https://github.com/ThorkhArokh/cities-managment/releases/latest/download/module.json
+            ```
+          files: |
+            module.json
+            module.zip
+          draft: false
+          prerelease: false
