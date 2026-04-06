@@ -1,17 +1,18 @@
 <section class='tab armies {{tab.cssClass}}' data-group='primary' data-tab='armies'>
     <div class="cm-cities-app-tab-header flexrow table-header no-wrap" style="gap:4px">
         <div class="flex2 left">
-            <div class="field-label">Unité</div>
+            <div class="field-label">{{localize "CM.app.header.unit.name"}}</div>
         </div>
         <div class="flex1 center">
-            <div class="field-label">Rôle</div>
+            <div class="field-label">{{localize "CM.app.header.unit.role"}}</div>
         </div>
         <div class="flex1 center" style="max-width: 40px;">
-            <div class="field-label">Nbr</div>
+            <div class="field-label">{{localize "CM.app.header.unit.nbr"}}</div>
         </div>
         <div class="flex1 center" style="max-width: 80px;">
             <div class="field-label"><span title="Cost"><i title="{{localize " CM.currency.sp.label"}}"
-                        class="fas fa-coins" style="color:silver"></i> Cost</span></div>
+                        class="fas fa-coins" style="color:silver"></i> {{localize "CM.app.header.unit.cost"}}</span>
+            </div>
         </div>
         <div class="flex1 center" style="max-width: 40px;">
             <div class="field-label"></div>
@@ -19,10 +20,12 @@
     </div>
     {{#each city.armies.units}}
     <div class="flexrow no-wrap cm-cities-app-tab-line" style="gap:4px">
-        <div class="flex2">
-            <a class="flexrow no-wrap" style="gap:4px" data-action="showDetails" data-uuid="{{uuid}}">
-                <img style="flex: none" width="30px" height="30px" src="{{img}}" />
-                <span style="flex: auto;"><strong>{{name}}</strong></span>
+        <div class="flex2 flexrow no-wrap" style="gap:4px">
+            <img class="flex0" width="30px" height="30px" src="{{img}}" data-action="editImage"
+                data-field="armies.units.{{@key}}.img" data-edit="city.armies.units.{{@key}}.img"
+                data-tooltip="{{localize " CM.app.tab.header.avatar.tooltip"}}" />
+            <a data-action="showDetails" data-uuid="{{uuid}}" {{#unless uuid}}disabled{{/unless}}>
+                <span class="flexauto {{#if uuid}}underline{{/if}}"><strong>{{name}}</strong></span>
             </a>
         </div>
         <div class="flex1 center">
@@ -39,20 +42,22 @@
         </div>
         <div class="flex1 center" style="max-width: 40px;">
             {{#if @root.isEditable}}
-            <button style="flex: none" type="button" data-action="removeUnit" data-id="{{id}}"><i
+            <button class="flex0" type="button" data-action="removeUnit" data-id="{{id}}"><i
                     class='fas fa-trash'></i></button>
             {{/if}}
         </div>
     </div>
     {{/each}}
     {{#if isEditable}}
-    <div class="drop-zone" data-drop-units="true">
-        {{#if hasNoUnits}}<p class="center"><i>{{localize "CM.app.tab.armies.units.empty"}}</i></p>{{/if}}
+    <div class="drop-zone-header flexrow no-wrap">
+        {{#if hasNoUnits}}<p><i>{{localize "CM.app.tab.armies.units.empty"}}</i></p>{{/if}}
         <!-- New entry button -->
-        <div class="right cm-cities-app-tab-line">
+        <div class="right">
             <button type="button" data-action="addNewUnit"><i class='fas fa-plus'></i> {{localize
                 "CM.app.tab.armies.units.new.btn"}}</button>
         </div>
+    </div>
+    <div class="drop-zone {{#if hasNoUnits}}drag-over{{/if}}" data-drop-units="true">
     </div>
     {{/if}}
 </section>

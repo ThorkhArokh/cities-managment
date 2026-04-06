@@ -3,7 +3,7 @@
         <div class="flexrow no-wrap" style="gap:8px; margin-bottom:4px">
             <img class="cm-cities-app-header-avatar" src="{{city.img}}" data-action="editImage" data-field="img"
                 data-edit="city.img" data-tooltip="{{localize "CM.app.tab.header.avatar.tooltip"}}" />
-            <div style="flex: 1;"><b>Nom</b></div>
+            <div style="flex: 1;"><b>{{localize "CM.app.header.name.label"}}</b></div>
             <div style="flex: 11;"><input class="field-value" type="text" name="city.name" value="{{city.name}}"
                     {{#unless isEditable}}disabled{{/unless}} />
             </div>

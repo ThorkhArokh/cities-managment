@@ -19,9 +19,10 @@
   {{#each city.chests}}
   <div class="flexrow no-wrap cm-cities-app-tab-line" style="gap:4px">
     <div>
-      <a class="flexrow no-wrap" style="gap:4px" data-action="showDetails" data-uuid="{{uuid}}">
-        <img style="flex: none" width="30px" height="30px" src="{{img}}" />
-        <span style="flex: auto;"><strong>{{name}}</strong></span>
+      <a class="flexrow no-wrap" style="gap:4px" data-action="showDetails" data-uuid="{{uuid}}" {{#unless
+        uuid}}disabled{{/unless}}>
+        <img class="flex0" width="30px" height="30px" src="{{img}}" />
+        <span class="flexauto {{#if uuid}}underline{{/if}}"><strong>{{name}}</strong></span>
       </a>
     </div>
     <div class="flex1 center" style="max-width: 40px;">
@@ -34,15 +35,17 @@
     </div>
     <div class="flex1 center" style="max-width: 40px;">
       {{#if @root.isEditable}}
-      <button style="flex: none" type="button" data-action="removeTreasury" data-id="{{id}}"><i
+      <button class="flex0" type="button" data-action="removeTreasury" data-id="{{id}}"><i
           class='fas fa-trash'></i></button>
       {{/if}}
     </div>
   </div>
   {{/each}}
   {{#if isEditable}}
-  <div class="drop-zone" data-drop-chests="true">
-    {{#if hasNoTreasures}}<p class="center"><i>{{localize "CM.app.tab.chests.empty"}}</i></p>{{/if}}
+  <div class="drop-zone-header flexrow no-wrap">
+      {{#if hasNoTreasures}}<p class="center"><i>{{localize "CM.app.tab.chests.empty"}}</i></p>{{/if}}
+  </div>
+  <div class="drop-zone {{#if hasNoTreasures}}drag-over{{/if}}" data-drop-chests="true">
   </div>
   {{/if}}
 </section>

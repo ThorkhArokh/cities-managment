@@ -9,3 +9,19 @@ the Setup menu of Foundry Virtual Tabletop:
 ```
 https://github.com/ThorkhArokh/cities-managment/releases/latest/download/module.json
 ```
+
+## Features
+ - Manage city stats
+ - Manage city finances
+ - Manage city armies
+ - Manage city population
+ - Manage city buildings
+ - Manage city vaults
+
+
+## Backlog
+ - Generics Stats
+ - Dynamics treasury
+ - City creation wizard
+ - Drop city on scenes
+ - Add folders in cities tab

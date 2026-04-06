@@ -1,17 +1,17 @@
 <section class='tab peoples {{tab.cssClass}}' data-group='primary' data-tab='peoples'>
   <div class="cm-cities-app-tab-header flexrow no-wrap" style="gap:4px;">
     <div class="flex1 left">
-      <div class="field-label">Population</div>
+      <div class="field-label">{{localize "CM.app.tab.peoples.population.label"}}</div>
     </div>
     <div class="flex1 right">
-      <div class="field-label">Base</div>
+      <div class="field-label">{{localize "CM.app.tab.peoples.population.base.label"}}</div>
     </div>
     <div class="flex1 center">
       <input class="field-value center" name="city.population.nbr" type="number" value="{{city.population.nbr}}"
         data-dtype="Number" {{#unless isEditable}}disabled{{/unless}}>
     </div>
     <div class="flex1 right">
-      <div class="field-label">Max</div>
+      <div class="field-label">{{localize "CM.app.tab.peoples.population.max.label"}}</div>
     </div>
     <div class="flex1 center">
       <input class="field-value center" name="city.population.max" type="number" value="{{city.population.max}}"
@@ -19,12 +19,12 @@
     </div>
   </div>
   <hr>
-  <div class="flexrow table-header no-wrap" style="gap:4px">
+  <div class="cm-cities-app-tab-header flexrow table-header no-wrap" style="gap:4px">
     <div class="flex2 left">
-      Habitants notables
+      {{localize "CM.app.tab.peoples.header.significant.label"}}
     </div>
     <div class="flex1 center">
-      <div class="field-label">Rôle</div>
+      <div class="field-label">{{localize "CM.app.tab.peoples.header.role.label"}}</div>
     </div>
     <div class="flex1 center" style="max-width: 40px;">
       <div class="field-label"></div>
@@ -33,9 +33,10 @@
   {{#each city.population.peoples}}
   <div class="flexrow no-wrap cm-cities-app-tab-line" style="gap:4px">
     <div class="flex2">
-      <a class="flexrow no-wrap" style="gap:4px" data-action="showDetails" data-uuid="{{uuid}}">
-        <img style="flex: none" width="30px" height="30px" src="{{img}}" />
-        <span style="flex: auto;"><strong>{{name}}</strong></span>
+      <a class="flexrow no-wrap" style="gap:4px" data-action="showDetails" data-uuid="{{uuid}}" {{#unless
+        uuid}}disabled{{/unless}}>
+        <img class="flex0" width="30px" height="30px" src="{{img}}" />
+        <span class="flexauto {{#if uuid}}underline{{/if}}" ><strong>{{name}}</strong></span>
       </a>
     </div>
     <div class="flex1 center">
@@ -44,15 +45,17 @@
     </div>
     <div class="flex1 center" style="max-width: 40px;">
       {{#if @root.isEditable}}
-      <button style="flex: none" type="button" data-action="removePeople" data-id="{{id}}"><i
+      <button class="flex0" type="button" data-action="removePeople" data-id="{{id}}"><i
           class='fas fa-trash'></i></button>
       {{/if}}
     </div>
   </div>
   {{/each}}
   {{#if isEditable}}
-  <div class="drop-zone" data-drop-peoples="true">
+  <div class="drop-zone-header flexrow no-wrap">
     {{#if hasNoPeoples}}<p class="center"><i>{{localize "CM.app.tab.peoples.empty"}}</i></p>{{/if}}
+  </div>
+  <div class="drop-zone {{#if hasNoPeoples}}drag-over{{/if}}" data-drop-peoples="true">
   </div>
   {{/if}}
 </section>

@@ -1,18 +1,20 @@
 <section class='tab buildings {{tab.cssClass}}' data-group='primary' data-tab='buildings'>
   <div class="cm-cities-app-tab-header flexrow table-header no-wrap" style="gap:4px">
     <div class="left">
-      <div class="field-label">{{localize "CM.app.tab.buildings.label"}}</div>
+      <div class="field-label">{{localize "CM.app.tab.buildings.header.name"}}</div>
     </div>
     <div class="flex1 center" style="max-width: 40px;">
-      <div class="field-label">Nbr</div>
+      <div class="field-label">{{localize "CM.app.tab.buildings.header.nbr"}}</div>
     </div>
     <div class="flex1 center" style="max-width: 80px;">
-      <div class="field-label"><span title="Buying price"><i title="{{localize " CM.currency.sp.label"}}"
-            class="fas fa-coins" style="color:silver"></i> Price</span></div>
+      <div class="field-label"><span title="{{localize " CM.app.tab.buildings.header.price.infos"}}"><i
+            title="{{localize " CM.currency.sp.label"}}" class="fas fa-coins" style="color:silver"></i> {{localize
+          "CM.app.tab.buildings.header.price.label"}}</span></div>
     </div>
     <div class="flex1 center" style="max-width: 80px;">
-      <div class="field-label"><span title="Maintenance cost"><i title="{{localize " CM.currency.sp.label"}}"
-            class="fas fa-coins" style="color:silver"></i> Cost</span></div>
+      <div class="field-label"><span title="{{localize " CM.app.tab.buildings.header.cost.infos"}}"><i
+            title="{{localize " CM.currency.sp.label"}}" class="fas fa-coins" style="color:silver"></i> {{localize
+          "CM.app.tab.buildings.header.cost.label"}}</span></div>
     </div>
     <div class="flex1 center" style="max-width: 40px;">
       <div class="field-label"></div>
@@ -21,9 +23,10 @@
   {{#each city.buildings}}
   <div class="flexrow no-wrap cm-cities-app-tab-line" style="gap:4px">
     <div>
-      <a class="flexrow no-wrap" style="gap:4px" data-action="showDetails" data-uuid="{{uuid}}">
-        <img style="flex: none" width="30px" height="30px" src="{{img}}" />
-        <span style="flex: auto;"><strong>{{name}}</strong></span>
+      <a class="flexrow no-wrap" style="gap:4px" data-action="showDetails" data-uuid="{{uuid}}" {{#unless
+        uuid}}disabled{{/unless}}>
+        <img class="flex0" width="30px" height="30px" src="{{img}}" />
+        <span class="flexauto {{#if uuid}}underline{{/if}}"><strong>{{name}}</strong></span>
       </a>
     </div>
     <div class="flex1 center" style="max-width: 40px;">
@@ -40,14 +43,22 @@
     </div>
     <div class="flex1 center" style="max-width: 40px;">
       {{#if @root.isEditable}}
-      <button type="button" data-action="removeBuilding" data-id="{{id}}"><i class='fas fa-trash'></i></button>
+      <button type="button" data-action="removeBuilding" title="{{localize " CM.app.tab.buildings.btn.delete.infos"}}"
+        data-id="{{id}}"><i class='fas fa-trash'></i></button>
       {{/if}}
     </div>
   </div>
   {{/each}}
   {{#if isEditable}}
-  <div class="drop-zone" data-drop-buildings="true">
-    {{#if hasNoBuildings}}<p class="center"><i>{{localize "CM.app.tab.buildings.empty"}}</i></p>{{/if}}
+  <div class="drop-zone-header flexrow no-wrap">
+        {{#if hasNoBuildings}}<p class="center"><i>{{localize "CM.app.tab.buildings.empty"}}</i></p>{{/if}}
+        <!-- New entry button -->
+        <div class="right cm-cities-app-tab-line">
+            <button type="button" data-action="addNewBuilding"><i class='fas fa-plus'></i> {{localize
+                "CM.app.tab.buildings.new.btn"}}</button>
+        </div>
+    </div>
+  <div class="drop-zone {{#if hasNoBuildings}}drag-over{{/if}}" data-drop-buildings="true">
   </div>
   {{/if}}
 </section>

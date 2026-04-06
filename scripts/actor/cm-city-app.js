@@ -4,6 +4,8 @@ import { CmDataStore } from "../common/cm-data-store.js"
 import { BuildingDto } from "../model/cm-building-dto.js"
 import { FinanceEntryDto, financeEntryTypes } from "../model/cm-finance-entry-dto.js"
 import { ArmyUnitDto } from "../model/cm-army-unit-dto.js"
+import { addArmiesUnitDialog } from "../dialogs/cm-city-add-armies-unit-dialog.js"
+import { addFinanceEntryDialog } from "../dialogs/cm-city-add-finance-entry-dialog.js"
 
 const { ApplicationV2, DialogV2, HandlebarsApplicationMixin } = foundry.applications.api;
 const { DragDrop, TextEditor, FormDataExtended } = foundry.applications.ux;
@@ -23,6 +25,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
 
     // Override title getter 
     get title() {
+        logger.debug("Get window title", this.city)
         return this.city?.name ?? "CM.tab.title";
     }
 
@@ -137,18 +140,30 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         if (!this.isEditable) return
         logger.debug("Add new army unit", target)
 
-        /*const actor = await Actor.create({
-            name: game.i18n.localize("CM.actor.new.default.name"),
-            type: "npc",
-            img: "icons/svg/mystery-man.svg",
-        });*/
+        let newUnitDatas
+        try {
+            const dialogForm = await addArmiesUnitDialog.config({})
+            newUnitDatas = await DialogV2.wait(dialogForm);
+        } catch (ex) {
+            logger.debug("User did not create new unit.", ex);
+            return;
+        }
 
-        const actor = await Actor.createDialog({
-            name: "Nouvel acteur",
-            type: "npc",
-        });
-
-        this.city.armies.units[actor.id] = new ArmyUnitDto(actor.id, actor.uuid, actor.name, actor.img, "soldier", 1, 0);
+        logger.debug("New unit", newUnitDatas)
+        if (!newUnitDatas || newUnitDatas === "cancel") return;
+        if (newUnitDatas.isSystemActor) {
+            const actor = await Actor.create({
+                name: newUnitDatas.name,
+                type: "npc",
+                img: "icons/environment/people/commoner.webp",
+            });
+            newUnitDatas.id = actor.id
+            newUnitDatas.uuid = actor.uuid
+            newUnitDatas.img = actor.img
+        } else {
+            newUnitDatas.id = foundry.utils.randomID();
+        }
+        this.city.armies.units[newUnitDatas.id] = new ArmyUnitDto(newUnitDatas.id, newUnitDatas.uuid, newUnitDatas.name, newUnitDatas.img, newUnitDatas.role, newUnitDatas.nbr, newUnitDatas.cost);
         await CmDataStore.updateCity(this.city);
         this.render();
     }
@@ -181,44 +196,12 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         event.stopPropagation();
         logger.debug("Add new finance entry", target)
 
-        const content = await renderTemplate(
-            `modules/${MODULE_ID}/templates/dialogs/cm-city-add-finance-entry.hbs`,
-            {
-                financeEntryTypes: financeEntryTypes,
-            }
-        );
-
         let newEntry
         try {
-            newEntry = await DialogV2.wait({
-                window: { title: game.i18n.localize("CM.app.tab.finances.entries.new.dialog.title") },
-                content,
-                buttons: [
-                    {
-                        label: game.i18n.localize("CM.app.tab.finances.entries.new.dialog.add.btn"),
-                        icon: "fas fa-plus",
-                        action: "confirm",
-                        callback: async (event, button, dialog) => {
-                            const form = button.form;
-                            const data = new FormDataExtended(form).object;
-                            logger.debug("Submit new finance entry", data);
-
-                            if (!data.label?.trim()) {
-                                ui.notifications.warn(game.i18n.localize("CM.app.tab.finances.entries.new.dialog.checks.label"));
-                                return false;
-                            }
-
-                            return new FinanceEntryDto(foundry.utils.randomID(), data.label, data.type, data.value);
-                        },
-                    },
-                    {
-                        label: game.i18n.localize("CM.app.tab.finances.entries.new.dialog.cancel.btn"),
-                        icon: "fas fa-times",
-                        action: "cancel",
-                    }
-                ],
-                rejectClose: false,
-            });
+            const dialogForm = await addFinanceEntryDialog.config({
+                financeEntryTypes: financeEntryTypes,
+            })
+            newEntry = await DialogV2.wait(dialogForm);
         } catch {
             logger.debug("User did not create new entry.");
             return;
@@ -226,7 +209,8 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
 
         logger.debug("New entry", newEntry)
         if (!newEntry || newEntry === "cancel") return;
-        this.city.finances.entries[newEntry.id] = newEntry
+        newEntry.id = foundry.utils.randomID();
+        this.city.finances.entries[newEntry.id] = new FinanceEntryDto(newEntry.id, newEntry.label, newEntry.type, newEntry.value);
         await CmDataStore.updateCity(this.city);
         this.render();
     }
@@ -362,12 +346,13 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         return this.isEditable;
     }
 
-    // Handler to change avatar
+    // Handler to change avatars
     static async #onEditImage(event, target) {
         if (!this.isEditable) return
 
         logger.debug("On edit image", event)
         const field = target.dataset.field || "img"
+        logger.debug("IMG field", field)
         const current = foundry.utils.getProperty(this.city, field)
 
         const fp = new FilePicker({
@@ -376,7 +361,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             callback: (path) => {
                 // Mettre à jour l'aperçu immédiatement
                 event.target.src = path;
-                this.city.img = path;
+                foundry.utils.setProperty(this.city, field, path);
                 // Déclencher un submit si submitOnChange est actif
                 event.target.dispatchEvent(new Event("change", { bubbles: true }));
             }
@@ -498,7 +483,8 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         logger.debug("Drop unit", actor)
 
         // Add unit to current city
-        this.city.armies.units[actor.id] = new ArmyUnitDto(actor.id, actor.uuid, actor.name, actor.img, "soldier", 1, 0);
+        let defaultRole = game.i18n.localize("CM.dialog.newUnit.role.default.value");
+        this.city.armies.units[actor.id] = new ArmyUnitDto(actor.id, actor.uuid, actor.name, actor.img, defaultRole, 1, 0);
 
         await CmDataStore.updateCity(this.city);
         this.render();
@@ -615,6 +601,10 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         logger.debug("Updated city", this.city)
 
         await CmDataStore.updateCity(this.city)
+
+        await this._updateFrame({
+            window: { title: this.city.name }
+        });
         this.render(true)
         // update sidebar
         ui.sidebar.render();

@@ -1,3 +1,19 @@
+hr {
+    margin: 0.1rem 0
+}
+
+.flexauto {
+    flex: auto
+}
+
+.gap4 {
+    gap: 4px
+}
+
+.underline {
+    text-decoration: underline;
+}
+
 .cm-cities-app {}
 
 .cm-cities-app-header-avatar {
@@ -24,10 +40,15 @@
 
 .cm-cities-app-tab-header {
     margin-top: 8px;
+    margin-bottom: 8px;
 }
 
 .cm-cities-app-treasury-currencies {
-    gap:4px;
+    gap: 4px;
+}
+
+.drop-zone-header {
+    margin-top: 8px;
 }
 
 .drop-zone {

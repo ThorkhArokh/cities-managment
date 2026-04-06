@@ -1,13 +1,14 @@
 class FinanceEntryType {
-    constructor(key, label) {
+    constructor(key, label, icon) {
         this.key = key;
         this.label = label;
+        this.icon = icon;
     }
 }
 
 export const financeEntryTypes = {
-    income: new FinanceEntryType("income", "CM.app.tab.finances.entry.types.income"),
-    expense: new FinanceEntryType("expense", "CM.app.tab.finances.entry.types.expense")
+    income: new FinanceEntryType("income", "CM.app.tab.finances.entry.types.income", "fa-solid fa-plus"),
+    expense: new FinanceEntryType("expense", "CM.app.tab.finances.entry.types.expense", "fa-solid fa-minus")
 }
 
 export class FinanceEntryDto {
@@ -31,10 +32,10 @@ export class FinanceEntryDto {
         var type;
         switch (key) {
             case financeEntryTypes.income.key:
-                type = financeEntryTypes.income;
+                type = new FinanceEntryType("income", "CM.app.tab.finances.entry.types.income", "fa-solid fa-plus");
                 break;
             case financeEntryTypes.expense.key:
-                type = financeEntryTypes.expense;
+                type = new FinanceEntryType("expense", "CM.app.tab.finances.entry.types.expense", "fa-solid fa-minus");
                 break;
             default:
                 ui.notifications.warn(game.i18n.localize("Unkown finance entry type"));

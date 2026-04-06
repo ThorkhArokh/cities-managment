@@ -3,22 +3,22 @@
   <div class="flexrow no-wrap cm-cities-app-tab-header cm-cities-app-treasury-currencies">
     <div class="flex1 left">{{localize "CM.app.tab.treasury.currencies"}}</div>
     <div class="flex1 left" style="gap:4px;">
-      <i title="{{localize " CM.currency.pp.label"}}" class="fas fa-coins" style="color:dimgray"></i>
+      <i title="{{localize "CM.currency.pp.label"}}" class="fas fa-coins" style="color:dimgray"></i>
       <input class="field-value center" name="city.finances.treasury.currencies.pp" type="number"
         value="{{city.finances.treasury.currencies.pp}}" data-dtype="Number" {{#unless isEditable}}disabled{{/unless}}>
     </div>
     <div class="flex1 left" style="gap:4px;">
-      <i title="{{localize " CM.currency.gp.label"}}" class="fas fa-coins" style="color:goldenrod"></i>
+      <i title="{{localize "CM.currency.gp.label"}}" class="fas fa-coins" style="color:goldenrod"></i>
       <input class="field-value center" name="city.finances.treasury.currencies.gp" type="number"
         value="{{city.finances.treasury.currencies.gp}}" data-dtype="Number" {{#unless isEditable}}disabled{{/unless}}>
     </div>
     <div class="flex1 left" style="gap:4px;">
-      <i title="{{localize " CM.currency.sp.label"}}" class="fas fa-coins" style="color:silver"></i>
+      <i title="{{localize "CM.currency.sp.label"}}" class="fas fa-coins" style="color:silver"></i>
       <input class="field-value center" name="city.finances.treasury.currencies.sp" type="number"
         value="{{city.finances.treasury.currencies.sp}}" data-dtype="Number" {{#unless isEditable}}disabled{{/unless}}>
     </div>
     <div class="flex1 left" style="gap:4px;">
-      <i title="{{localize " CM.currency.cp.label"}}" class="fas fa-coins" style="color:saddlebrown"></i>
+      <i title="{{localize "CM.currency.cp.label"}}" class="fas fa-coins" style="color:saddlebrown"></i>
       <input class="field-value center" name="city.finances.treasury.currencies.cp" type="number"
         value="{{city.finances.treasury.currencies.cp}}" data-dtype="Number" {{#unless isEditable}}disabled{{/unless}}>
     </div>
@@ -43,6 +43,9 @@
   {{#if hasNoEntries}}<p class="center"><i>{{localize "CM.app.tab.finances.entries.empty"}}</i></p>{{/if}}
   {{#each city.finances.entries}}
   <div class="flexrow no-wrap cm-cities-app-tab-line" style="gap:4px">
+    <div class="flex0">
+        <i class="{{type.icon}}"></i>
+    </div>
     <div>
       <!-- label -->
       <input class="field-value center" type="text" name="city.finances.entries.{{@key}}.label" value="{{label}}"

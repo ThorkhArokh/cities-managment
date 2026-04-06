@@ -22,7 +22,7 @@
         </div>
         {{#each city.stats as |stat id|}}
         <div class="flexrow no-wrap cm-cities-app-tab-line" style="gap:4px">
-                <div class="flex1"> {{localize stat.label }}</div>
+                <div class="flex1">{{localize stat.label }}</div>
                 <div class="flex1 center">
                         <input class="field-value center" type="text" name="city.stats.{{id}}.base"
                                 value="{{stat.base}}" data-dtype="Number" data-keystat="{{id}}" data-keyatt="base"

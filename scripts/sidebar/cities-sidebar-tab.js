@@ -9,15 +9,20 @@ const { AbstractSidebarTab } = foundry.applications.sidebar;
 const { ContextMenu } = foundry.applications.ux;
 
 export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
+  _searchQuery = "";
+  _sortAlpha = "asc";
+
   static tabName = "citiesmanagment";
 
   static DEFAULT_OPTIONS = {
     window: { title: "CM.tab.city-managment" },
     classes: ["cm-cities-app", "flexcol"],
     actions: {
+      //createFolder: CitiesTab.onCreateFolder,
       createEntry: CitiesTab.onCreateCity,
       activateEntry: CitiesTab.onCityDetails,
       deleteAllEntry: CitiesTab.onDeleteAll,
+      toggleSort: CitiesTab.onToggleSort,
     }
   };
 
@@ -31,6 +36,30 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
     super(...args);
     logger.debug("CitiesTab constructed");
   }
+
+  // Handler sort button
+  static onToggleSort(event, target) {
+    this._sortAlpha = this._sortAlpha === "asc" ? "desc" : "asc";
+    this.render();
+  }
+
+  // Handler search — debounce to don't render for each hit
+  #onSearch = foundry.utils.debounce((event) => {
+    this._searchQuery = event.target.value;
+    this.render();
+  }, 200);
+
+  /*static async onCreateFolder(event, target) {
+    logger.debug("onCreateFolder", target)
+    const button = event.target;
+    const li = button.closest(".directory-item");
+    const parentId = li?.dataset.folderId;
+
+    Folder.createDialog(
+      { type: this.constructor.documentName },
+      { parent: game.folders.get(parentId) ?? null }
+    );
+  }*/
 
   static async onDeleteAll(event, target) {
     logger.debug("onDeleteAll", target)
@@ -48,7 +77,7 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
   static async onCreateCity(event, target) {
     const button = event.currentTarget;
     const rect = button.getBoundingClientRect();
-    const result = await DialogV2.prompt({
+    const newCityName = await DialogV2.prompt({
       window: { title: game.i18n.localize("CM.dialog.newCity.title") },
       position: {
         left: rect.left - 320,
@@ -69,38 +98,23 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
       }
     });
 
-    if (!result) return;
-    if (result.trim() === "") {
+    if (!newCityName) return;
+    if (newCityName.trim() === "") {
       ui.notifications.warn(game.i18n.localize("CM.dialog.newCity.emptyName"));
       return;
     }
 
-    var city = new CityDto(result)
+    var city = new CityDto(newCityName)
 
     logger.debug("city", city)
 
     await CmDataStore.addCity(city)
     logger.debug("Created city", city)
 
-    // Ouvre automatiquement la fiche du nouvel acteur
+    // Open actor sheet
     var cityApp = new CmCityApp(city)
     cityApp.render(true);
     this.render(true);
-  }
-
-  /** Prepare template context */
-  /** After template is rendered */
-  async _onRender(context, options) {
-    await super._onRender(context, options);
-    logger.debug("CitiesTab rendering...", context);
-
-    // Cities context menu
-    new ContextMenu(
-      this.element,
-      ".city-item",
-      this._getCityContextMenuItems(),
-      { jQuery: false }
-    );
   }
 
   _getCityContextMenuItems() {
@@ -128,6 +142,37 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
     ];
   }
 
+  /** Prepare template context */
+  /** After template is rendered */
+  async _onRender(context, options) {
+    await super._onRender(context, options);
+    logger.debug("CitiesTab rendering...", context);
+
+    const searchInput = this.element.querySelector("input[name='search']");
+
+    if (searchInput) {
+      searchInput.addEventListener("input", this.#onSearch.bind(this));
+
+      // Put focus
+      if (this._searchQuery) {
+        searchInput.focus();
+        // Put cursor at the end
+        searchInput.setSelectionRange(
+          searchInput.value.length,
+          searchInput.value.length
+        );
+      }
+    }
+
+    // Cities context menu
+    new ContextMenu(
+      this.element,
+      ".city-item",
+      this._getCityContextMenuItems(),
+      { jQuery: false }
+    );
+  }
+
   /**
 * Prepare context that is specific to only a single rendered part.
 *
@@ -142,10 +187,24 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
 */
   async _preparePartContext(partId, context) {
     logger.debug(`CitiesTab preparePartContext for ${partId}...`);
+    let cities = CmDataStore.getCities();
 
-    context.cities = CmDataStore.getCities();
+    // Search
+    const query = this._searchQuery.trim().toLowerCase();
+    if (query) {
+      cities = cities.filter(c => c.name.toLowerCase().includes(query));
+    }
+
+    // Sorts
+    cities = [...cities].sort((a, b) => {
+      const cmp = a.name.localeCompare(b.name);
+      return this._sortAlpha === "asc" ? cmp : -cmp;
+    });
 
     logger.debug("cities", context.cities)
+    context.cities = cities;
+    context.searchQuery = this._searchQuery;
+    context.sortAlpha = this._sortAlpha;
     return context;
   }
 }
