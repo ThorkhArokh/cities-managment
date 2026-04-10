@@ -1,16 +1,17 @@
 import { logger } from "../common/customLog.js"
 import { MODULE_ID } from "../common/constants.js"
 import { CmDataStore } from "../common/cm-data-store.js"
+import { CityDto } from "../model/cm-city-dto.js"
 import { BuildingDto } from "../model/cm-building-dto.js"
 import { FinanceEntryDto, financeEntryTypes } from "../model/cm-finance-entry-dto.js"
 import { ArmyUnitDto } from "../model/cm-army-unit-dto.js"
 import { addArmiesUnitDialog } from "../dialogs/cm-city-add-armies-unit-dialog.js"
 import { addFinanceEntryDialog } from "../dialogs/cm-city-add-finance-entry-dialog.js"
+import { addBuildingDialog } from "../dialogs/cm-city-add-building-dialog.js"
 
 const { ApplicationV2, DialogV2, HandlebarsApplicationMixin } = foundry.applications.api;
 const { DragDrop, TextEditor, FormDataExtended } = foundry.applications.ux;
 const { FilePicker } = foundry.applications.apps;
-const { renderTemplate } = foundry.applications.handlebars;
 
 export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
     #dragDrop;
@@ -18,7 +19,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
 
     constructor(city, options = {}) {
         super(options);
-        this.city = city;
+        this.city = CityDto.fromData(city);
         this.#dragDrop = this.#createDragDropHandlers();
         this.isEditable = game.user.isGM;
     }
@@ -26,7 +27,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
     // Override title getter 
     get title() {
         logger.debug("Get window title", this.city)
-        return this.city?.name ?? "CM.tab.title";
+        return this.city?.name ?? "CM.app.city.title";
     }
 
     static DEFAULT_OPTIONS = {
@@ -51,18 +52,9 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             left: 150,
         },
         window: {
-            title: "CM.app.title",
+            title: "CM.app.city.title",
             resizable: true,
-            /*controls: [
-                {
-                    // font awesome icon
-                    icon: 'fa-solid fa-screwdriver-wrench',
-                    // string that will be run through localization
-                    label: "Options",
-                    // string that MUST match one of your `actions`
-                    action: "optionsAction",
-                },
-            ]*/
+            controls: []
         },
         actions: {
             showDetails: CmCityApp.#showDetails,
@@ -74,7 +66,10 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             addNewFinanceEntry: CmCityApp.#addNewFinanceEntry,
             removeFinanceEntry: CmCityApp.#removeFinanceEntry,
             addNewUnit: CmCityApp.#addNewUnit,
-            removeUnit: CmCityApp.#removeUnit
+            removeUnit: CmCityApp.#removeUnit,
+            addNewBuilding: CmCityApp.#addNewBuilding,
+            showDetailsBuilding: CmCityApp.#showDetailsBuilding,
+            editAction: CmCityApp.#editAction
         }
     };
 
@@ -119,17 +114,65 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
     static TABS = {
         primary: {
             tabs: [
-                { id: "stats", label: "CM.app.tab.stats.label", icon: "", tooltip: "", cssClass: "" },
-                { id: "finances", label: "CM.app.tab.finances.label", icon: "", tooltip: "", cssClass: "" },
-                { id: "armies", label: "CM.app.tab.armies.label", icon: "", tooltip: "", cssClass: "" },
-                { id: "peoples", label: "CM.app.tab.peoples.label", icon: "", tooltip: "", cssClass: "" },
-                { id: "buildings", label: "CM.app.tab.buildings.label", icon: "", tooltip: "", cssClass: "" },
-                { id: "chests", label: "CM.app.tab.chests.label", icon: "", tooltip: "", cssClass: "" }
+                { id: "stats", label: "CM.app.city.tab.stats.label", icon: "fa-solid fa-scroll", tooltip: "", cssClass: "" },
+                { id: "finances", label: "CM.app.city.tab.finances.label", icon: "fa-solid fa-coins", tooltip: "", cssClass: "" },
+                { id: "armies", label: "CM.app.city.tab.armies.label", icon: "fa-solid fa-shield-halved", tooltip: "", cssClass: "" },
+                { id: "peoples", label: "CM.app.city.tab.peoples.label", icon: "fa-solid fa-people-group", tooltip: "", cssClass: "" },
+                { id: "buildings", label: "CM.app.city.tab.buildings.label", icon: "fa-solid fa-chess-rook", tooltip: "", cssClass: "" },
+                { id: "chests", label: "CM.app.city.tab.chests.label", icon: "fa-solid fa-gem", tooltip: "", cssClass: "" }
             ],
-            labelPrefix: "CM.app.tab", // Optional. Prepended to the id to generate a localization key
+            labelPrefix: "CM.app.city.tab", // Optional. Prepended to the id to generate a localization key
             initial: "stats", // Set the initial tab
         },
     };
+
+    /**
+   * Show building details
+   * @param {PointerEvent} event  click event
+   * @param {HTMLElement} target  click target
+   */
+    static async #showDetailsBuilding(event, target) {
+        logger.debug("Show building details", target)
+        if (!target.dataset.id) return
+
+        var building = this.city.buildings[target.dataset.id]
+        logger.debug("Building details", building)
+        if (building.uuid) {
+            const obj = await fromUuid(building.uuid);
+            obj?.sheet?.render(true)
+        } else {
+            building.getSheet().render(true)
+        }
+    }
+
+    /**
+   * Add new building
+   * @param {PointerEvent} event  click event
+   * @param {HTMLElement} target  click target
+   */
+    static async #addNewBuilding(event, target) {
+        if (!this.isEditable) return
+        logger.debug("Add new building", target)
+
+        let newBuildingDatas
+        try {
+
+            const dialogForm = await addBuildingDialog.config({})
+            newBuildingDatas = await DialogV2.wait(dialogForm);
+        } catch (ex) {
+            logger.debug("User did not create new building.", ex);
+            return;
+        }
+
+        logger.debug("New building datas", newBuildingDatas)
+        if (!newBuildingDatas || newBuildingDatas === "cancel") return;
+        newBuildingDatas.id = foundry.utils.randomID();
+        var newBuilding = new BuildingDto(newBuildingDatas.id, newBuildingDatas.uuid, newBuildingDatas.name, newBuildingDatas.img);
+        logger.debug("New building", newBuilding)
+        this.city.buildings[newBuildingDatas.id] = newBuilding
+        await CmDataStore.updateCity(this.city);
+        this.render();
+    }
 
     /**
    * Add new army unit
@@ -151,18 +194,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
 
         logger.debug("New unit", newUnitDatas)
         if (!newUnitDatas || newUnitDatas === "cancel") return;
-        if (newUnitDatas.isSystemActor) {
-            const actor = await Actor.create({
-                name: newUnitDatas.name,
-                type: "npc",
-                img: "icons/environment/people/commoner.webp",
-            });
-            newUnitDatas.id = actor.id
-            newUnitDatas.uuid = actor.uuid
-            newUnitDatas.img = actor.img
-        } else {
-            newUnitDatas.id = foundry.utils.randomID();
-        }
+        newUnitDatas.id = foundry.utils.randomID();
         this.city.armies.units[newUnitDatas.id] = new ArmyUnitDto(newUnitDatas.id, newUnitDatas.uuid, newUnitDatas.name, newUnitDatas.img, newUnitDatas.role, newUnitDatas.nbr, newUnitDatas.cost);
         await CmDataStore.updateCity(this.city);
         this.render();
@@ -583,14 +615,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         const datas = foundry.utils.expandObject(formData.object);
         logger.debug("FormDatas", datas)
 
-        // Remapping finance entries datas to object
-        var financeEntries = datas.city?.finances?.entries ?? {}
-        var mappedEntries = Object.entries(financeEntries).map(([id, entry]) => new FinanceEntryDto(id, entry.label, entry.type, entry.value));
-        logger.debug("Mapped entries", mappedEntries)
-        mappedEntries.forEach(entry => {
-            datas.city.finances.entries[entry.id] = entry
-        })
-
+        logger.debug("City to update", this.city)
         foundry.utils.mergeObject(this.city, datas.city, {
             insertKeys: true,    // ajouter les clés absentes de objA
             insertValues: true,  // ajouter les valeurs manquantes
@@ -599,6 +624,9 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             inplace: true,      // false = retourne un nouvel objet
         });
         logger.debug("Updated city", this.city)
+
+        this.city = CityDto.fromData(this.city);
+        logger.debug("City Datas", this.city)
 
         await CmDataStore.updateCity(this.city)
 
@@ -642,28 +670,36 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             // { type: "reset", action: "reset", icon: "fa-solid fa-undo", label: "SETTINGS.Reset" },
         ]
         context.tabs = this._prepareTabs("primary")
-        context.city = this.city ?? {};
+        const sourceCity = CityDto.fromData(this.city);
+        context.city = sourceCity;
         this.computeStats(context.city);
 
         context.financeEntryTypes = financeEntryTypes;
-        let treasurySum = (Number(this.city.finances.treasury.currencies.pp) * 100) + (Number(this.city.finances.treasury.currencies.gp) * 10) + Number(this.city.finances.treasury.currencies.sp) + Number(this.city.finances.treasury.currencies.cp / 10)
-        let expensesSum = Object.values(this.city.finances.entries).filter(entry => entry.type.key === financeEntryTypes.expense.key).reduce((sum, entry) => sum + entry.value, 0);
-        let incomesSum = Object.values(this.city.finances.entries).filter(entry => entry.type.key === financeEntryTypes.income.key).reduce((sum, entry) => sum + entry.value, 0);
-        let armiesSum = Object.values(this.city.armies.units).reduce((sum, unit) => sum + (unit.nbr * unit.cost), 0);
-        let totalSum = Number(treasurySum) + Number(incomesSum) - Number(expensesSum) - Number(armiesSum)
+        let treasurySum = (Number(sourceCity.finances.treasury.currencies.pp) * 100) + (Number(sourceCity.finances.treasury.currencies.gp) * 10) + Number(sourceCity.finances.treasury.currencies.sp) + Number(sourceCity.finances.treasury.currencies.cp / 10)
+        let expensesSum = Object.values(sourceCity.finances.entries).filter(entry => entry.type.key === financeEntryTypes.expense.key).reduce((sum, entry) => sum + entry.value, 0);
+        let incomesSum = Object.values(sourceCity.finances.entries).filter(entry => entry.type.key === financeEntryTypes.income.key).reduce((sum, entry) => sum + entry.value, 0);
+        let armiesSum = Object.values(sourceCity.armies.units).reduce((sum, unit) => sum + (unit.nbr * unit.cost), 0);
+        let vaultsSum = Object.values(sourceCity.chests).reduce((sum, item) => sum + (item.nbr * item.price), 0);
+        let buildingsSum = Object.values(sourceCity.buildings).reduce((sum, building) => sum + (building.nbr * building.cost + building.nbr * building.price), 0);
+        let totalSum = Number(treasurySum) + Number(vaultsSum) + Number(incomesSum) - Number(expensesSum) - Number(armiesSum) - Number(buildingsSum)
         context.city.finances.total = {
             "treasury": treasurySum,
             "expenses": expensesSum,
             "incomes": incomesSum,
             "armies": armiesSum,
+            "vaults": vaultsSum,
+            "buildings": buildingsSum,
             "value": totalSum
         }
 
-        context.hasNoPeoples = Object.keys(this.city.population.peoples ?? {}).length < 1;
-        context.hasNoBuildings = Object.keys(this.city.buildings ?? {}).length < 1;
-        context.hasNoTreasures = Object.keys(this.city.chests ?? {}).length < 1;
-        context.hasNoEntries = Object.keys(this.city.finances.entries ?? {}).length < 1;
-        context.hasNoUnits = Object.keys(this.city.armies.units ?? {}).length < 1;
+        context.hasNoPeoples = Object.keys(sourceCity.population.peoples ?? {}).length < 1;
+        context.hasNoBuildings = Object.keys(sourceCity.buildings ?? {}).length < 1;
+        context.hasNoTreasures = Object.keys(sourceCity.chests ?? {}).length < 1;
+        context.hasNoEntries = Object.keys(sourceCity.finances.entries ?? {}).length < 1;
+        context.hasNoUnits = Object.keys(sourceCity.armies.units ?? {}).length < 1;
+
+        context.citySizeChoices = CONFIG.CM.city.sizes;
+
         return context;
     }
 
@@ -672,5 +708,33 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             stat.value = Number(stat.base) + Number(stat.bonus) - Number(stat.malus);
             stat.malusDisplay = stat.malus === 0 ? 0 : -Math.abs(stat.malus);
         }
+    }
+
+    _configureRenderOptions(options) {
+        super._configureRenderOptions(options);
+        logger.debug("_configureRenderOptions", options)
+
+        if (game.user.isGM) {
+            this.options.window.controls = [
+                {
+                    icon: 'fa-solid fa-screwdriver-wrench',
+                    label: "CM.app.city.options.editmode.label",
+                    action: "editAction",
+                }
+            ];
+            logger.debug("Add controls", this.options.window.controls)
+        }
+    }
+
+    /**
+    * Options edit
+    * @param {PointerEvent} event  click event
+    * @param {HTMLElement} target  click target
+    */
+    static async #editAction(event, target) {
+        if (!game.user.isGM) return;
+        logger.debug("editAction", target)
+        this.isEditable = !this.isEditable
+        this.render()
     }
 }

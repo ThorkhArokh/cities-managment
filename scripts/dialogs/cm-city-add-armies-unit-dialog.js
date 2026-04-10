@@ -16,7 +16,7 @@ export const addArmiesUnitDialog = {
                     callback: async (event, button, dialog) => {
                         const form = button.form;
                         const data = new FormDataExtended(form).object;
-                        logger.debug("Submit new finance entry", data);
+                        logger.debug("Submit new army unit", data);
 
                         if (!data.name?.trim()) {
                             ui.notifications.warn(game.i18n.localize("CM.dialog.newUnit.emptyName"));

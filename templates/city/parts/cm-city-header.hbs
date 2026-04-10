@@ -1,15 +1,19 @@
 <section>
-    <header>
-        <div class="flexrow no-wrap" style="gap:8px; margin-bottom:4px">
-            <img class="cm-cities-app-header-avatar" src="{{city.img}}" data-action="editImage" data-field="img"
-                data-edit="city.img" data-tooltip="{{localize "CM.app.tab.header.avatar.tooltip"}}" />
-            <div style="flex: 1;"><b>{{localize "CM.app.header.name.label"}}</b></div>
-            <div style="flex: 11;"><input class="field-value" type="text" name="city.name" value="{{city.name}}"
-                    {{#unless isEditable}}disabled{{/unless}} />
+    <header class="cm-cities-app-header flexrow no-wrap">
+        <img class="flex0 cm-cities-app-header-avatar" src="{{city.img}}" data-action="editImage" data-field="img"
+            data-edit="city.img" data-tooltip="{{localize "CM.app.city.tab.header.avatar.tooltip"}}" />
+        <div>
+            <h1 class="cm-cities-app-header-title">
+                <input type="text" name="city.name" value="{{city.name}}"
+                {{#unless isEditable}}disabled{{/unless}} />
+            </h1>
+            <div class="flexrow no-wrap gap4">
+                <input class="flex2" type="text" name="city.description" value="{{city.description}}" placeholder="{{localize "CM.app.city.tab.header.city.desc.placeholder"}}"
+                {{#unless isEditable}}disabled{{/unless}} />
+                <select name="city.size">
+                    {{selectOptions citySizeChoices selected=city.size localize=true}}
+                </select>
             </div>
         </div>
-        <!--<div class="flexrow no-wrap" style="gap:8px">
-            <div>Description : {{city.description}}</div>
-        </div>-->
     </header>
 </section>

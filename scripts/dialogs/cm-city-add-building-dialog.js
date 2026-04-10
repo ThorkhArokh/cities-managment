@@ -3,26 +3,23 @@ import { MODULE_ID } from "../common/constants.js"
 const { FormDataExtended } = foundry.applications.ux;
 const { renderTemplate } = foundry.applications.handlebars;
 
-export const addFinanceEntryDialog = {
-    async config(dataConfig) {
+export const addBuildingDialog = {
+    async config(data) {
         return {
-            window: { title: "CM.app.city.tab.finances.entries.new.dialog.title" },
-            content: await renderTemplate(
-                `modules/${MODULE_ID}/templates/dialogs/cm-city-add-finance-entry.hbs`,
-                dataConfig
-            ),
+            window: { title: "CM.dialog.newBuilding.title" },
+            content: await renderTemplate(`modules/${MODULE_ID}/templates/dialogs/cm-city-add-building.hbs`, data),
             buttons: [
                 {
-                    label: "CM.app.city.tab.finances.entries.new.dialog.add.btn",
+                    label: "CM.dialog.newBuilding.new.btn",
                     icon: "fas fa-plus",
                     action: "confirm",
                     callback: async (event, button, dialog) => {
                         const form = button.form;
                         const data = new FormDataExtended(form).object;
-                        logger.debug("Submit new finance entry", data);
+                        logger.debug("Submit new building", data);
 
-                        if (!data.label?.trim()) {
-                            ui.notifications.warn(game.i18n.localize("CM.app.city.tab.finances.entries.new.dialog.checks.label"));
+                        if (!data.name?.trim()) {
+                            ui.notifications.warn(game.i18n.localize("CM.dialog.newBuilding.emptyName"));
                             return false;
                         }
 

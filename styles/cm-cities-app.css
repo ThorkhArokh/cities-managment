@@ -17,7 +17,8 @@ hr {
 .cm-cities-app {}
 
 .cm-cities-app-header-avatar {
-    width: 40px;
+    max-width: 100px;
+    height: 100px;
     cursor: pointer;
     border-radius: 4px;
     border: 1px solid var(--color-border-light);
@@ -27,6 +28,14 @@ hr {
         opacity: 0.8;
         border-color: var(--color-border-highlight);
     }
+}
+
+.cm-cities-app-header-title {
+    margin-bottom:4px
+}
+
+.cm-cities-app-header-title input {
+    height: 60px;
 }
 
 .cm-cities-app-tab-line {
@@ -52,7 +61,7 @@ hr {
 }
 
 .drop-zone {
-    min-height: 100px;
+    min-height: 50px;
     padding: 8px;
 }
 

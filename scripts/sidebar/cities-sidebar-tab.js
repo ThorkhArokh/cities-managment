@@ -69,9 +69,9 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
 
   static async onCityDetails(event, target) {
     logger.debug("onCityDetails", target)
-    var city = CmDataStore.getCityById(target.dataset.id);
-    var cityApp = new CmCityApp(city)
-    cityApp.render(true);
+    let city = CmDataStore.getCityById(target.dataset.id);
+    // Open city sheet
+    new CmCityApp(city).render(true);
   }
 
   static async onCreateCity(event, target) {
@@ -104,16 +104,15 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
       return;
     }
 
-    var city = new CityDto(newCityName)
+    let city = new CityDto(newCityName)
 
     logger.debug("city", city)
 
     await CmDataStore.addCity(city)
     logger.debug("Created city", city)
 
-    // Open actor sheet
-    var cityApp = new CmCityApp(city)
-    cityApp.render(true);
+    // Open city sheet
+    new CmCityApp(city).render(true);
     this.render(true);
   }
 

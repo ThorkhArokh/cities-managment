@@ -8,7 +8,7 @@
       <div class="field-label">Nbr</div>
     </div>
     <div class="flex1 center" style="max-width: 80px;">
-      <div class="field-label"><span title="Buying price"><i title="{{localize " CM.currency.sp.label"}}"
+      <div class="field-label"><span data-tooltip="Buying price"><i data-tooltip="{{localize "CM.currency.sp.label"}}"
             class="fas fa-coins" style="color:silver"></i> Price</span></div>
     </div>
     <div class="flex1 center" style="max-width: 40px;">
@@ -43,7 +43,7 @@
   {{/each}}
   {{#if isEditable}}
   <div class="drop-zone-header flexrow no-wrap">
-      {{#if hasNoTreasures}}<p class="center"><i>{{localize "CM.app.tab.chests.empty"}}</i></p>{{/if}}
+      {{#if hasNoTreasures}}<p class="center"><i>{{localize "CM.app.city.tab.chests.empty"}}</i></p>{{/if}}
   </div>
   <div class="drop-zone {{#if hasNoTreasures}}drag-over{{/if}}" data-drop-chests="true">
   </div>

@@ -3,18 +3,22 @@ import { MODULE_ID } from "./common/constants.js"
 import { CitiesTab } from "./sidebar/cities-sidebar-tab.js"
 import { registerSystemSettings } from "./common/cm-settings.js"
 import { preloadHandlebarsTemplates } from "./common/cm-templates.js"
+import { registerHandlebarsHelpers } from "./common/cm-helpers.js"
+import { CM_CONFIG } from "./common/cm-config.js";
 
 logger.info(`Module ${MODULE_ID} loaded`);
 
 Hooks.on("init", function () {
   logger.info(`Module ${MODULE_ID} Initializing...`);
+  logger.info(`Module ${MODULE_ID} ...config...`);
+  CONFIG.CM = CM_CONFIG;
 
   logger.info(`Module ${MODULE_ID} ...settings...`);
   registerSystemSettings();
 
   logger.debug("actor classes", CONFIG.Actor.documentClasses)
-  logger.debug("data models", CONFIG.Actor.dataModels)
-  logger.debug("doc types", game.documentTypes.Actor);
+  logger.debug("actor data models", CONFIG.Actor.dataModels)
+  logger.debug("actor types", game.documentTypes.Actor);
   logger.debug("collections", foundry.documents.collections)
   logger.debug("init UI", CONFIG.ui)
 
@@ -53,6 +57,10 @@ Hooks.on("init", function () {
   // Preload Handlebars Templates
   logger.info(`Module ${MODULE_ID} ...templates...`);
   preloadHandlebarsTemplates();
+
+  // Register Handlebars helpers
+  logger.info(`Module ${MODULE_ID} ...helpers...`);
+  registerHandlebarsHelpers();
 
   logger.info(`Module ${MODULE_ID} ...Initializing done`);
 });

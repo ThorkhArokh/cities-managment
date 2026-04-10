@@ -25,3 +25,6 @@ https://github.com/ThorkhArokh/cities-managment/releases/latest/download/module.
  - City creation wizard
  - Drop city on scenes
  - Add folders in cities tab
+ - building class Extend Item class
+ - add duplicate menu on cities
+ - add sheet for armies unit ?
