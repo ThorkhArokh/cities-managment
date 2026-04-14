@@ -31,11 +31,20 @@ hr {
 }
 
 .cm-cities-app-header-title {
-    margin-bottom:4px
+    margin-bottom: 4px
 }
 
 .cm-cities-app-header-title input {
     height: 60px;
+}
+
+.cm-cities-app-header-title .map-img {
+    border: 1px solid var(--color-tabs-border);
+    width: 60px;
+    height: 60px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .cm-cities-app-tab-line {

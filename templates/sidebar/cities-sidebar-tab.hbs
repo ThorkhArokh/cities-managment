@@ -10,10 +10,6 @@
                 <i class="fa-solid fa-folder" inert=""></i>
                 <span>Create Folder</span>
             </button>-->
-            <button type="button" class="" data-action="deleteAllEntry">
-                <i class="fa-solid fa-folder" inert=""></i>
-                <span>Delete all</span>
-            </button>
         </div>
 
         <search class="cm-sidebar-search">
@@ -33,17 +29,17 @@
         </search>
     </header>
     <ol class="directory-list plain" data-application-part="directory">
-        {{#each folders as |folder|}}
+        <!--{{#each folders as |folder|}}
         <li data-folder-id="{{folder.id}}">
             <span>{{folder.name}}</span>
             <button type="button" data-action="createFolder">
                 <i class="fa-solid fa-folder-plus"></i>
             </button>
         </li>
-        {{/each}}
+        {{/each}}-->
         {{#each cities}}
         <li class="city-item directory-item entry document flexrow" data-id="{{id}}">
-            <img class="thumbnail" src="{{img}}" />
+            <img class="thumbnail" src="{{flags.cities-managment.cityData.img}}" />
             <a class="entry-name ellipsis" data-action="activateEntry" data-index="{{@index}}"
                 data-id="{{id}}">{{name}}</a>
         </li>

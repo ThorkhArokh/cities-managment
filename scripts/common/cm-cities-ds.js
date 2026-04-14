@@ -2,7 +2,7 @@ import { logger } from "./customLog.js"
 import { MODULE_ID, DATAS_STORE } from "./constants.js"
 import { CityDto } from "../model/cm-city-dto.js"
 
-export class CmDataStore {
+export class CmCitiesDataStore {
 
     static get() {
         return game.settings.get(MODULE_ID, DATAS_STORE);

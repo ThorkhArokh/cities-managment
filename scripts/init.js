@@ -1,5 +1,5 @@
 import { logger } from "./common/customLog.js"
-import { MODULE_ID } from "./common/constants.js"
+import { MODULE_ID, FLAG_KEY } from "./common/constants.js"
 import { CitiesTab } from "./sidebar/cities-sidebar-tab.js"
 import { registerSystemSettings } from "./common/cm-settings.js"
 import { preloadHandlebarsTemplates } from "./common/cm-templates.js"
@@ -43,6 +43,7 @@ Hooks.on("init", function () {
     logger.debug("tabs", Sidebar.TABS);
   }
 
+  logger.info(`Module ${MODULE_ID} ...hooks...`);
   Hooks.on("renderSidebar", (app, html) => {
     const citiesmanagmentBtn = html.querySelector('button[data-tab="citiesmanagment"]');
     const citiesmanagmentLi = citiesmanagmentBtn?.closest("li");
@@ -51,6 +52,16 @@ Hooks.on("init", function () {
 
     if (citiesmanagmentLi && itemsLi) {
       itemsLi.before(citiesmanagmentLi);
+    }
+  });
+
+  Hooks.on("renderJournalDirectory", (app, html, data) => {
+    logger.debug("Hook : renderJournalDirectory", html)
+    for (const journal of game.journal) {
+      if (journal.getFlag(MODULE_ID, FLAG_KEY) !== undefined) {
+        const entry = html.querySelector(`[data-entry-id="${journal.id}"]`);
+        if (entry) entry.remove();
+      }
     }
   });
 

@@ -1,13 +1,25 @@
 import { MODULE_ID } from "../common/constants.js"
+import { logger } from "../common/customLog.js"
 
 const { FormDataExtended } = foundry.applications.ux;
 const { renderTemplate } = foundry.applications.handlebars;
+const { DialogV2 } = foundry.applications.api;
 
 export const addBuildingDialog = {
+    async render(dialogForm) {
+        if (!dialogForm) return
+        try {
+            return await DialogV2.wait(dialogForm);
+        } catch (ex) {
+            logger.debug("User did not create new building.", ex);
+            return;
+        }
+    },
     async config(data) {
+        const dataForm = data ?? {}
         return {
             window: { title: "CM.dialog.newBuilding.title" },
-            content: await renderTemplate(`modules/${MODULE_ID}/templates/dialogs/cm-city-add-building.hbs`, data),
+            content: await renderTemplate(`modules/${MODULE_ID}/templates/dialogs/cm-city-add-building.hbs`, dataForm),
             buttons: [
                 {
                     label: "CM.dialog.newBuilding.new.btn",
@@ -30,6 +42,9 @@ export const addBuildingDialog = {
                     label: "CM.dialog.cancel.btn",
                     icon: "fas fa-times",
                     action: "cancel",
+                    callback: async (event, button, dialog) => {
+                        return false;
+                    }
                 }
             ],
             rejectClose: false,

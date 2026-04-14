@@ -5,36 +5,36 @@ const { FormDataExtended } = foundry.applications.ux;
 const { renderTemplate } = foundry.applications.handlebars;
 const { DialogV2 } = foundry.applications.api;
 
-export const addFinanceEntryDialog = {
+export const addStatDialog = {
     async render(dialogForm) {
-        if (!dialogForm) return
+        if(!dialogForm) return
         try {
             return await DialogV2.wait(dialogForm);
-        } catch {
-            logger.debug("User did not create new entry.");
+        } catch (ex) {
+            logger.debug("User did not create new stat.", ex);
             return;
         }
     },
     async config(dataConfig) {
         const dataForm = dataConfig ?? {}
         return {
-            window: { title: "CM.app.city.tab.finances.entries.new.dialog.title" },
+            window: { title: "CM.dialog.newStat.title" },
             content: await renderTemplate(
-                `modules/${MODULE_ID}/templates/dialogs/cm-city-add-finance-entry.hbs`,
+                `modules/${MODULE_ID}/templates/dialogs/cm-city-add-stat.hbs`,
                 dataForm
             ),
             buttons: [
                 {
-                    label: "CM.app.city.tab.finances.entries.new.dialog.add.btn",
+                    label: "CM.dialog.newStat.new.btn",
                     icon: "fas fa-plus",
                     action: "confirm",
                     callback: async (event, button, dialog) => {
                         const form = button.form;
                         const data = new FormDataExtended(form).object;
-                        logger.debug("Submit new finance entry", data);
+                        logger.debug("Submit new stat", data);
 
                         if (!data.label?.trim()) {
-                            ui.notifications.warn(game.i18n.localize("CM.app.city.tab.finances.entries.new.dialog.checks.label"));
+                            ui.notifications.warn(game.i18n.localize("CM.dialog.newStat.emptyLabel"));
                             return false;
                         }
 

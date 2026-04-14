@@ -1,9 +1,9 @@
 import { logger } from "../common/customLog.js"
 import { MODULE_ID } from "../common/constants.js"
-import { CmDataStore } from "../common/cm-data-store.js"
-import { CityDto } from "../model/cm-city-dto.js"
-import { CmCityApp } from "../actor/cm-city-app.js"
+import { CmCitiesJournalDataStore } from "../common/cm-cities-journal-ds.js"
+import { CmCityApp } from "../apps/cm-cities-app.js"
 
+const { DocumentOwnershipConfig } = foundry.applications.apps;
 const { DialogV2, HandlebarsApplicationMixin } = foundry.applications.api;
 const { AbstractSidebarTab } = foundry.applications.sidebar;
 const { ContextMenu } = foundry.applications.ux;
@@ -21,7 +21,6 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
       //createFolder: CitiesTab.onCreateFolder,
       createEntry: CitiesTab.onCreateCity,
       activateEntry: CitiesTab.onCityDetails,
-      deleteAllEntry: CitiesTab.onDeleteAll,
       toggleSort: CitiesTab.onToggleSort,
     }
   };
@@ -61,15 +60,9 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
     );
   }*/
 
-  static async onDeleteAll(event, target) {
-    logger.debug("onDeleteAll", target)
-    await CmDataStore.deleteAllCities();
-    this.render(true)
-  }
-
   static async onCityDetails(event, target) {
     logger.debug("onCityDetails", target)
-    let city = CmDataStore.getCityById(target.dataset.id);
+    let city = CmCitiesJournalDataStore.getCityById(target.dataset.id)
     // Open city sheet
     new CmCityApp(city).render(true);
   }
@@ -104,11 +97,7 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
       return;
     }
 
-    let city = new CityDto(newCityName)
-
-    logger.debug("city", city)
-
-    await CmDataStore.addCity(city)
+    let city = await CmCitiesJournalDataStore.createCity(newCityName);
     logger.debug("Created city", city)
 
     // Open city sheet
@@ -119,12 +108,24 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
   _getCityContextMenuItems() {
     return [
       {
+        name: game.i18n.localize("CM.city.contextmenu.ownership"),
+        icon: "<i class='fas fa-lock'></i>",
+        condition: (element) => game.user.isGM,
+        callback: (element) => {
+          logger.debug("Callback context menu", element)
+          const cityId = element.dataset.id;
+          const city = CmCitiesJournalDataStore.getCityById(cityId)
+          // FIXME : Ouvre la fenêtre native de configuration des droits
+          new DocumentOwnershipConfig({ document: city }).render(true);
+        }
+      },
+      {
         name: game.i18n.localize("CM.city.contextmenu.open"),
         icon: "<i class='fas fa-edit'></i>",
         callback: (element) => {
           logger.debug("Callback context menu", element)
           const cityId = element.dataset.id;
-          const city = CmDataStore.getCityById(cityId);
+          const city = CmCitiesJournalDataStore.getCityById(cityId)
           new CmCityApp(city).render(true);
         }
       },
@@ -134,7 +135,7 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
         condition: (element) => game.user.isGM,
         callback: async (element) => {
           const cityId = element.dataset.id;
-          await CmDataStore.deleteCity(cityId);
+          await CmCitiesJournalDataStore.deleteCity(cityId);
           this.render();
         }
       }
@@ -186,7 +187,8 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
 */
   async _preparePartContext(partId, context) {
     logger.debug(`CitiesTab preparePartContext for ${partId}...`);
-    let cities = CmDataStore.getCities();
+    let cities = CmCitiesJournalDataStore.getAllCities();
+    logger.debug("cities", cities)
 
     // Search
     const query = this._searchQuery.trim().toLowerCase();
@@ -200,7 +202,6 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
       return this._sortAlpha === "asc" ? cmp : -cmp;
     });
 
-    logger.debug("cities", context.cities)
     context.cities = cities;
     context.searchQuery = this._searchQuery;
     context.sortAlpha = this._sortAlpha;

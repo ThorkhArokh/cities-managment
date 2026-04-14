@@ -1,15 +1,17 @@
 import { logger } from "../common/customLog.js"
 import { MODULE_ID } from "../common/constants.js"
-import { CmDataStore } from "../common/cm-data-store.js"
+import { CmCitiesJournalDataStore } from "../common/cm-cities-journal-ds.js"
 import { CityDto } from "../model/cm-city-dto.js"
+import { StatDto } from "../model/cm-stat-dto.js"
 import { BuildingDto } from "../model/cm-building-dto.js"
 import { FinanceEntryDto, financeEntryTypes } from "../model/cm-finance-entry-dto.js"
 import { ArmyUnitDto } from "../model/cm-army-unit-dto.js"
 import { addArmiesUnitDialog } from "../dialogs/cm-city-add-armies-unit-dialog.js"
 import { addFinanceEntryDialog } from "../dialogs/cm-city-add-finance-entry-dialog.js"
 import { addBuildingDialog } from "../dialogs/cm-city-add-building-dialog.js"
+import { addStatDialog } from "../dialogs/cm-city-add-stat-dialog.js"
 
-const { ApplicationV2, DialogV2, HandlebarsApplicationMixin } = foundry.applications.api;
+const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 const { DragDrop, TextEditor, FormDataExtended } = foundry.applications.ux;
 const { FilePicker } = foundry.applications.apps;
 
@@ -19,7 +21,8 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
 
     constructor(city, options = {}) {
         super(options);
-        this.city = CityDto.fromData(city);
+        this.city = city;
+        this.cityDatas = CityDto.fromData(CmCitiesJournalDataStore.getCityData(city));
         this.#dragDrop = this.#createDragDropHandlers();
         this.isEditable = game.user.isGM;
     }
@@ -43,7 +46,8 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             { dragSelector: null, dropSelector: "[data-drop-peoples]" },
             { dragSelector: null, dropSelector: "[data-drop-buildings]" },
             { dragSelector: null, dropSelector: "[data-drop-chests]" },
-            { dragSelector: null, dropSelector: "[data-drop-units]" }
+            { dragSelector: null, dropSelector: "[data-drop-units]" },
+            { dragSelector: null, dropSelector: "[data-drop-map]" }
         ],
         position: {
             width: 800,
@@ -69,7 +73,10 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             removeUnit: CmCityApp.#removeUnit,
             addNewBuilding: CmCityApp.#addNewBuilding,
             showDetailsBuilding: CmCityApp.#showDetailsBuilding,
-            editAction: CmCityApp.#editAction
+            editAction: CmCityApp.#editAction,
+            addNewStat: CmCityApp.#addNewStat,
+            removeStat: CmCityApp.#removeStat,
+            showMap: CmCityApp.#showMap
         }
     };
 
@@ -127,15 +134,66 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
     };
 
     /**
-   * Show building details
-   * @param {PointerEvent} event  click event
-   * @param {HTMLElement} target  click target
-   */
+     * Show map
+     * @param {PointerEvent} event  click event
+     * @param {HTMLElement} target  click target
+     */
+    static async #showMap(event, target) {
+        logger.debug("Show map", target)
+        const scene = await fromUuid(target.dataset.uuid);
+        if (!scene) return;
+        
+        await scene.view();
+    }
+
+    /**
+     * Add new stat
+     * @param {PointerEvent} event  click event
+     * @param {HTMLElement} target  click target
+     */
+    static async #addNewStat(event, target) {
+        if (!this.isEditable) return
+        logger.debug("Add new stat", target)
+
+        const dialogForm = await addStatDialog.config({})
+        let newStatDatas = await addStatDialog.render(dialogForm);
+        logger.debug("New stat datas", newStatDatas)
+        if (!newStatDatas) return;
+        newStatDatas.id = foundry.utils.randomID();
+        var newStat = new StatDto(newStatDatas.id, newStatDatas.label, 0, 0, 0, newStatDatas.rollFormula);
+        logger.debug("New stat", newStat)
+        this.cityDatas.stats[newStatDatas.id] = newStat
+        await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
+        this.render();
+    }
+
+    /**
+    * Remove stat
+    * @param {PointerEvent} event  click event
+    * @param {HTMLElement} target  click target
+    */
+    static async #removeStat(event, target) {
+        if (!this.isEditable) return
+        logger.debug("Remove stat", target, this.cityDatas)
+        var statId = target.dataset.id
+
+        if (Object.hasOwn(this.cityDatas.stats, statId)) {
+            delete this.cityDatas.stats[statId]
+            await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
+            this.render();
+        }
+    }
+
+    /**
+    * Show building details
+    * @param {PointerEvent} event  click event
+    * @param {HTMLElement} target  click target
+    */
     static async #showDetailsBuilding(event, target) {
         logger.debug("Show building details", target)
         if (!target.dataset.id) return
 
-        var building = this.city.buildings[target.dataset.id]
+        var building = this.cityDatas.buildings[target.dataset.id]
         logger.debug("Building details", building)
         if (building.uuid) {
             const obj = await fromUuid(building.uuid);
@@ -146,73 +204,58 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
     }
 
     /**
-   * Add new building
-   * @param {PointerEvent} event  click event
-   * @param {HTMLElement} target  click target
-   */
+    * Add new building
+    * @param {PointerEvent} event  click event
+    * @param {HTMLElement} target  click target
+    */
     static async #addNewBuilding(event, target) {
         if (!this.isEditable) return
         logger.debug("Add new building", target)
 
-        let newBuildingDatas
-        try {
-
-            const dialogForm = await addBuildingDialog.config({})
-            newBuildingDatas = await DialogV2.wait(dialogForm);
-        } catch (ex) {
-            logger.debug("User did not create new building.", ex);
-            return;
-        }
-
+        const dialogForm = await addBuildingDialog.config({})
+        let newBuildingDatas = await addBuildingDialog.render(dialogForm);
         logger.debug("New building datas", newBuildingDatas)
-        if (!newBuildingDatas || newBuildingDatas === "cancel") return;
+        if (!newBuildingDatas) return;
         newBuildingDatas.id = foundry.utils.randomID();
         var newBuilding = new BuildingDto(newBuildingDatas.id, newBuildingDatas.uuid, newBuildingDatas.name, newBuildingDatas.img);
         logger.debug("New building", newBuilding)
-        this.city.buildings[newBuildingDatas.id] = newBuilding
-        await CmDataStore.updateCity(this.city);
+        this.cityDatas.buildings[newBuildingDatas.id] = newBuilding
+        await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
         this.render();
     }
 
     /**
-   * Add new army unit
-   * @param {PointerEvent} event  click event
-   * @param {HTMLElement} target  click target
-   */
+    * Add new army unit
+    * @param {PointerEvent} event  click event
+    * @param {HTMLElement} target  click target
+    */
     static async #addNewUnit(event, target) {
         if (!this.isEditable) return
         logger.debug("Add new army unit", target)
 
-        let newUnitDatas
-        try {
-            const dialogForm = await addArmiesUnitDialog.config({})
-            newUnitDatas = await DialogV2.wait(dialogForm);
-        } catch (ex) {
-            logger.debug("User did not create new unit.", ex);
-            return;
-        }
-
+        const dialogForm = await addArmiesUnitDialog.config({})
+        let newUnitDatas = await addArmiesUnitDialog.render(dialogForm);
         logger.debug("New unit", newUnitDatas)
-        if (!newUnitDatas || newUnitDatas === "cancel") return;
+        if (!newUnitDatas) return;
         newUnitDatas.id = foundry.utils.randomID();
-        this.city.armies.units[newUnitDatas.id] = new ArmyUnitDto(newUnitDatas.id, newUnitDatas.uuid, newUnitDatas.name, newUnitDatas.img, newUnitDatas.role, newUnitDatas.nbr, newUnitDatas.cost);
-        await CmDataStore.updateCity(this.city);
+        this.cityDatas.armies.units[newUnitDatas.id] = new ArmyUnitDto(newUnitDatas.id, newUnitDatas.uuid, newUnitDatas.name, newUnitDatas.img, newUnitDatas.role, newUnitDatas.nbr, newUnitDatas.cost);
+        await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
         this.render();
     }
 
     /**
-   * Remove army unit
-   * @param {PointerEvent} event  click event
-   * @param {HTMLElement} target  click target
-   */
+    * Remove army unit
+    * @param {PointerEvent} event  click event
+    * @param {HTMLElement} target  click target
+    */
     static async #removeUnit(event, target) {
         if (!this.isEditable) return
         logger.debug("Remove army unit", target)
         var peopleId = target.dataset.id
 
-        if (Object.hasOwn(this.city.armies.units, peopleId)) {
-            delete this.city.armies.units[peopleId]
-            await CmDataStore.updateCity(this.city);
+        if (Object.hasOwn(this.cityDatas.armies.units, peopleId)) {
+            delete this.cityDatas.armies.units[peopleId]
+            await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
             this.render();
         }
     }
@@ -228,22 +271,15 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         event.stopPropagation();
         logger.debug("Add new finance entry", target)
 
-        let newEntry
-        try {
-            const dialogForm = await addFinanceEntryDialog.config({
-                financeEntryTypes: financeEntryTypes,
-            })
-            newEntry = await DialogV2.wait(dialogForm);
-        } catch {
-            logger.debug("User did not create new entry.");
-            return;
-        }
-
+        const dialogForm = await addFinanceEntryDialog.config({
+            financeEntryTypes: financeEntryTypes,
+        })
+        let newEntry = await addFinanceEntryDialog.render(dialogForm);
         logger.debug("New entry", newEntry)
-        if (!newEntry || newEntry === "cancel") return;
+        if (!newEntry) return;
         newEntry.id = foundry.utils.randomID();
-        this.city.finances.entries[newEntry.id] = new FinanceEntryDto(newEntry.id, newEntry.label, newEntry.type, newEntry.value);
-        await CmDataStore.updateCity(this.city);
+        this.cityDatas.finances.entries[newEntry.id] = new FinanceEntryDto(newEntry.id, newEntry.label, newEntry.type, newEntry.value);
+        await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
         this.render();
     }
 
@@ -257,9 +293,9 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         logger.debug("remove finance entry", target)
         const entryId = target.dataset.id
 
-        if (Object.hasOwn(this.city.finances.entries, entryId)) {
-            delete this.city.finances.entries[entryId]
-            await CmDataStore.updateCity(this.city);
+        if (Object.hasOwn(this.cityDatas.finances.entries, entryId)) {
+            delete this.cityDatas.finances.entries[entryId]
+            await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
             this.render();
         }
     }
@@ -272,20 +308,19 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
     static async #rollStats(event, target) {
         logger.debug("Roll stats dice", target)
 
-        const stat = this.city.stats[target.dataset.id]
+        const stat = this.cityDatas.stats[target.dataset.id]
 
-        const roll = new Roll('1d100');
+        if (!stat.rollFormula) return
+
+        const roll = new Roll(stat.rollFormula);
         await roll.evaluate();
-        logger.debug("Res : " + stat.value + " > " + roll.total, stat);
 
-        var results_html = `<h2 class="standard"><i class="fas fa-dice-d20"></i> Réussite</h2><b>${game.i18n.localize(stat.label)}</b> pour ${this.city.name}`
-        if (stat.value > roll.total) {
-            results_html = `<h2 class="standard"><i class="fas fa-dice-d20"></i> Echec</h2><b>${game.i18n.localize(stat.label)}</b> pour ${this.city.name}`
-        }
-
+        var results_html = `<h2 class="standard">
+        <i class="fas fa-dice-d20"></i> ${game.i18n.localize("CM.app.city.tab.stats.roll.skill.title")}</h2>
+        <b>${game.i18n.localize(stat.label)}</b> pour ${this.cityDatas.name}`
         // Afficher dans le chat
         await roll.toMessage({
-            speaker: ChatMessage.getSpeaker({ actor: this.city }),
+            speaker: ChatMessage.getSpeaker(),
             flavor: results_html,
         });
     }
@@ -296,7 +331,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
    * @param {HTMLElement} target  click target
    */
     static async #showDetails(event, target) {
-        logger.debug("Show Actor details", target)
+        logger.debug("Show object details", target)
         if (!target.dataset.uuid) return
         const obj = await fromUuid(target.dataset.uuid);
         obj?.sheet?.render(true)
@@ -313,9 +348,9 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         logger.debug("Remove people", target)
         var peopleId = target.dataset.id
 
-        if (Object.hasOwn(this.city.population.peoples, peopleId)) {
-            delete this.city.population.peoples[peopleId]
-            await CmDataStore.updateCity(this.city);
+        if (Object.hasOwn(this.cityDatas.population.peoples, peopleId)) {
+            delete this.cityDatas.population.peoples[peopleId]
+            await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
             this.render();
         }
     }
@@ -331,9 +366,9 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         logger.debug("Remove treasury", target)
         var treasuryId = target.dataset.id
 
-        if (Object.hasOwn(this.city.chests, treasuryId)) {
-            delete this.city.chests[treasuryId]
-            await CmDataStore.updateCity(this.city);
+        if (Object.hasOwn(this.cityDatas.chests, treasuryId)) {
+            delete this.cityDatas.chests[treasuryId]
+            await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
             this.render();
         }
     }
@@ -349,9 +384,9 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         logger.debug("Remove building", target)
         var buildingId = target.dataset.id
 
-        if (Object.hasOwn(this.city.buildings, buildingId)) {
-            delete this.city.buildings[buildingId]
-            await CmDataStore.updateCity(this.city);
+        if (Object.hasOwn(this.cityDatas.buildings, buildingId)) {
+            delete this.cityDatas.buildings[buildingId]
+            await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
             this.render();
         }
     }
@@ -385,7 +420,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         logger.debug("On edit image", event)
         const field = target.dataset.field || "img"
         logger.debug("IMG field", field)
-        const current = foundry.utils.getProperty(this.city, field)
+        const current = foundry.utils.getProperty(this.cityDatas, field)
 
         const fp = new FilePicker({
             type: "image",
@@ -393,7 +428,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             callback: (path) => {
                 // Mettre à jour l'aperçu immédiatement
                 event.target.src = path;
-                foundry.utils.setProperty(this.city, field, path);
+                foundry.utils.setProperty(this.cityDatas, field, path);
                 // Déclencher un submit si submitOnChange est actif
                 event.target.dispatchEvent(new Event("change", { bubbles: true }));
             }
@@ -489,6 +524,22 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         if (data.type === "Item" && event.target.dataset.dropChests) {
             await this._onDropItem(data.uuid)
         }
+
+        if (data.type === "Scene" && event.target.dataset.dropMap) {
+            await this._onDropMap(data.uuid)
+        }
+    }
+
+    async _onDropMap(sceneUUID) {
+        const scene = await fromUuid(sceneUUID);
+        if (!scene) return;
+        logger.debug("Drop scene", scene);
+
+        this.cityDatas.map.id = sceneUUID
+        this.cityDatas.map.img = scene.thumb ?? "icons/tools/navigation/map-chart-tan.webp";
+
+        await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
+        this.render();
     }
 
     async _onDropActor(actorUUID) {
@@ -497,7 +548,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         logger.debug("Drop actor", actor)
 
         // Add people to current city
-        this.city.population.peoples[actor.id] = {
+        this.cityDatas.population.peoples[actor.id] = {
             id: actor.id,
             uuid: actor.uuid,
             name: actor.name,
@@ -505,7 +556,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             role: "people"
         };
 
-        await CmDataStore.updateCity(this.city);
+        await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
         this.render();
     }
 
@@ -516,9 +567,8 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
 
         // Add unit to current city
         let defaultRole = game.i18n.localize("CM.dialog.newUnit.role.default.value");
-        this.city.armies.units[actor.id] = new ArmyUnitDto(actor.id, actor.uuid, actor.name, actor.img, defaultRole, 1, 0);
-
-        await CmDataStore.updateCity(this.city);
+        this.cityDatas.armies.units[actor.id] = new ArmyUnitDto(actor.id, actor.uuid, actor.name, actor.img, defaultRole, 1, 0);
+        await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
         this.render();
     }
 
@@ -528,8 +578,8 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         logger.debug("Drop building", item)
 
         // Add building to current city
-        this.city.buildings[item.id] = new BuildingDto(item.id, item.uuid, item.name, item.img)
-        await CmDataStore.updateCity(this.city);
+        this.cityDatas.buildings[item.id] = new BuildingDto(item.id, item.uuid, item.name, item.img)
+        await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
         this.render();
     }
 
@@ -539,7 +589,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         logger.debug("Drop item", item)
 
         // Add treasure to current city chests
-        this.city.chests[item.id] = {
+        this.cityDatas.chests[item.id] = {
             id: item.id,
             uuid: item.uuid,
             name: item.name,
@@ -548,7 +598,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             price: item.system?.price ?? 0
         };
 
-        await CmDataStore.updateCity(this.city);
+        await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
         this.render();
     }
 
@@ -565,10 +615,10 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         this.#hooks.push(
             Hooks.on("updateActor", (actor, changes, options, userId) => {
                 logger.debug("Hook update actor", actor)
-                if (Object.hasOwn(this.city.armies.units, actor.id)) {
+                if (Object.hasOwn(this.cityDatas.armies.units, actor.id)) {
                     logger.debug("Update army unit", actor)
-                    this.city.armies.units[actor.id] = new ArmyUnitDto(actor.id, actor.uuid, actor.name, actor.img, "soldier", 1, 0);
-                    CmDataStore.updateCity(this.city);
+                    this.cityDatas.armies.units[actor.id] = new ArmyUnitDto(actor.id, actor.uuid, actor.name, actor.img, "soldier", 1, 0);
+                    CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
                     this.render();
                 };
 
@@ -578,9 +628,9 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
 
         this.#hooks.push(
             Hooks.on("deleteActor", (actor) => {
-                if (Object.hasOwn(this.city.armies.units, actor.id)) {
-                    delete this.city.armies.units[actor.id]
-                    CmDataStore.updateCity(this.city);
+                if (Object.hasOwn(this.cityDatas.armies.units, actor.id)) {
+                    delete this.cityDatas.armies.units[actor.id]
+                    CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
                     this.render();
                 }
 
@@ -615,20 +665,19 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         const datas = foundry.utils.expandObject(formData.object);
         logger.debug("FormDatas", datas)
 
-        logger.debug("City to update", this.city)
-        foundry.utils.mergeObject(this.city, datas.city, {
+        logger.debug("City to update", this.cityDatas)
+        foundry.utils.mergeObject(this.cityDatas, datas.city, {
             insertKeys: true,    // ajouter les clés absentes de objA
             insertValues: true,  // ajouter les valeurs manquantes
             overwrite: true,     // objB écrase objA
             recursive: true,     // fusion récursive des objets imbriqués
             inplace: true,      // false = retourne un nouvel objet
         });
-        logger.debug("Updated city", this.city)
+        logger.debug("Updated city", this.cityDatas)
 
-        this.city = CityDto.fromData(this.city);
-        logger.debug("City Datas", this.city)
-
-        await CmDataStore.updateCity(this.city)
+        this.cityDatas = CityDto.fromData(this.cityDatas);
+        logger.debug("City Datas", this.cityDatas)
+        await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
 
         await this._updateFrame({
             window: { title: this.city.name }
@@ -670,7 +719,9 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             // { type: "reset", action: "reset", icon: "fa-solid fa-undo", label: "SETTINGS.Reset" },
         ]
         context.tabs = this._prepareTabs("primary")
-        const sourceCity = CityDto.fromData(this.city);
+        const cityDatas = CmCitiesJournalDataStore.getCityData(this.city);
+        logger.debug("City datas", cityDatas)
+        const sourceCity = CityDto.fromData(cityDatas);
         context.city = sourceCity;
         this.computeStats(context.city);
 
@@ -692,6 +743,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             "value": totalSum
         }
 
+        context.hasNoStats = Object.keys(sourceCity.stats ?? {}).length < 1;
         context.hasNoPeoples = Object.keys(sourceCity.population.peoples ?? {}).length < 1;
         context.hasNoBuildings = Object.keys(sourceCity.buildings ?? {}).length < 1;
         context.hasNoTreasures = Object.keys(sourceCity.chests ?? {}).length < 1;

@@ -28,3 +28,4 @@ https://github.com/ThorkhArokh/cities-managment/releases/latest/download/module.
  - building class Extend Item class
  - add duplicate menu on cities
  - add sheet for armies unit ?
+ - show city or not to players (ownership)

@@ -10,7 +10,7 @@
             <div class="field-label">{{localize "CM.app.city.header.unit.nbr"}}</div>
         </div>
         <div class="flex1 center" style="max-width: 80px;">
-            <div class="field-label"><span><i data-tooltip="{{localize "CM.currency.sp.label"}}"
+            <div class="field-label"><span><i data-tooltip="CM.currency.sp.label"
                         class="fas fa-coins" style="color:silver"></i> {{localize "CM.app.city.header.unit.cost"}}</span>
             </div>
         </div>
@@ -23,7 +23,7 @@
         <div class="flex2 flexrow no-wrap" style="gap:4px">
             <img class="flex0" width="30px" height="30px" src="{{img}}" data-action="editImage"
                 data-field="armies.units.{{@key}}.img" data-edit="city.armies.units.{{@key}}.img"
-                data-tooltip="{{localize "CM.app.city.tab.header.avatar.tooltip"}}" />
+                data-tooltip="CM.app.city.tab.header.avatar.tooltip" />
             <a data-action="showDetails" data-uuid="{{uuid}}" {{#unless uuid}}disabled{{/unless}}>
                 <span class="flexauto {{#if uuid}}underline{{/if}}"><strong>{{name}}</strong></span>
             </a>
