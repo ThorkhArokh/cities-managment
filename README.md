@@ -17,6 +17,8 @@ https://github.com/ThorkhArokh/cities-managment/releases/latest/download/module.
  - Manage city population
  - Manage city buildings
  - Manage city vaults
+ - Link to map
+ - Link to journal
 
 ## Backlog
  - Dynamics treasury
