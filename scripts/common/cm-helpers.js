@@ -30,7 +30,7 @@ export const registerHandlebarsHelpers = function () {
   `);
 
     Handlebars.registerPartial("cityEntry", `
-    <li class="city-item directory-item entry document flexrow" data-id="{{city.id}}" draggable="true">
+    <li class="city-item directory-item entry document flexrow" data-id="{{city.id}}" data-uuid="{{city.uuid}}" draggable="true">
         <img class="thumbnail" src="{{city.flags.cities-managment.cityData.img}}" />
         <a class="entry-name ellipsis" data-action="activateEntry" data-index="{{@index}}"
             data-id="{{city.id}}">{{city.flags.cities-managment.cityData.name}}</a>

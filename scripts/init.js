@@ -1,5 +1,5 @@
-import { logger } from "./common/customLog.js"
-import { MODULE_ID, FLAG_KEY_CITY_DATAS } from "./common/constants.js"
+import { logger } from "./common/cm-customLog.js"
+import { MODULE_ID, FLAG_KEY_CITY_DATAS, FLAG_KEY_TYPE, ENTITY_TYPE_CITY } from "./common/cm-constants.js"
 import { CitiesTab } from "./sidebar/cities-sidebar-tab.js"
 import { registerSystemSettings } from "./common/cm-settings.js"
 import { preloadHandlebarsTemplates } from "./common/cm-templates.js"
@@ -43,6 +43,7 @@ Hooks.on("init", function () {
     logger.debug("tabs", Sidebar.TABS);
   }
 
+  // Hooks
   logger.info(`Module ${MODULE_ID} ...hooks...`);
   Hooks.on("renderSidebar", (app, html) => {
     const citiesmanagmentBtn = html.querySelector('button[data-tab="citiesmanagment"]');
@@ -57,9 +58,18 @@ Hooks.on("init", function () {
 
   Hooks.on("renderJournalDirectory", (app, html, data) => {
     logger.debug("Hook : renderJournalDirectory", html)
+    // Don't show city journal
     for (const journal of game.journal) {
       if (journal.getFlag(MODULE_ID, FLAG_KEY_CITY_DATAS) !== undefined) {
         const entry = html.querySelector(`[data-entry-id="${journal.id}"]`);
+        if (entry) entry.remove();
+      }
+    }
+    // Don't show city folders
+    for (const folder of game.folders.filter(f => f.type === "JournalEntry")) {
+      logger.debug("Hook : renderJournalDirectory folder", folder)
+      if (folder.getFlag(MODULE_ID, FLAG_KEY_TYPE) === ENTITY_TYPE_CITY) {
+        const entry = html.querySelector(`[data-folder-id="${folder.id}"]`);
         if (entry) entry.remove();
       }
     }

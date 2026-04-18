@@ -137,6 +137,12 @@
             "cost.label": "Coût de maintenance",
             "new.btn": "Ajouter un nouveau bâtiment",
             "emptyName": "Le nom du bâtiment ne peut pas être vide."
+        },
+        "deleteFolder" : {
+            "title" : "Supprimer dossier : ",
+            "content" : "<p>Que faire du contenu de ce dossier ?</p>",
+            "btn.deleteAll" : "Supprimer tout",
+            "btn.keepContent" : "Garder le contenu"
         }
     },
     "CM.currency": {

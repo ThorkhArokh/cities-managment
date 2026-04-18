@@ -1,4 +1,4 @@
-import { MODULE_ID } from "./constants.js"
+import { MODULE_ID } from "./cm-constants.js"
 
 /**
  * Define a set of template paths to pre-load

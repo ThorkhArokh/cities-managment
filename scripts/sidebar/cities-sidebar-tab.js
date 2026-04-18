@@ -1,7 +1,8 @@
-import { logger } from "../common/customLog.js"
-import { MODULE_ID, FLAG_KEY_TYPE, ENTITY_TYPE_CITY } from "../common/constants.js"
+import { logger } from "../common/cm-customLog.js"
+import { MODULE_ID, FLAG_KEY_TYPE, ENTITY_TYPE_CITY } from "../common/cm-constants.js"
 import { CmCitiesJournalDataStore } from "../common/cm-cities-journal-ds.js"
 import { CmCityApp } from "../apps/cm-cities-app.js"
+import { addCityDialog, deleteFolderDialog } from "../dialogs/cm-cities-tab-dialog.js"
 
 const { DocumentOwnershipConfig } = foundry.applications.apps;
 const { DialogV2, HandlebarsApplicationMixin } = foundry.applications.api;
@@ -35,11 +36,19 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
 
   constructor(...args) {
     super(...args);
-    logger.debug("CitiesTab constructed");
+    logger.debug("Cities Sidebar | constructed");
   }
 
+  // --------------------------------------------------------------------
+  // HEADER ACTIONS
+  // -------------------------------------------------------------------- 
+  /**
+   * Collapse all folders
+   * @param {PointerEvent} event  click event
+   * @param {HTMLElement} target  click target
+   */
   static onCollapseFolders(event, target) {
-    logger.debug("onCollapseFolders", event, target)
+    logger.debug("Cities Sidebar | onCollapseFolders", event, target)
     this._expandedFolders.clear();
     this.render();
   }
@@ -56,15 +65,23 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
     this.render();
   }, 200);
 
+  // --------------------------------------------------------------------
+  // FOLDERS
+  // -------------------------------------------------------------------- 
+  /**
+   * Create folder
+   * @param {PointerEvent} event  click event
+   * @param {HTMLElement} target  click target
+   */
   static async onCreateFolder(event, target) {
-    logger.debug("onCreateFolder", target)
+    logger.debug("Cities Sidebar | onCreateFolder", target)
     const button = event.target;
     const li = button.closest(".directory-item");
     const parentId = li?.dataset.folderId;
 
-    // Écoute la prochaine création de dossier une seule fois
+    // Listen next folder creation, one time
     Hooks.once("createFolder", async (folder) => {
-      logger.debug("Hook create folder", folder)
+      logger.debug("Cities Sidebar | Hook create folder", folder)
       if (folder.type !== JournalEntry.metadata.name) return;
       await folder.setFlag(MODULE_ID, FLAG_KEY_TYPE, ENTITY_TYPE_CITY);
     });
@@ -79,77 +96,52 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
     this.render();
   }
 
+  /**
+   * Edit folder. Open the folder sheet
+   * @param {*} folder the folder to edit
+   */
   _onEditFolder(folder) {
     if (!folder) return;
     folder.sheet.render(true);
   }
 
+  /**
+   * Delete folder
+   * @param {*} folder the folder to delete
+   */
   async _onDeleteFolder(folder) {
+    logger.debug("Cities Sidebar | onDeleteFolder", folder)
     if (!folder) return;
 
-    const result = await foundry.applications.api.DialogV2.wait({
-      window: { title: `Supprimer "${folder.name}"` },
-      content: `<p>Que faire du contenu de ce dossier ?</p>`,
-      buttons: [
-        {
-          label: "Supprimer tout",
-          icon: "fas fa-trash",
-          action: "all",
-        },
-        {
-          label: "Garder le contenu",
-          icon: "fas fa-folder-minus",
-          action: "keep",
-        },
-        {
-          label: "Annuler",
-          icon: "fas fa-times",
-          action: "cancel",
-        },
-      ],
-    });
+    const result = await deleteFolderDialog.render(folder);
+    if (!result) return;
 
-    if (result === "cancel" || result === null) return;
-
+    logger.debug("Cities Sidebar | onDeleteFolder result", result)
     await folder.delete({
       deleteSubfolders: result === "all",
       deleteContents: result === "all",
     });
   }
 
+  // --------------------------------------------------------------------
+  // CITIES
+  // -------------------------------------------------------------------- 
   static async onCityDetails(event, target) {
-    logger.debug("onCityDetails", target)
+    logger.debug("Cities Sidebar | onCityDetails", target)
     let city = CmCitiesJournalDataStore.getCityById(target.dataset.id)
     // Open city sheet
     new CmCityApp(city).render(true);
   }
 
   static async onCreateCity(event, target) {
-    logger.debug("On create city", target)
+    logger.debug("Cities Sidebar | onCreateCity", target)
     const button = event.currentTarget;
     const rect = button.getBoundingClientRect();
     const folderId = target.dataset.folderId;
-    const newCityName = await DialogV2.prompt({
-      window: { title: game.i18n.localize("CM.dialog.newCity.title") },
-      position: {
-        left: rect.left - 320,
-        top: rect.top,
-        width: 300,
-      },
-      content: `
-            <div class="form-group">
-                <label>${game.i18n.localize("CM.dialog.newCity.label")}</label>
-                <input type="text" name="cityName" placeholder="${game.i18n.localize("CM.dialog.newCity.placeholder")}" autofocus />
-            </div>
-        `,
-      ok: {
-        label: game.i18n.localize("CM.dialog.newCity.create"),
-        callback: (event, button, dialog) => {
-          return button.form.elements.cityName.value;
-        }
-      }
-    });
 
+    const newCityName = await addCityDialog.render({
+      rect: rect
+    });
     if (!newCityName) return;
     if (newCityName.trim() === "") {
       ui.notifications.warn(game.i18n.localize("CM.dialog.newCity.emptyName"));
@@ -157,13 +149,16 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
     }
 
     let city = await CmCitiesJournalDataStore.createCity(newCityName, folderId);
-    logger.debug("Created city", city)
+    logger.debug("Cities Sidebar | Created city", city)
 
     // Open city sheet
     new CmCityApp(city).render(true);
     this.render(true);
   }
 
+  // --------------------------------------------------------------------
+  // CONTEXT MENUS
+  // -------------------------------------------------------------------- 
   _getCityContextMenuItems() {
     return [
       {
@@ -171,7 +166,7 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
         icon: "<i class='fas fa-lock'></i>",
         condition: (element) => game.user.isGM,
         callback: (element) => {
-          logger.debug("Callback context menu", element)
+          logger.debug("Cities Sidebar | Callback context menu", element)
           const cityId = element.dataset.id;
           const city = CmCitiesJournalDataStore.getCityById(cityId)
           // FIXME : Ouvre la fenêtre native de configuration des droits
@@ -182,7 +177,7 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
         name: "CM.city.contextmenu.open",
         icon: "<i class='fas fa-edit'></i>",
         callback: (element) => {
-          logger.debug("Callback context menu", element)
+          logger.debug("Cities Sidebar | Callback context menu", element)
           const cityId = element.dataset.id;
           const city = CmCitiesJournalDataStore.getCityById(cityId)
           new CmCityApp(city).render(true);
@@ -226,7 +221,7 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
           return folder?.isOwner;
         },
         callback: async (element) => {
-          logger.debug("Delete folder", element)
+          logger.debug("Cities Sidebar | Delete folder", element)
           const folderId = element.dataset.folderId;
           const folder = game.folders.get(folderId);
           this._onDeleteFolder(folder);
@@ -235,11 +230,14 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
     ];
   }
 
+  // --------------------------------------------------------------------
+  // RENDERING
+  // -------------------------------------------------------------------- 
   /** Prepare template context */
   /** After template is rendered */
   async _onRender(context, options) {
     await super._onRender(context, options);
-    logger.debug("CitiesTab rendering...", context);
+    logger.debug("Cities Sidebar | rendering...", context);
 
     const searchInput = this.element.querySelector("input[name='search']");
 
@@ -308,10 +306,10 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
 * @protected
 */
   async _preparePartContext(partId, context) {
-    logger.debug(`CitiesTab preparePartContext for ${partId}...`);
+    logger.debug(`Cities Sidebar | preparePartContext for ${partId}...`);
     // Cities
     let cities = CmCitiesJournalDataStore.getAllCities();
-    logger.debug("cities", cities)
+    logger.debug("Cities Sidebar | cities", cities)
 
     // Search
     const query = this._searchQuery.trim().toLowerCase();
@@ -334,7 +332,7 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
     // Folders
     context.tree = this._buildTree(context.cities, isSearch);
 
-    logger.debug("SideBar Context", context)
+    logger.debug("Cities Sidebar | Context", context)
     return context;
   }
 
@@ -347,7 +345,7 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
   _buildTree(cities, isSearch) {
     const type = JournalEntry.metadata.name;
 
-    logger.debug("Folders", game.folders)
+    logger.debug("Cities Sidebar | Folders", game.folders)
     // All visible city folders
     const folders = game.folders
       .filter(f => f.type === type && f.getFlag(MODULE_ID, FLAG_KEY_TYPE) === ENTITY_TYPE_CITY)
@@ -442,21 +440,22 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
     list?.addEventListener("drop", this._onDropRoot.bind(this));
   }
 
-  _onDragStart(event) {
-    logger.debug("onDragStart", event)
+  async _onDragStart(event) {
+    logger.debug("Cities Sidebar | onDragStart", event)
     const li = event.target;
     const documentId = li.dataset.id;
-
+    const documentUuid = li.dataset.uuid;
+    logger.debug("Cities Sidebar | onDragStart UUID", documentId, documentUuid)
     event.dataTransfer.setData("text/plain", JSON.stringify({
       type: "JournalEntry",
-      id: documentId,
+      uuid: documentUuid
     }));
 
     event.stopPropagation();
   }
 
   _onFolderDragStart(event) {
-    logger.debug("onFolderDragStart", event)
+    logger.debug("Cities Sidebar | onFolderDragStart", event)
     const li = event.target;
     const folderId = li.dataset.folderId;
 
@@ -478,7 +477,7 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
   }
 
   async _onDrop(event) {
-    logger.debug("onDrop", event)
+    logger.debug("Cities Sidebar | onDrop", event)
     event.preventDefault();
     event.stopPropagation();
 
@@ -514,7 +513,7 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
 
   // Drop à la racine (hors dossier)
   async _onDropRoot(event) {
-    logger.debug("onDropRoot", event)
+    logger.debug("Cities Sidebar | onDropRoot", event)
     event.preventDefault();
 
     let data;

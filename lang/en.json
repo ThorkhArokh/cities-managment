@@ -136,6 +136,12 @@
             "cost.label": "Maintenance cost",
             "new.btn": "Add new building",
             "emptyName": "Building's name can't be empty."
+        },
+        "deleteFolder": {
+            "title": "Delete folder : ",
+            "content": "<p>What should be done with the contents of this folder?</p>",
+            "btn.deleteAll": "Delete All",
+            "btn.keepContent": "Keep content"
         }
     },
     "CM.currency": {

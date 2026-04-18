@@ -1,5 +1,5 @@
-import { logger } from "./customLog.js"
-import { MODULE_ID, DATAS_STORE } from "./constants.js"
+import { logger } from "./cm-customLog.js"
+import { MODULE_ID, DATAS_STORE } from "./cm-constants.js"
 import { CityDto } from "../model/cm-city-dto.js"
 
 export class CmCitiesDataStore {

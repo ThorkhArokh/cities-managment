@@ -1,4 +1,4 @@
-import { MODULE_ID, IS_DEBUG_MODE, DATAS_STORE } from "./constants.js"
+import { MODULE_ID, IS_DEBUG_MODE, DATAS_STORE } from "./cm-constants.js"
 
 export const registerSystemSettings = function () {
     game.settings.register(MODULE_ID, IS_DEBUG_MODE, {

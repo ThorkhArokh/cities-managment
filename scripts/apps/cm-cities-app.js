@@ -1,5 +1,5 @@
-import { logger } from "../common/customLog.js"
-import { MODULE_ID } from "../common/constants.js"
+import { logger } from "../common/cm-customLog.js"
+import { MODULE_ID } from "../common/cm-constants.js"
 import { CmCitiesJournalDataStore } from "../common/cm-cities-journal-ds.js"
 import { CityDto } from "../model/cm-city-dto.js"
 import { StatDto } from "../model/cm-stat-dto.js"
@@ -540,11 +540,15 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
       * @protected
       */
     _onDragStart(event) {
+        logger.debug("Cities App | onDragStart", event)
         const el = event.currentTarget;
         if ('link' in event.target.dataset) return;
 
-        // Extract the data you need
-        let dragData = null;
+        // Extract the data
+        const dragData = {
+            type: "JournalEntry",
+            uuid: journal.uuid
+        };
 
         if (!dragData) return;
 

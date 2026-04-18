@@ -1,5 +1,5 @@
-import { MODULE_ID } from "../common/constants.js"
-import { logger } from "../common/customLog.js"
+import { MODULE_ID } from "../common/cm-constants.js"
+import { logger } from "../common/cm-customLog.js"
 
 const { FormDataExtended } = foundry.applications.ux;
 const { renderTemplate } = foundry.applications.handlebars;
