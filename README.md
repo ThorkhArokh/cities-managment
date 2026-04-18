@@ -26,13 +26,14 @@ https://github.com/ThorkhArokh/cities-managment/releases/latest/download/module.
  - add sheet for armies unit ?
  - add sheet for building ? (building class Extend Item class ?)
  - Add sort on tables columns headers
- - Can add bonus, malus, base to stat roll
+ 
 
 ### WIP
  
 
 ### DONE
- - Edit stats => DONE
- - Generics Stats => DONE
- - Add folders in cities tab; /!\ drag and drop cities in folders => DONE
- - show city or not to players (ownership) => DONE
+ - Can add bonus, malus, base to stat roll
+ - Edit stats
+ - Generics Stats
+ - Add folders in cities tab; /!\ drag and drop cities in folders
+ - show city or not to players (ownership)

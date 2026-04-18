@@ -17,7 +17,7 @@ export const addStatDialog = {
     },
     async config(dataConfig) {
         let titleTxt = "CM.dialog.newStat.title";
-        if(dataConfig) {
+        if (dataConfig) {
             titleTxt = "CM.dialog.editStat.title"
         }
         const dataForm = dataConfig ?? {
@@ -32,6 +32,32 @@ export const addStatDialog = {
                 `modules/${MODULE_ID}/templates/dialogs/cm-city-add-stat.hbs`,
                 dataForm
             ),
+            actions: {
+                addBaseToRoll: async (event, target) => {
+                    logger.debug("addBaseToRoll", target.dataset);
+                    const dialog = target.closest(".application");
+                    const rollFormulaElement = dialog.querySelector("[name='rollFormula']");
+                    logger.debug("Elements", dialog, rollFormulaElement)
+                    let value = rollFormulaElement.value ?? 0
+                    rollFormulaElement.value = value + " + @base"
+                },
+                addBonusToRoll: async (event, target) => {
+                    logger.debug("addBonusToRoll", target.dataset);
+                    const dialog = target.closest(".application");
+                    const rollFormulaElement = dialog.querySelector("[name='rollFormula']");
+                    logger.debug("Elements", dialog, rollFormulaElement)
+                    let value = rollFormulaElement.value ?? 0
+                    rollFormulaElement.value = value + " + @bonus"
+                },
+                addMalusToRoll: async (event, target) => {
+                    logger.debug("addMalusToRoll", target.dataset);
+                    const dialog = target.closest(".application");
+                    const rollFormulaElement = dialog.querySelector("[name='rollFormula']");
+                    logger.debug("Elements", dialog, rollFormulaElement)
+                    let value = rollFormulaElement.value ?? 0
+                    rollFormulaElement.value = value + " - @malus"
+                }
+            },
             buttons: [
                 {
                     label: "CM.dialog.save.btn",

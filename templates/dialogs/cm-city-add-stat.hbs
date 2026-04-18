@@ -36,8 +36,14 @@
                 >
                 <i class="fas fa-info-circle"></i>
                 </span></label>
-                <input class="field-value center" type="text" placeholder="{{localize "CM.dialog.newStat.roll.formula.placeholder"}}" name="rollFormula" value="{{rollFormula}}" />
+                <div class="flexrow gap4">
+                    <input class="field-value center" type="text" placeholder="{{localize "CM.dialog.newStat.roll.formula.placeholder"}}" name="rollFormula" value="{{rollFormula}}" />
+                    <button class="flex0" type="button" data-action="addBaseToRoll" ><i class="fas fa-plus"></i> {{localize "CM.dialog.newStat.stats.base.label"}}</button>
+                    <button class="flex0" type="button" data-action="addBonusToRoll" ><i class="fas fa-plus"></i> {{localize "CM.dialog.newStat.stats.bonus.label"}}</button>
+                    <button class="flex0" type="button" data-action="addMalusToRoll" ><i class="fas fa-plus"></i> {{localize "CM.dialog.newStat.stats.malus.label"}}</button>
+                </div>
             </div>
+            
         </div>
     </div>
 </form>

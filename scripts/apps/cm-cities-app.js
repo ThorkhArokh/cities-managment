@@ -244,7 +244,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
 
         if (!stat.rollFormula) return
 
-        const roll = new Roll(stat.rollFormula);
+        const roll = new Roll(stat.rollFormula, stat);
         await roll.evaluate();
 
         var results_html = `<h2 class="standard">
