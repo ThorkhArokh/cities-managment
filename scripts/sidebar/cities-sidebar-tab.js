@@ -1,5 +1,5 @@
 import { logger } from "../common/customLog.js"
-import { MODULE_ID } from "../common/constants.js"
+import { MODULE_ID, FLAG_KEY_TYPE, ENTITY_TYPE_CITY } from "../common/constants.js"
 import { CmCitiesJournalDataStore } from "../common/cm-cities-journal-ds.js"
 import { CmCityApp } from "../apps/cm-cities-app.js"
 
@@ -11,6 +11,7 @@ const { ContextMenu } = foundry.applications.ux;
 export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
   _searchQuery = "";
   _sortAlpha = "asc";
+  _expandedFolders = new Set();
 
   static tabName = "citiesmanagment";
 
@@ -18,7 +19,7 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
     window: { title: "CM.tab.city-managment" },
     classes: ["cm-cities-app", "flexcol"],
     actions: {
-      //createFolder: CitiesTab.onCreateFolder,
+      createFolder: CitiesTab.onCreateFolder,
       createEntry: CitiesTab.onCreateCity,
       activateEntry: CitiesTab.onCityDetails,
       toggleSort: CitiesTab.onToggleSort,
@@ -48,17 +49,66 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
     this.render();
   }, 200);
 
-  /*static async onCreateFolder(event, target) {
+  static async onCreateFolder(event, target) {
     logger.debug("onCreateFolder", target)
     const button = event.target;
     const li = button.closest(".directory-item");
     const parentId = li?.dataset.folderId;
 
+    // Écoute la prochaine création de dossier une seule fois
+    Hooks.once("createFolder", async (folder) => {
+      logger.debug("Hook create folder", folder)
+      if (folder.type !== JournalEntry.metadata.name) return;
+      await folder.setFlag(MODULE_ID, FLAG_KEY_TYPE, ENTITY_TYPE_CITY);
+    });
+
     Folder.createDialog(
-      { type: this.constructor.documentName },
+      {
+        type: JournalEntry.metadata.name
+      },
       { parent: game.folders.get(parentId) ?? null }
     );
-  }*/
+
+    this.render();
+  }
+
+  _onEditFolder(folder) {
+    if (!folder) return;
+    folder.sheet.render(true);
+  }
+
+  async _onDeleteFolder(folder) {
+    if (!folder) return;
+
+    const result = await foundry.applications.api.DialogV2.wait({
+      window: { title: `Supprimer "${folder.name}"` },
+      content: `<p>Que faire du contenu de ce dossier ?</p>`,
+      buttons: [
+        {
+          label: "Supprimer tout",
+          icon: "fas fa-trash",
+          action: "all",
+        },
+        {
+          label: "Garder le contenu",
+          icon: "fas fa-folder-minus",
+          action: "keep",
+        },
+        {
+          label: "Annuler",
+          icon: "fas fa-times",
+          action: "cancel",
+        },
+      ],
+    });
+
+    if (result === "cancel" || result === null) return;
+
+    await folder.delete({
+      deleteSubfolders: result === "all",
+      deleteContents: result === "all",
+    });
+  }
 
   static async onCityDetails(event, target) {
     logger.debug("onCityDetails", target)
@@ -68,8 +118,10 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
   }
 
   static async onCreateCity(event, target) {
+    logger.debug("On create city", target)
     const button = event.currentTarget;
     const rect = button.getBoundingClientRect();
+    const folderId = target.dataset.folderId;
     const newCityName = await DialogV2.prompt({
       window: { title: game.i18n.localize("CM.dialog.newCity.title") },
       position: {
@@ -97,7 +149,7 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
       return;
     }
 
-    let city = await CmCitiesJournalDataStore.createCity(newCityName);
+    let city = await CmCitiesJournalDataStore.createCity(newCityName, folderId);
     logger.debug("Created city", city)
 
     // Open city sheet
@@ -120,7 +172,7 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
         }
       },
       {
-        name: game.i18n.localize("CM.city.contextmenu.open"),
+        name: "CM.city.contextmenu.open",
         icon: "<i class='fas fa-edit'></i>",
         callback: (element) => {
           logger.debug("Callback context menu", element)
@@ -130,7 +182,7 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
         }
       },
       {
-        name: game.i18n.localize("CM.city.contextmenu.delete"),
+        name: "CM.city.contextmenu.delete",
         icon: "<i class='fas fa-trash'></i>",
         condition: (element) => game.user.isGM,
         callback: async (element) => {
@@ -139,6 +191,40 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
           this.render();
         }
       }
+    ];
+  }
+
+  _getFolderContextMenuItems() {
+    return [
+      {
+        name: "CM.city.contextmenu.edit",
+        icon: '<i class="fas fa-edit"></i>',
+        condition: (element) => {
+          const folderId = element.dataset.folderId;
+          const folder = game.folders.get(folderId);
+          return folder?.isOwner;
+        },
+        callback: (element) => {
+          const folderId = element.dataset.folderId;
+          const folder = game.folders.get(folderId);
+          this._onEditFolder(folder);
+        },
+      },
+      {
+        name: "CM.city.contextmenu.delete",
+        icon: '<i class="fas fa-trash"></i>',
+        condition: (element) => {
+          const folderId = element.dataset.folderId;
+          const folder = game.folders.get(folderId);
+          return folder?.isOwner;
+        },
+        callback: async (element) => {
+          logger.debug("Delete folder", element)
+          const folderId = element.dataset.folderId;
+          const folder = game.folders.get(folderId);
+          this._onDeleteFolder(folder);
+        },
+      },
     ];
   }
 
@@ -171,6 +257,35 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
       this._getCityContextMenuItems(),
       { jQuery: false }
     );
+
+    // Context menu on folders
+    new ContextMenu(
+      this.element,
+      ".city-folder",
+      this._getFolderContextMenuItems(),
+      { jQuery: false }
+    );
+
+    // Toggle expanded when clic on folder header
+    this.element.querySelectorAll(".folder-header").forEach(header => {
+      header.addEventListener("click", (e) => {
+        // Si le clic vient du bouton +, on ignore
+        if (e.target.closest(".create-entry")) return;
+
+        const li = e.currentTarget.closest(".folder");
+        const folderId = li.dataset.folderId;
+
+        if (this._expandedFolders.has(folderId)) {
+          this._expandedFolders.delete(folderId);
+        } else {
+          this._expandedFolders.add(folderId);
+        }
+
+        this.render();
+      });
+    });
+
+    this._activateDragDrop();
   }
 
   /**
@@ -187,13 +302,16 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
 */
   async _preparePartContext(partId, context) {
     logger.debug(`CitiesTab preparePartContext for ${partId}...`);
+    // Cities
     let cities = CmCitiesJournalDataStore.getAllCities();
     logger.debug("cities", cities)
 
     // Search
     const query = this._searchQuery.trim().toLowerCase();
+    let isSearch = false;
     if (query) {
       cities = cities.filter(c => c.name.toLowerCase().includes(query));
+      isSearch = true;
     }
 
     // Sorts
@@ -202,9 +320,211 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
       return this._sortAlpha === "asc" ? cmp : -cmp;
     });
 
-    context.cities = cities;
+    context.cities = cities.filter(j => j.visible);
     context.searchQuery = this._searchQuery;
     context.sortAlpha = this._sortAlpha;
+
+    // Folders
+    context.tree = this._buildTree(context.cities, isSearch);
+
+    logger.debug("SideBar Context", context)
     return context;
+  }
+
+  /**
+   * Build folders and entities tree
+   * @param {*} cities cities entities
+   * @param {*} isSearch search active or not
+   * @returns folders and entities tree
+   */
+  _buildTree(cities, isSearch) {
+    const type = JournalEntry.metadata.name;
+
+    logger.debug("Folders", game.folders)
+    // All visible city folders
+    const folders = game.folders
+      .filter(f => f.type === type && f.getFlag(MODULE_ID, FLAG_KEY_TYPE) === ENTITY_TYPE_CITY)
+      .sort((a, b) => (a.sort ?? 0) - (b.sort ?? 0));
+
+    // All visible entities
+    const entries = cities
+      .filter(j => j.visible)
+      .sort((a, b) => (a.sort ?? 0) - (b.sort ?? 0));
+
+    // Node recursive build
+    const buildNode = (folder) => ({
+      folder,
+      expanded: isSearch || this._expandedFolders.has(folder.id),
+      children: folders
+        .filter(f => f.folder?.id === folder.id)
+        .map(buildNode),
+      entries: entries.filter(j => j.folder?.id === folder.id),
+    });
+
+    return {
+      // Root folders
+      children: folders
+        .filter(f => !f.folder)
+        .map(buildNode),
+      // Root entities
+      entries: entries.filter(j => !j.folder),
+    };
+  }
+
+  // ----------------------------------------------------------------------
+  // HOOKS 
+  // ----------------------------------------------------------------------
+  _onFirstRender(context, options) {
+    super._onFirstRender(context, options);
+    this._registerHooks();
+  }
+
+  async close(options) {
+    this._unregisterHooks();
+    return super.close(options);
+  }
+
+  _registerHooks() {
+    const rerender = () => this.render();
+    const folderFilter = (folder) => {
+      if (folder.type === JournalEntry.metadata.name) rerender();
+    };
+
+    this._hooks = [
+      { name: "createFolder", id: Hooks.on("createFolder", folderFilter) },
+      { name: "updateFolder", id: Hooks.on("updateFolder", folderFilter) },
+      { name: "deleteFolder", id: Hooks.on("deleteFolder", folderFilter) },
+      { name: "createJournalEntry", id: Hooks.on("createJournalEntry", rerender) },
+      { name: "updateJournalEntry", id: Hooks.on("updateJournalEntry", rerender) },
+      { name: "deleteJournalEntry", id: Hooks.on("deleteJournalEntry", rerender) },
+    ];
+  }
+
+  _unregisterHooks() {
+    this._hooks?.forEach(({ name, id }) => Hooks.off(name, id));
+    this._hooks = [];
+  }
+
+  // ----------------------------------------------------------------------
+  // DRAG n DROP 
+  // ----------------------------------------------------------------------
+  _activateDragDrop() {
+    const el = this.element;
+
+    // Drag entities
+    el.querySelectorAll(".directory-item.document").forEach(item => {
+      item.addEventListener("dragstart", this._onDragStart.bind(this));
+    });
+
+    // Drag folders
+    el.querySelectorAll(".city-folder").forEach(folder => {
+      folder.addEventListener("dragstart", this._onFolderDragStart.bind(this));
+    });
+
+    // Drop zones on folders
+    el.querySelectorAll(".folder-drop-zone").forEach(folder => {
+      folder.addEventListener("dragover", this._onDragOver.bind(this));
+      folder.addEventListener("dragleave", this._onDragLeave.bind(this));
+      folder.addEventListener("drop", this._onDrop.bind(this));
+    });
+
+    // Drop zone root
+    const list = el.querySelector(".directory-list");
+    list?.addEventListener("dragover", this._onDragOver.bind(this));
+    list?.addEventListener("dragleave", this._onDragLeave.bind(this));
+    list?.addEventListener("drop", this._onDropRoot.bind(this));
+  }
+
+  _onDragStart(event) {
+    logger.debug("onDragStart", event)
+    const li = event.target;
+    const documentId = li.dataset.id;
+
+    event.dataTransfer.setData("text/plain", JSON.stringify({
+      type: "JournalEntry",
+      id: documentId,
+    }));
+
+    event.stopPropagation();
+  }
+
+  _onFolderDragStart(event) {
+    logger.debug("onFolderDragStart", event)
+    const li = event.target;
+    const folderId = li.dataset.folderId;
+
+    event.dataTransfer.setData("text/plain", JSON.stringify({
+      type: "Folder",
+      id: folderId,
+    }));
+
+    event.stopPropagation();
+  }
+
+  _onDragOver(event) {
+    event.preventDefault();
+    event.target.classList.add("droptarget");
+  }
+
+  _onDragLeave(event) {
+    event.target.classList.remove("droptarget");
+  }
+
+  async _onDrop(event) {
+    logger.debug("onDrop", event)
+    event.preventDefault();
+    event.stopPropagation();
+
+    const target = event.target;
+    target.classList.remove("droptarget");
+
+    const folderId = target.dataset.folderId;
+    const folder = game.folders.get(folderId);
+    if (!folder) return;
+
+    let data;
+    try {
+      data = JSON.parse(event.dataTransfer.getData("text/plain"));
+    } catch { return; }
+
+    // Drop d'une entrée dans un dossier
+    if (data.type === "JournalEntry") {
+      const journal = game.journal.get(data.id);
+      if (!journal?.isOwner) return;
+
+      await journal.update({ folder: folderId });
+    }
+
+    // Drop d'un dossier dans un dossier
+    if (data.type === "Folder") {
+      if (data.id === folderId) return; // pas sur lui-même
+      const draggedFolder = game.folders.get(data.id);
+      if (!draggedFolder?.isOwner) return;
+
+      await draggedFolder.update({ folder: folderId });
+    }
+  }
+
+  // Drop à la racine (hors dossier)
+  async _onDropRoot(event) {
+    logger.debug("onDropRoot", event)
+    event.preventDefault();
+
+    let data;
+    try {
+      data = JSON.parse(event.dataTransfer.getData("text/plain"));
+    } catch { return; }
+
+    if (data.type === "JournalEntry") {
+      const journal = game.journal.get(data.id);
+      if (!journal?.isOwner) return;
+      await journal.update({ folder: null });
+    }
+
+    if (data.type === "Folder") {
+      const folder = game.folders.get(data.id);
+      if (!folder?.isOwner) return;
+      await folder.update({ folder: null });
+    }
   }
 }

@@ -6,10 +6,10 @@
                 <i class="fa-solid fa-user" inert=""></i>
                 <span>{{localize "CM.sidebar.button.createCity"}}</span>
             </button>
-            <!--<button type="button" class="create-folder" data-action="createFolder">
+            <button type="button" class="create-folder" data-action="createFolder">
                 <i class="fa-solid fa-folder" inert=""></i>
-                <span>Create Folder</span>
-            </button>-->
+                <span>{{localize "CM.sidebar.button.createCityFolder"}}</span>
+            </button>
         </div>
 
         <search class="cm-sidebar-search">
@@ -29,20 +29,14 @@
         </search>
     </header>
     <ol class="directory-list plain" data-application-part="directory">
-        <!--{{#each folders as |folder|}}
-        <li data-folder-id="{{folder.id}}">
-            <span>{{folder.name}}</span>
-            <button type="button" data-action="createFolder">
-                <i class="fa-solid fa-folder-plus"></i>
-            </button>
-        </li>
-        {{/each}}-->
-        {{#each cities}}
-        <li class="city-item directory-item entry document flexrow" data-id="{{id}}">
-            <img class="thumbnail" src="{{flags.cities-managment.cityData.img}}" />
-            <a class="entry-name ellipsis" data-action="activateEntry" data-index="{{@index}}"
-                data-id="{{id}}">{{name}}</a>
-        </li>
+        {{! Dossiers racine }}
+        {{#each tree.children as |node|}}
+            {{> cityFolderNode node=node}}
+        {{/each}}
+
+        {{! Entrées sans dossier }}
+        {{#each tree.entries as |city|}}
+            {{> cityEntry city=city}}
         {{/each}}
     </ol>
 </section>

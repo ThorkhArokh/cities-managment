@@ -24,13 +24,13 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         this.city = city;
         this.cityDatas = CityDto.fromData(CmCitiesJournalDataStore.getCityData(city));
         this.#dragDrop = this.#createDragDropHandlers();
-        this.isEditable = game.user.isGM;
+        this.isEditable = game.user.isGM || city.testUserPermission(game.user, "OWNER");
     }
 
     // Override title getter 
     get title() {
-        logger.debug("Get window title", this.city)
-        return this.city?.name ?? "CM.app.city.title";
+        logger.debug("Get window title", this.cityDatas)
+        return this.cityDatas?.name ?? "CM.app.city.title";
     }
 
     static DEFAULT_OPTIONS = {
@@ -133,6 +133,15 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         },
     };
 
+    /** Handle user app rendering */
+    _canRender(options) {
+        if (!this.city.testUserPermission(game.user, "OBSERVER")) {
+            ui.notifications.warn("Vous ne pouvez pas afficher les détails de cette ville.");
+            return false;
+        }
+        return super._canRender(options);
+    }
+
     /**
      * Show map
      * @param {PointerEvent} event  click event
@@ -142,7 +151,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         logger.debug("Show map", target)
         const scene = await fromUuid(target.dataset.uuid);
         if (!scene) return;
-        
+
         await scene.view();
     }
 
@@ -680,7 +689,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
 
         await this._updateFrame({
-            window: { title: this.city.name }
+            window: { title: this.cityDatas.name }
         });
         this.render(true)
         // update sidebar

@@ -1,5 +1,5 @@
 hr {
-    margin: 0.1rem 0
+    margin: 0.5rem 0
 }
 
 .flexauto {
@@ -80,4 +80,17 @@ hr {
     border-radius: 4px;
     transition: border-color 0.2s;
     background: rgba(0, 123, 255, 0.05);
+}
+
+.folder-drop-zone.droptarget {
+    outline: 2px dashed whitesmoke;
+    background: var(--color-bg-option);
+}
+
+.directory-item.document[draggable="true"] {
+    cursor: grab;
+}
+
+.directory-item.document[draggable="true"]:active {
+    cursor: grabbing;
 }

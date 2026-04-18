@@ -1,5 +1,5 @@
 import { logger } from "./common/customLog.js"
-import { MODULE_ID, FLAG_KEY } from "./common/constants.js"
+import { MODULE_ID, FLAG_KEY_CITY_DATAS } from "./common/constants.js"
 import { CitiesTab } from "./sidebar/cities-sidebar-tab.js"
 import { registerSystemSettings } from "./common/cm-settings.js"
 import { preloadHandlebarsTemplates } from "./common/cm-templates.js"
@@ -58,7 +58,7 @@ Hooks.on("init", function () {
   Hooks.on("renderJournalDirectory", (app, html, data) => {
     logger.debug("Hook : renderJournalDirectory", html)
     for (const journal of game.journal) {
-      if (journal.getFlag(MODULE_ID, FLAG_KEY) !== undefined) {
+      if (journal.getFlag(MODULE_ID, FLAG_KEY_CITY_DATAS) !== undefined) {
         const entry = html.querySelector(`[data-entry-id="${journal.id}"]`);
         if (entry) entry.remove();
       }

@@ -1,13 +1,18 @@
 {
     "CM.sidebar.button.createCity": "Créer ville",
-    "CM.city.contextmenu.open": "Ouvrir",
-    "CM.city.contextmenu.delete": "Supprimer",
+    "CM.sidebar.button.createCityFolder": "Créer dossier",
+    "CM.city.contextmenu": {
+        "open": "Ouvrir",
+        "edit": "Modifier",
+        "delete": "Supprimer",
+        "ownership": "Configurer droits"
+    },
     "CM.tab.city-managment": "Villes",
     "CM.app.city.title": "Ville",
     "CM.app.city.options.editmode.label": "Basculer mode édition",
     "CM.app.city.actor.new.default.name": "Nouvel acteur",
     "CM.app.city.tab.header.city.desc.placeholder": "Aucune description...",
-    "CM.app.city.tab.header.city.map.tooltip" : "Glissez une scéne ici pour la lier à la ville",
+    "CM.app.city.tab.header.city.map.tooltip": "Glissez une scéne ici pour la lier à la ville",
     "CM.app.city.tab.stats": {
         "empty": "Aucune caractéristique",
         "btn.new.label": "Ajouter une nouvelle caractéristique",
@@ -23,7 +28,7 @@
         "header.bonus.label": "Bonus",
         "header.malus.label": "Malus",
         "header.total.label": "Total",
-        "roll.skill.title" : "Test de compétence"
+        "roll.skill.title": "Test de compétence"
     },
     "CM.app.city.tab.finances.label": "Finances",
     "CM.app.city.tab.finances.entries.empty": "Aucune entrée",
@@ -78,6 +83,9 @@
     "CM.app.city.header.unit.role": "Type",
     "CM.app.city.header.unit.nbr": "Nbr",
     "CM.app.city.header.unit.cost": "Coût",
+    "CM.app.city.messages.errors": {
+        "render.nopermission": "Vous ne pouvez pas afficher les détails de cette ville."
+    },
     "CM.dialog": {
         "cancel.btn": "Annuler",
         "newStat": {

@@ -1,5 +1,5 @@
 import { logger } from "./customLog.js"
-import { MODULE_ID, FLAG_KEY } from "./constants.js"
+import { MODULE_ID, FLAG_KEY_CITY_DATAS } from "./constants.js"
 import { CityDto } from "../model/cm-city-dto.js"
 
 /**
@@ -12,7 +12,7 @@ export class CmCitiesJournalDataStore {
      */
     static getAllCities() {
         return game.journal.filter(j =>
-            j.getFlag(MODULE_ID, FLAG_KEY) !== undefined
+            j.getFlag(MODULE_ID, FLAG_KEY_CITY_DATAS) !== undefined
         );
     }
 
@@ -31,17 +31,18 @@ export class CmCitiesJournalDataStore {
      * @returns city datas
      */
     static getCityData(journalEntry) {
-        return journalEntry.getFlag(MODULE_ID, FLAG_KEY);
+        return journalEntry.getFlag(MODULE_ID, FLAG_KEY_CITY_DATAS);
     }
 
     // Création
-    static async createCity(name) {
+    static async createCity(name, folderId) {
         const dto = new CityDto(name);
         const journal = await JournalEntry.create({
             name: dto.name,
+            folder: folderId,
             flags: {
                 [MODULE_ID]: {
-                    [FLAG_KEY]: dto
+                    [FLAG_KEY_CITY_DATAS]: dto
                 }
             }
         });
@@ -55,10 +56,10 @@ export class CmCitiesJournalDataStore {
      */
     static async updateCity(journalEntry, cityDto) {
         logger.debug("Update city", journalEntry, cityDto)
-        await journalEntry.unsetFlag(MODULE_ID, FLAG_KEY);
+        await journalEntry.unsetFlag(MODULE_ID, FLAG_KEY_CITY_DATAS);
         await journalEntry.setFlag(
             MODULE_ID,
-            FLAG_KEY,
+            FLAG_KEY_CITY_DATAS,
             { ...cityDto }
         );
         logger.debug("Updated city", this.getCityById(journalEntry.id))

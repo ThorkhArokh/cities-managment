@@ -1,7 +1,9 @@
 {
     "CM.sidebar.button.createCity": "Create City",
+    "CM.sidebar.button.createCityFolder": "Create Folder",
     "CM.city.contextmenu": {
         "open": "Open",
+        "edit": "Edit",
         "delete": "Delete",
         "ownership": "Configure ownership"
     },
@@ -80,6 +82,9 @@
     "CM.app.city.header.unit.role": "Type",
     "CM.app.city.header.unit.nbr": "Nbr",
     "CM.app.city.header.unit.cost": "Cost",
+    "CM.app.city.messages.errors": {
+        "render.nopermission": "You cannot display the details for this city."
+    },
     "CM.dialog": {
         "cancel.btn": "Cancel",
         "newStat": {
