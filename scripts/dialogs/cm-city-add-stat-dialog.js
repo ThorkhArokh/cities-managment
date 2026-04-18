@@ -7,7 +7,7 @@ const { DialogV2 } = foundry.applications.api;
 
 export const addStatDialog = {
     async render(dialogForm) {
-        if(!dialogForm) return
+        if (!dialogForm) return
         try {
             return await DialogV2.wait(dialogForm);
         } catch (ex) {
@@ -16,17 +16,26 @@ export const addStatDialog = {
         }
     },
     async config(dataConfig) {
-        const dataForm = dataConfig ?? {}
+        let titleTxt = "CM.dialog.newStat.title";
+        if(dataConfig) {
+            titleTxt = "CM.dialog.editStat.title"
+        }
+        const dataForm = dataConfig ?? {
+            "base": 0,
+            "bonus": 0,
+            "malus": 0
+        }
+        logger.debug("DataForm", dataForm)
         return {
-            window: { title: "CM.dialog.newStat.title" },
+            window: { title: titleTxt },
             content: await renderTemplate(
                 `modules/${MODULE_ID}/templates/dialogs/cm-city-add-stat.hbs`,
                 dataForm
             ),
             buttons: [
                 {
-                    label: "CM.dialog.newStat.new.btn",
-                    icon: "fas fa-plus",
+                    label: "CM.dialog.save.btn",
+                    icon: "fas fa-save",
                     action: "confirm",
                     callback: async (event, button, dialog) => {
                         const form = button.form;

@@ -14,6 +14,21 @@ hr {
     text-decoration: underline;
 }
 
+.info-icon {
+    display: inline-flex;
+    align-items: center;
+    cursor: help;
+    color: var(--color-text-hyperlink);
+    margin-left: 4px;
+    font-size: 0.85em;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.info-icon:hover {
+    opacity: 1;
+}
+
 .cm-cities-app {}
 
 .cm-cities-app-header-avatar {

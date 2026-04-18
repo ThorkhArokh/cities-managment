@@ -66,7 +66,6 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             removeTreasury: CmCityApp.#removeTreasury,
             removeBuilding: CmCityApp.#removeBuilding,
             editImage: CmCityApp.#onEditImage,
-            rollStats: CmCityApp.#rollStats,
             addNewFinanceEntry: CmCityApp.#addNewFinanceEntry,
             removeFinanceEntry: CmCityApp.#removeFinanceEntry,
             addNewUnit: CmCityApp.#addNewUnit,
@@ -75,7 +74,9 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             showDetailsBuilding: CmCityApp.#showDetailsBuilding,
             editAction: CmCityApp.#editAction,
             addNewStat: CmCityApp.#addNewStat,
+            editStat: CmCityApp.#editStat,
             removeStat: CmCityApp.#removeStat,
+            rollStats: CmCityApp.#rollStats,
             showMap: CmCityApp.#showMap
         }
     };
@@ -142,6 +143,9 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         return super._canRender(options);
     }
 
+    // --------------------------------------------------------------------
+    // MAP
+    // -------------------------------------------------------------------- 
     /**
      * Show map
      * @param {PointerEvent} event  click event
@@ -155,6 +159,9 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         await scene.view();
     }
 
+    // --------------------------------------------------------------------
+    // STATS
+    // -------------------------------------------------------------------- 
     /**
      * Add new stat
      * @param {PointerEvent} event  click event
@@ -164,16 +171,48 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         if (!this.isEditable) return
         logger.debug("Add new stat", target)
 
-        const dialogForm = await addStatDialog.config({})
+        const dialogForm = await addStatDialog.config()
         let newStatDatas = await addStatDialog.render(dialogForm);
         logger.debug("New stat datas", newStatDatas)
         if (!newStatDatas) return;
         newStatDatas.id = foundry.utils.randomID();
-        var newStat = new StatDto(newStatDatas.id, newStatDatas.label, 0, 0, 0, newStatDatas.rollFormula);
+        var newStat = new StatDto(newStatDatas.id, newStatDatas.label, newStatDatas.base, newStatDatas.bonus, newStatDatas.malus, newStatDatas.rollFormula);
         logger.debug("New stat", newStat)
         this.cityDatas.stats[newStatDatas.id] = newStat
         await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
         this.render();
+    }
+
+    /**
+   * Edit stat
+   * @param {PointerEvent} event  click event
+   * @param {HTMLElement} target  click target
+   */
+    static async #editStat(event, target) {
+        if (!this.isEditable) return
+        logger.debug("Edit stat", event, target)
+        var statId = target.dataset.id
+
+        if (Object.hasOwn(this.cityDatas.stats, statId)) {
+            const statToEdit = this.cityDatas.stats[statId];
+            logger.debug("Stat to edit", statToEdit)
+            const dialogForm = await addStatDialog.config(statToEdit)
+            let newStatDatas = await addStatDialog.render(dialogForm);
+            logger.debug("Edited stat datas", newStatDatas)
+            if (!newStatDatas) return;
+            foundry.utils.mergeObject(statToEdit, newStatDatas, {
+                insertKeys: true,    // ajouter les clés absentes de objA
+                insertValues: true,  // ajouter les valeurs manquantes
+                overwrite: true,     // objB écrase objA
+                recursive: true,     // fusion récursive des objets imbriqués
+                inplace: true,      // false = retourne un nouvel objet
+            });
+            this.cityDatas.stats[statId] = statToEdit
+            await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
+            this.render();
+        } else {
+            logger.error("No stat found", statId)
+        }
     }
 
     /**
@@ -193,6 +232,34 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         }
     }
 
+    /**
+    * Roll stats dice
+    * @param {PointerEvent} event  click event
+    * @param {HTMLElement} target  click target
+    */
+    static async #rollStats(event, target) {
+        logger.debug("Roll stats dice", target)
+
+        const stat = this.cityDatas.stats[target.dataset.id]
+
+        if (!stat.rollFormula) return
+
+        const roll = new Roll(stat.rollFormula);
+        await roll.evaluate();
+
+        var results_html = `<h2 class="standard">
+        <i class="fas fa-dice-d20"></i> ${game.i18n.localize("CM.app.city.tab.stats.roll.skill.title")}</h2>
+        <b>${game.i18n.localize(stat.label)}</b> pour ${this.cityDatas.name}`
+        // Afficher dans le chat
+        await roll.toMessage({
+            speaker: ChatMessage.getSpeaker(),
+            flavor: results_html,
+        });
+    }
+
+    // --------------------------------------------------------------------
+    // BUILDINGS
+    // -------------------------------------------------------------------- 
     /**
     * Show building details
     * @param {PointerEvent} event  click event
@@ -234,6 +301,27 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
     }
 
     /**
+     * Remove building
+     * @param {PointerEvent} event  click event
+     * @param {HTMLElement} target  click target
+     */
+    static async #removeBuilding(event, target) {
+        if (!this.isEditable) return
+
+        logger.debug("Remove building", target)
+        var buildingId = target.dataset.id
+
+        if (Object.hasOwn(this.cityDatas.buildings, buildingId)) {
+            delete this.cityDatas.buildings[buildingId]
+            await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
+            this.render();
+        }
+    }
+
+    // --------------------------------------------------------------------
+    // ARMY UNITS
+    // -------------------------------------------------------------------- 
+    /**
     * Add new army unit
     * @param {PointerEvent} event  click event
     * @param {HTMLElement} target  click target
@@ -269,6 +357,9 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         }
     }
 
+    // --------------------------------------------------------------------
+    // FINANCE ENTRIES
+    // -------------------------------------------------------------------- 
     /**
    * Add new finance entry
    * @param {PointerEvent} event  click event
@@ -309,31 +400,9 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         }
     }
 
-    /**
-   * Roll stats dice
-   * @param {PointerEvent} event  click event
-   * @param {HTMLElement} target  click target
-   */
-    static async #rollStats(event, target) {
-        logger.debug("Roll stats dice", target)
-
-        const stat = this.cityDatas.stats[target.dataset.id]
-
-        if (!stat.rollFormula) return
-
-        const roll = new Roll(stat.rollFormula);
-        await roll.evaluate();
-
-        var results_html = `<h2 class="standard">
-        <i class="fas fa-dice-d20"></i> ${game.i18n.localize("CM.app.city.tab.stats.roll.skill.title")}</h2>
-        <b>${game.i18n.localize(stat.label)}</b> pour ${this.cityDatas.name}`
-        // Afficher dans le chat
-        await roll.toMessage({
-            speaker: ChatMessage.getSpeaker(),
-            flavor: results_html,
-        });
-    }
-
+    // --------------------------------------------------------------------
+    // OBJECTS
+    // -------------------------------------------------------------------- 
     /**
    * Show object details
    * @param {PointerEvent} event  click event
@@ -344,24 +413,6 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         if (!target.dataset.uuid) return
         const obj = await fromUuid(target.dataset.uuid);
         obj?.sheet?.render(true)
-    }
-
-    /**
-     * Remove people
-     * @param {PointerEvent} event  click event
-     * @param {HTMLElement} target  click target
-     */
-    static async #removePeople(event, target) {
-        if (!this.isEditable) return
-
-        logger.debug("Remove people", target)
-        var peopleId = target.dataset.id
-
-        if (Object.hasOwn(this.cityDatas.population.peoples, peopleId)) {
-            delete this.cityDatas.population.peoples[peopleId]
-            await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
-            this.render();
-        }
     }
 
     /**
@@ -382,44 +433,25 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         }
     }
 
+    // --------------------------------------------------------------------
+    // PEOPLES
+    // -------------------------------------------------------------------- 
     /**
-     * Remove building
+     * Remove people
      * @param {PointerEvent} event  click event
      * @param {HTMLElement} target  click target
      */
-    static async #removeBuilding(event, target) {
+    static async #removePeople(event, target) {
         if (!this.isEditable) return
 
-        logger.debug("Remove building", target)
-        var buildingId = target.dataset.id
+        logger.debug("Remove people", target)
+        var peopleId = target.dataset.id
 
-        if (Object.hasOwn(this.cityDatas.buildings, buildingId)) {
-            delete this.cityDatas.buildings[buildingId]
+        if (Object.hasOwn(this.cityDatas.population.peoples, peopleId)) {
+            delete this.cityDatas.population.peoples[peopleId]
             await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
             this.render();
         }
-    }
-
-    /**
-       * Define whether a user is able to begin a dragstart workflow for a given drag selector
-       * @param {string} selector       The candidate HTML selector for dragging
-       * @returns {boolean}             Can the current user drag this selector?
-       * @protected
-       */
-    _canDragStart(selector) {
-        // game.user fetches the current user
-        return this.isEditable;
-    }
-
-    /**
-   * Define whether a user is able to conclude a drag-and-drop workflow for a given drop selector
-   * @param {string} selector       The candidate HTML selector for the drop target
-   * @returns {boolean}             Can the current user drop on this selector?
-   * @protected
-   */
-    _canDragDrop(selector) {
-        // game.user fetches the current user
-        return this.isEditable;
     }
 
     // Handler to change avatars
@@ -444,6 +476,31 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         })
 
         fp.render(true)
+    }
+
+    // --------------------------------------------------------------------
+    // DRAG n DROP
+    // -------------------------------------------------------------------- 
+    /**
+       * Define whether a user is able to begin a dragstart workflow for a given drag selector
+       * @param {string} selector       The candidate HTML selector for dragging
+       * @returns {boolean}             Can the current user drag this selector?
+       * @protected
+       */
+    _canDragStart(selector) {
+        // game.user fetches the current user
+        return this.isEditable;
+    }
+
+    /**
+   * Define whether a user is able to conclude a drag-and-drop workflow for a given drop selector
+   * @param {string} selector       The candidate HTML selector for the drop target
+   * @returns {boolean}             Can the current user drop on this selector?
+   * @protected
+   */
+    _canDragDrop(selector) {
+        // game.user fetches the current user
+        return this.isEditable;
     }
 
     /**
@@ -611,6 +668,9 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         this.render();
     }
 
+    // --------------------------------------------------------------------
+    // RENDERING
+    // -------------------------------------------------------------------- 
     /**
     * Actions performed after any render of the Application.
     * Post-render steps are not awaited by the render process.

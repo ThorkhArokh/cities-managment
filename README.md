@@ -19,13 +19,20 @@ https://github.com/ThorkhArokh/cities-managment/releases/latest/download/module.
  - Manage city vaults
 
 ## Backlog
- - Generics Stats => DONE
  - Dynamics treasury
  - City creation wizard
  - Drop city on scenes
- - Add folders in cities tab; /!\ drag and drop cities in folders => WIP
  - add duplicate menu on cities
  - add sheet for armies unit ?
  - add sheet for building ? (building class Extend Item class ?)
- - show city or not to players (ownership) => DONE
  - Add sort on tables columns headers
+ - Can add bonus, malus, base to stat roll
+
+### WIP
+ 
+
+### DONE
+ - Edit stats => DONE
+ - Generics Stats => DONE
+ - Add folders in cities tab; /!\ drag and drop cities in folders => DONE
+ - show city or not to players (ownership) => DONE

@@ -70,6 +70,12 @@
                         <input disabled readonly="true" class="field-value center" name="city.stats.{{id}}.value"
                                 type="text" value="{{value}}" data-dtype="Number" />
                 </div>
+                <!-- ...Edit button -->
+                {{#if @root.isEditable}}
+                <div class="flex1 center" style="max-width: 40px;">
+                        <button type="button" data-tooltip="CM.app.city.tab.stats.btn.edit.infos" data-action="editStat" data-id="{{id}}"><i class='fas fa-edit'></i></button>    
+                </div>
+                {{/if}}
                 <!-- ...Delete button -->
                 {{#if @root.isEditable}}
                 <div class="flex1 center" style="max-width: 40px;">

@@ -16,6 +16,7 @@
     "CM.app.city.tab.stats": {
         "empty": "Aucune caractéristique",
         "btn.new.label": "Ajouter une nouvelle caractéristique",
+        "btn.edit.infos": "Modifier la caractéristique",
         "btn.delete.infos": "Supprimer la caractéristique",
         "label": "Caractéristiques",
         "population.label": "Population",
@@ -87,13 +88,24 @@
         "render.nopermission": "Vous ne pouvez pas afficher les détails de cette ville."
     },
     "CM.dialog": {
+        "field.mandatory":"Champ obligatoire",
+        "save.btn": "Enregistrer",
         "cancel.btn": "Annuler",
         "newStat": {
             "title": "Ajouter une nouvelle caractéristique",
-            "new.btn": "Ajouter caractéristique",
             "emptyLabel": "Veuillez renseigner un label.",
             "name.label": "Label",
-            "roll.formula.label": "Formule jet"
+            "stats.legend" : "Statistiques",
+            "stats.base.label": "Base",
+            "stats.bonus.label": "Bonus",
+            "stats.malus.label": "Malus",
+            "name.placeholder": "Nouveau label...",
+            "roll.formula.label": "Formule jet",
+            "roll.formula.placeholder": "ex : 1d6+1",
+            "roll.formula.tooltip.description": "<i>Optionnel</i> - Permet l'ajout d'un jet sur la caractéristique avec une formule personnalisée (exemple : '1d6+1')"
+        },
+        "editStat" : {
+            "title": "Modifier caractéristique"
         },
         "newUnit": {
             "title": "Ajouter une nouvelle unité",

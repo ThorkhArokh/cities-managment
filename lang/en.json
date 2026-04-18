@@ -12,10 +12,11 @@
     "CM.app.city.options.editmode.label": "Toggle edit mode",
     "CM.app.city.actor.new.default.name": "New actor",
     "CM.app.city.tab.header.city.desc.placeholder": "No description...",
-    "CM.app.city.tab.header.city.map.tooltip" : "Drop a scene here to link it to the city",
+    "CM.app.city.tab.header.city.map.tooltip": "Drop a scene here to link it to the city",
     "CM.app.city.tab.stats": {
         "empty": "No stat",
         "btn.new.label": "Add new stat",
+        "btn.edit.infos": "Edit stat",
         "btn.delete.infos": "Delete stat",
         "label": "Stats",
         "population.label": "Population",
@@ -86,13 +87,24 @@
         "render.nopermission": "You cannot display the details for this city."
     },
     "CM.dialog": {
+        "field.mandatory": "Required field",
+        "save.btn": "Save",
         "cancel.btn": "Cancel",
         "newStat": {
             "title": "Add new stat",
-            "new.btn": "Add stat",
             "emptyLabel": "Stat's label can be empty.",
-            "name.label": "Label",
-            "roll.formula.label": "Roll formula"
+            "stats.legend": "Stats",
+            "stats.name.label": "Label",
+            "stats.base.label": "Base",
+            "stats.bonus.label": "Bonus",
+            "stats.malus.label": "Malus",
+            "name.placeholder": "New label...",
+            "roll.formula.label": "Roll formula",
+            "roll.formula.placeholder": "ex : 1d6+1",
+            "roll.formula.tooltip.description": "<i>Optional</i> - Allows adding a roll to the characteristic with a custom formula (example: '1d6+1')"
+        },
+        "editStat": {
+            "title": "Modifier caractéristique"
         },
         "newUnit": {
             "title": "Add new armies unit",
