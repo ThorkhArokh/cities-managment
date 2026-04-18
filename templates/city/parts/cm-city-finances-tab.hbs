@@ -101,25 +101,26 @@
   </div>
   {{/if}}
   <hr>
+  <form>
   <!-- total line -->
   <div class="cm-cities-app-tab-header cm-cities-app-tab-line left gap4">
     <!-- Incomes -->
     <div class="flex1 flexrow gap4">
       <div class="right field-label">{{localize "CM.app.city.tab.finances.total.incomes.label"}}</div>
       <input readonly="true" data-dtype="Number" type="text" class="field-value center"
-        value="{{city.finances.total.incomes}}"/>
+        value="{{city.finances.total.incomes}}"/> <i data-tooltip="CM.currency.sp.label" class="fas fa-coins flex0" style="color:silver"></i>
     </div>
     <!-- Treasury -->
     <div class="flex1 flexrow gap4">
       <div class="right field-label">{{localize "CM.app.city.tab.finances.total.treasury.label"}}</div>
       <input readonly="true" data-dtype="Number" type="text" class="field-value center"
-        value="{{city.finances.total.treasury}}"/>
+        value="{{city.finances.total.treasury}}"/> <i data-tooltip="CM.currency.sp.label" class="fas fa-coins flex0" style="color:silver"></i>
     </div>
     <!-- Vault -->
-    <div class="flex1 flexrow gap4">
+    <div class="flexauto flexrow gap4">
       <div class="right field-label">{{localize "CM.app.city.tab.finances.total.vaults.label"}}</div>
       <input readonly="true" data-dtype="Number" type="text" class="field-value center"
-        value="{{city.finances.total.vaults}}"/>
+        value="{{city.finances.total.vaults}}"/> <i data-tooltip="CM.currency.sp.label" class="fas fa-coins flex0" style="color:silver"></i>
     </div>
   </div>
   <div class="cm-cities-app-tab-header cm-cities-app-tab-line left gap4">
@@ -127,19 +128,19 @@
     <div class="flex1 flexrow gap4">
       <div class="right field-label">{{localize "CM.app.city.tab.finances.total.expenses.label"}}</div>
       <input readonly="true" data-dtype="Number" type="text" class="field-value center"
-        value="{{city.finances.total.expenses}}"/>
+        value="{{city.finances.total.expenses}}"/> <i data-tooltip="CM.currency.sp.label" class="fas fa-coins flex0" style="color:silver"></i>
     </div>
     <!-- Armies -->
     <div class="flex1 flexrow gap4">
       <div class="right field-label">{{localize "CM.app.city.tab.finances.total.armies.label"}}</div>
       <input readonly="true" data-dtype="Number" type="text" class="field-value center"
-        value="{{city.finances.total.armies}}"/>
+        value="{{city.finances.total.armies}}"/> <i data-tooltip="CM.currency.sp.label" class="fas fa-coins flex0" style="color:silver"></i>
     </div>
     <!-- Buildings -->
-    <div class="flex1 flexrow gap4">
+    <div class="flexauto flexrow gap4">
       <div class="right field-label">{{localize "CM.app.city.tab.finances.total.building.label"}}</div>
       <input readonly="true" data-dtype="Number" type="text" class="field-value center"
-        value="{{city.finances.total.buildings}}"/>
+        value="{{city.finances.total.buildings}}"/> <i data-tooltip="CM.currency.sp.label" class="fas fa-coins flex0" style="color:silver"></i>
     </div>
   </div>
   <div class="cm-cities-app-tab-header cm-cities-app-tab-line right gap4">
@@ -147,7 +148,7 @@
     <div class="flex1 flexrow gap4">
       <div class="right field-label">{{localize "CM.app.city.tab.finances.total.label"}}</div>
       <input readonly="true" data-dtype="Number" type="text" class="field-value center"
-        value="{{city.finances.total.value}}"/>
+        value="{{city.finances.total.value}}"/> <i data-tooltip="CM.currency.sp.label" class="fas fa-coins flex0" style="color:silver"></i>
     </div>
   </div>
 </section>
