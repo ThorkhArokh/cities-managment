@@ -20,6 +20,7 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
     classes: ["cm-cities-app", "flexcol"],
     actions: {
       createFolder: CitiesTab.onCreateFolder,
+      collapseFolders: CitiesTab.onCollapseFolders,
       createEntry: CitiesTab.onCreateCity,
       activateEntry: CitiesTab.onCityDetails,
       toggleSort: CitiesTab.onToggleSort,
@@ -35,6 +36,12 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
   constructor(...args) {
     super(...args);
     logger.debug("CitiesTab constructed");
+  }
+
+  static onCollapseFolders(event, target) {
+    logger.debug("onCollapseFolders", event, target)
+    this._expandedFolders.clear();
+    this.render();
   }
 
   // Handler sort button
