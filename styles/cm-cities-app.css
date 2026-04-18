@@ -82,9 +82,10 @@ hr {
     background: rgba(0, 123, 255, 0.05);
 }
 
-.folder-drop-zone.droptarget {
-    outline: 2px dashed whitesmoke;
-    background: var(--color-bg-option);
+.folder-drop-zone .droptarget {
+    outline: 2px dashed #aaa;
+    transition: border-color 0.2s;
+    background: rgba(0, 123, 255, 0.05);
 }
 
 .directory-item.document[draggable="true"] {
