@@ -448,7 +448,8 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
     logger.debug("Cities Sidebar | onDragStart UUID", documentId, documentUuid)
     event.dataTransfer.setData("text/plain", JSON.stringify({
       type: "JournalEntry",
-      uuid: documentUuid
+      uuid: documentUuid,
+      id: documentId
     }));
 
     event.stopPropagation();
@@ -495,6 +496,7 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
 
     // Drop d'une entrée dans un dossier
     if (data.type === "JournalEntry") {
+      logger.debug("Cities Sidebar | onDrop JournalEntry", data.id)
       const journal = game.journal.get(data.id);
       if (!journal?.isOwner) return;
 
@@ -503,6 +505,7 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
 
     // Drop d'un dossier dans un dossier
     if (data.type === "Folder") {
+      logger.debug("Cities Sidebar | onDrop Folder", data.id)
       if (data.id === folderId) return; // pas sur lui-même
       const draggedFolder = game.folders.get(data.id);
       if (!draggedFolder?.isOwner) return;

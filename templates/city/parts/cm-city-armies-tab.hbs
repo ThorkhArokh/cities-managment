@@ -1,22 +1,53 @@
 <section class='tab armies {{tab.cssClass}}' data-group='primary' data-tab='armies'>
     <div class="cm-cities-app-tab-header flexrow table-header no-wrap" style="gap:4px">
         <div class="flex2 left">
-            <div class="field-label">{{localize "CM.app.city.header.unit.name"}}</div>
+            <div class="field-label" data-action="sortObjects" data-field="name">
+                {{localize "CM.app.city.header.unit.name"}}
+                {{#if (eq @root.armiesSort.field "name")}}
+                    <i class="fas fa-sort-{{#if (eq @root.armiesSort.direction 1)}}down{{else}}up{{/if}}"></i>
+                {{else}}
+                    <i class="fas fa-sort"></i>
+                {{/if}}
+            </div>
         </div>
         <div class="flex1 center">
-            <div class="field-label">{{localize "CM.app.city.header.unit.role"}}</div>
-        </div>
-        <div class="flex1 center" style="max-width: 40px;">
-            <div class="field-label">{{localize "CM.app.city.header.unit.nbr"}}</div>
-        </div>
-        <div class="flex1 center" style="max-width: 80px;">
-            <div class="field-label"><span><i data-tooltip="CM.currency.sp.label"
-                        class="fas fa-coins" style="color:silver"></i> {{localize "CM.app.city.header.unit.cost"}}</span>
+            <div class="field-label" data-action="sortObjects" data-field="role">
+                {{localize "CM.app.city.header.unit.role"}} 
+                {{#if (eq @root.armiesSort.field "role")}}
+                    <i class="fas fa-sort-{{#if (eq @root.armiesSort.direction 1)}}down{{else}}up{{/if}}"></i>
+                {{else}}
+                    <i class="fas fa-sort"></i>
+                {{/if}}
             </div>
         </div>
         <div class="flex1 center" style="max-width: 40px;">
+            <div class="field-label" data-action="sortObjects" data-field="nbr">
+                {{localize "CM.app.city.header.unit.nbr"}}
+                {{#if (eq @root.armiesSort.field "nbr")}}
+                    <i class="fas fa-sort-{{#if (eq @root.armiesSort.direction 1)}}down{{else}}up{{/if}}"></i>
+                {{else}}
+                    <i class="fas fa-sort"></i>
+                {{/if}}
+            </div>
+        </div>
+        <div class="flex1 center" style="max-width: 80px;">
+            <div class="field-label" data-action="sortObjects" data-field="cost">
+                <span>
+                    <i data-tooltip="CM.currency.sp.label"
+                        class="fas fa-coins" style="color:silver"></i> {{localize "CM.app.city.header.unit.cost"}}
+                </span>
+                {{#if (eq @root.armiesSort.field "cost")}}
+                    <i class="fas fa-sort-{{#if (eq @root.armiesSort.direction 1)}}down{{else}}up{{/if}}"></i>
+                {{else}}
+                    <i class="fas fa-sort"></i>
+                {{/if}}
+            </div>
+        </div>
+        {{#if @root.isEditable}}
+        <div class="flex1 center" style="max-width: 40px;">
             <div class="field-label"></div>
         </div>
+        {{/if}}
     </div>
     {{#each city.armies.units}}
     <div class="flexrow no-wrap cm-cities-app-tab-line" style="gap:4px">
@@ -40,12 +71,12 @@
             <input class="field-value center" type="text" name="city.armies.units.{{@key}}.cost" value="{{cost}}"
                 {{#unless @root.isEditable}}disabled{{/unless}} />
         </div>
+        {{#if @root.isEditable}}
         <div class="flex1 center" style="max-width: 40px;">
-            {{#if @root.isEditable}}
             <button class="flex0" type="button" data-action="removeUnit" data-id="{{id}}"><i
                     class='fas fa-trash'></i></button>
-            {{/if}}
         </div>
+        {{/if}}
     </div>
     {{/each}}
     {{#if isEditable}}

@@ -31,6 +31,13 @@ hr {
 
 .cm-cities-app {}
 
+/* Le contenu des tabs prend le reste de la hauteur */
+.tab {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+}
+
 .cm-cities-app-header-avatar {
     max-width: 100px;
     height: 100px;

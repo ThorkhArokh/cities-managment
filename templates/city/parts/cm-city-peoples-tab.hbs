@@ -20,11 +20,23 @@
   </div>
   <hr>
   <div class="cm-cities-app-tab-header flexrow table-header no-wrap" style="gap:4px">
-    <div class="flex2 left">
-      {{localize "CM.app.city.tab.peoples.header.significant.label"}}
+    <div class="flex2" data-action="sortObjects" data-field="name">
+      {{localize "CM.app.city.tab.peoples.header.significant.label"}} 
+      {{#if (eq @root.peoplesSort.field "name")}}
+          <i class="fas fa-sort-{{#if (eq @root.peoplesSort.direction 1)}}down{{else}}up{{/if}}"></i>
+      {{else}}
+          <i class="fas fa-sort"></i>
+      {{/if}}
     </div>
     <div class="flex1 center">
-      <div class="field-label">{{localize "CM.app.city.tab.peoples.header.role.label"}}</div>
+      <div class="field-label" data-action="sortObjects" data-field="role">
+        {{localize "CM.app.city.tab.peoples.header.role.label"}}
+        {{#if (eq @root.peoplesSort.field "role")}}
+            <i class="fas fa-sort-{{#if (eq @root.peoplesSort.direction 1)}}down{{else}}up{{/if}}"></i>
+        {{else}}
+            <i class="fas fa-sort"></i>
+        {{/if}}
+      </div>
     </div>
     <div class="flex1 center" style="max-width: 40px;">
       <div class="field-label"></div>
@@ -43,12 +55,12 @@
       <input class="field-value" type="text" name="city.population.peoples.{{@key}}.role" value="{{role}}" {{#unless
         @root.isEditable}}disabled{{/unless}} />
     </div>
+    {{#if @root.isEditable}}
     <div class="flex1 center" style="max-width: 40px;">
-      {{#if @root.isEditable}}
       <button class="flex0" type="button" data-action="removePeople" data-id="{{id}}"><i
           class='fas fa-trash'></i></button>
-      {{/if}}
     </div>
+    {{/if}}
   </div>
   {{/each}}
   {{#if isEditable}}

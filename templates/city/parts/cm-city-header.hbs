@@ -1,7 +1,7 @@
 <section>
     <header class="cm-cities-app-header flexrow no-wrap">
         <img class="flex0 cm-cities-app-header-avatar" src="{{city.img}}" data-action="editImage" data-field="img"
-            data-edit="city.img" data-tooltip="CM.app.city.tab.header.avatar.tooltip" />
+            data-edit="city.img" data-tooltip="CM.app.city.tab.header.avatar.tooltip" data-tooltip-direction="UP"/>
         <div>
             <h1 class="cm-cities-app-header-title flexrow gap4">
                 <input type="text" name="city.name" value="{{city.name}}" style="flex:11" {{#unless isEditable}}disabled{{/unless}} />
@@ -9,6 +9,7 @@
                 {{#unless city.map.img}}data-tooltip="CM.app.city.tab.header.city.map.tooltip"{{/unless}}></a>
             </h1>
             <div class="flexrow no-wrap gap4">
+                <button class="flex0" type="button" data-action="showJournal"><i class="fas fa-book-open"></i></button>
                 <input class="flex2" type="text" name="city.description" value="{{city.description}}" placeholder="{{localize "CM.app.city.tab.header.city.desc.placeholder"}}"
                 {{#unless isEditable}}disabled{{/unless}} />
                 <select name="city.size" {{#unless isEditable}}disabled{{/unless}}>

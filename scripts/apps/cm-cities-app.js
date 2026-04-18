@@ -18,6 +18,7 @@ const { FilePicker } = foundry.applications.apps;
 export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
     #dragDrop;
     #hooks = [];
+    #sort = { field: null, direction: 1 };
 
     constructor(city, options = {}) {
         super(options);
@@ -61,6 +62,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             controls: []
         },
         actions: {
+            showJournal: CmCityApp.#showJournal,
             showDetails: CmCityApp.#showDetails,
             removePeople: CmCityApp.#removePeople,
             removeTreasury: CmCityApp.#removeTreasury,
@@ -77,7 +79,8 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             editStat: CmCityApp.#editStat,
             removeStat: CmCityApp.#removeStat,
             rollStats: CmCityApp.#rollStats,
-            showMap: CmCityApp.#showMap
+            showMap: CmCityApp.#showMap,
+            sortObjects: CmCityApp.#sortObjects,
         }
     };
 
@@ -143,6 +146,28 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         return super._canRender(options);
     }
 
+    static async #showJournal(event, target) {
+        logger.debug("Cities App | showJournal", event, target)
+        this.city.sheet.render(true)
+    }
+
+    // --------------------------------------------------------------------
+    // SORTS
+    // -------------------------------------------------------------------- 
+    static async #sortObjects(event, target) {
+        logger.debug("Cities App | sortUnits", event, target, this.#sort)
+        const field = target.dataset.field;
+
+        // Inverser la direction si même champ, sinon reset
+        if (this.#sort.field === field) {
+            this.#sort.direction *= -1;
+        } else {
+            this.#sort.field = field;
+            this.#sort.direction = 1;
+        }
+
+        this.render();
+    }
     // --------------------------------------------------------------------
     // MAP
     // -------------------------------------------------------------------- 
@@ -773,19 +798,9 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
      * @protected
      */
     async _preparePartContext(partId, context) {
-        logger.debug("context", context)
-        switch (partId) {
-            case 'stats':
-            case 'armies':
-            case 'peoples':
-            case 'buildings':
-            case 'chests':
-            case 'finances':
-                context.tab = context.tabs[partId];
-                break;
-            default:
-        }
+        logger.debug("Cities App | context", context)
 
+        context.tab = context.tabs[partId];
         context.isEditable = this.isEditable
         context.buttons = [
             //{ type: "submit", icon: "fa-solid fa-save", label: "SETTINGS.Save" },
@@ -793,7 +808,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         ]
         context.tabs = this._prepareTabs("primary")
         const cityDatas = CmCitiesJournalDataStore.getCityData(this.city);
-        logger.debug("City datas", cityDatas)
+        logger.debug("Cities App | city datas", cityDatas)
         const sourceCity = CityDto.fromData(cityDatas);
         context.city = sourceCity;
         this.computeStats(context.city);
@@ -825,7 +840,70 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
 
         context.citySizeChoices = CONFIG.CM.city.sizes;
 
+        // Sorts
+        switch (partId) {
+            case 'stats':
+            case 'armies':
+                if (this.#sort.field) {
+                    // Sort armies units
+                    context.city.armies.units = this.sortItems(sourceCity.armies.units);
+                    context.armiesSort = this.#sort;
+                }
+                break;
+            case 'peoples':
+                if (this.#sort.field) {
+                    // Sort peoples
+                    context.city.population.peoples = this.sortItems(sourceCity.population.peoples);
+                    context.peoplesSort = this.#sort;
+                }
+                break;
+            case 'buildings':
+                if (this.#sort.field) {
+                    // Sort buildings
+                    context.city.buildings = this.sortItems(sourceCity.buildings);
+                    context.buildingsSort = this.#sort;
+                }
+                break;
+            case 'chests':
+                if (this.#sort.field) {
+                    // Sort chests
+                    context.city.chests = this.sortItems(sourceCity.chests);
+                    context.chestsSort = this.#sort;
+                }
+                break;
+            case 'finances':
+                if (this.#sort.field) {
+                    // Sort finances
+                    context.city.finances.entries = this.sortItems(sourceCity.finances.entries);
+                    context.financesEntriesSort = this.#sort;
+                }
+                break;
+            default:
+        }
+
         return context;
+    }
+
+    sortItems(itemsDatas) {
+        logger.debug("Cities App | sortItems", itemsDatas, this.#sort)
+        const items = Object.values(itemsDatas);
+        const field = this.#sort.field;
+        const dir = this.#sort.direction;
+
+        items.sort((a, b) => {
+            let valA = a[field] ?? "";
+            let valB = b[field] ?? "";
+
+            // Cas objet imbriqué avec propriété label (ex: type = { key, label })
+            if (typeof valA === "object" && valA !== null) valA = valA.label ?? "";
+            if (typeof valB === "object" && valB !== null) valB = valB.label ?? "";
+
+
+            if (typeof valA === "number") return (valA - valB) * dir;
+            return String(valA).localeCompare(String(valB)) * dir;
+        });
+
+        return Object.fromEntries(items.map(u => [u.id, u]));
     }
 
     computeStats(city) {

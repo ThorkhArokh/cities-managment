@@ -27,18 +27,41 @@
   <!-- Entries -->
   <div class="cm-cities-app-tab-header flexrow table-header no-wrap" style="gap:4px">
     <div class="center">
-      <div class="field-label">{{localize "CM.app.city.tab.finances.entries.header.label"}}</div>
+      <div class="field-label" data-action="sortObjects" data-field="label">
+        {{localize "CM.app.city.tab.finances.entries.header.label"}}
+        {{#if (eq @root.financesEntriesSort.field "label")}}
+            <i class="fas fa-sort-{{#if (eq @root.financesEntriesSort.direction 1)}}down{{else}}up{{/if}}"></i>
+        {{else}}
+            <i class="fas fa-sort"></i>
+        {{/if}}
+      </div>
     </div>
     <div class="flex1 center">
-      <div class="field-label">{{localize "CM.app.city.tab.finances.entries.header.type"}}</div>
+      <div class="field-label" data-action="sortObjects" data-field="type">
+        {{localize "CM.app.city.tab.finances.entries.header.type"}}
+        {{#if (eq @root.financesEntriesSort.field "type")}}
+            <i class="fas fa-sort-{{#if (eq @root.financesEntriesSort.direction 1)}}down{{else}}up{{/if}}"></i>
+        {{else}}
+            <i class="fas fa-sort"></i>
+        {{/if}}
+      </div>
     </div>
     <div class="flex1 center">
-      <div class="field-label"><span data-tooltip="Value"><i data-tooltip="CM.currency.sp.label" class="fas fa-coins"
-            style="color:#c0c0c0"></i> {{localize "CM.app.city.tab.finances.entries.header.value"}}</span></div>
+      <div class="field-label" data-action="sortObjects" data-field="value">
+        <span data-tooltip="Value"><i data-tooltip="CM.currency.sp.label" class="fas fa-coins"
+            style="color:#c0c0c0"></i> {{localize "CM.app.city.tab.finances.entries.header.value"}}</span>
+        {{#if (eq @root.financesEntriesSort.field "value")}}
+            <i class="fas fa-sort-{{#if (eq @root.financesEntriesSort.direction 1)}}down{{else}}up{{/if}}"></i>
+        {{else}}
+            <i class="fas fa-sort"></i>
+        {{/if}}
+      </div>
     </div>
+    {{#if @root.isEditable}}
     <div class="flex1 center" style="max-width: 40px;">
       <div class="field-label"></div>
     </div>
+    {{/if}}
   </div>
   {{#if hasNoEntries}}<p class="center"><i>{{localize "CM.app.city.tab.finances.entries.empty"}}</i></p>{{/if}}
   {{#each city.finances.entries}}
@@ -63,11 +86,11 @@
       <input class="field-value center" type="text" data-dtype="Number" name="city.finances.entries.{{@key}}.value"
         value="{{value}}" {{#unless @root.isEditable}}disabled{{/unless}} />
     </div>
+    {{#if @root.isEditable}}
     <div class="flex1 center" style="max-width: 40px;">
-      {{#if @root.isEditable}}
       <button type="button" data-action="removeFinanceEntry" data-id="{{id}}"><i class='fas fa-trash'></i></button>
-      {{/if}}
     </div>
+    {{/if}}
   </div>
   {{/each}}
   <!-- New entry button -->

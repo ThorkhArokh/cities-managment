@@ -24,12 +24,13 @@ https://github.com/ThorkhArokh/cities-managment/releases/latest/download/module.
  - add duplicate menu on cities
  - add sheet for armies unit ?
  - add sheet for building ? (building class Extend Item class ?)
- - Add sort on tables columns headers
  
 ### WIP
- 
+
 
 ### DONE
+ - Add sort on tables columns headers
+ - Add journal sheet rendering
  - Drop city on scenes (journal mode)
  - Can add bonus, malus, base to stat roll
  - Edit stats
