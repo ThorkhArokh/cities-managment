@@ -11,7 +11,7 @@ export class ArmyUnitDto {
         this.id = id;
         this.uuid = uuid;
         this.name = name;
-        this.img = img ?? "icons/svg/mystery-man.svg";
+        this.img = img ?? "icons/environment/people/commoner.webp";
         this.role = role;
         this.nbr = Number(nbr) || 1;
         this.cost = Number(cost) || 0;

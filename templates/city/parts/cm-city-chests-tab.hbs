@@ -2,26 +2,50 @@
 
   <div class="cm-cities-app-tab-header flexrow table-header no-wrap" style="gap:4px">
     <div class="left">
-      <div class="field-label">Objet</div>
+      <div class="field-label" data-action="sortObjects" data-field="name">
+        {{localize "CM.app.city.tab.chests.item.label"}}
+        {{#if (eq @root.chestsSort.field "name")}}
+            <i class="fas fa-sort-{{#if (eq @root.chestsSort.direction 1)}}down{{else}}up{{/if}}"></i>
+        {{else}}
+            <i class="fas fa-sort"></i>
+        {{/if}}
+      </div>
     </div>
     <div class="flex1 center" style="max-width: 40px;">
-      <div class="field-label">Nbr</div>
+      <div class="field-label" data-action="sortObjects" data-field="nbr">
+        {{localize "CM.app.city.tab.chests.item.nbr"}}
+        {{#if (eq @root.chestsSort.field "nbr")}}
+            <i class="fas fa-sort-{{#if (eq @root.chestsSort.direction 1)}}down{{else}}up{{/if}}"></i>
+        {{else}}
+            <i class="fas fa-sort"></i>
+        {{/if}}
+      </div>
     </div>
     <div class="flex1 center" style="max-width: 80px;">
-      <div class="field-label"><span title="Buying price"><i title="{{localize " CM.currency.sp.label"}}"
-            class="fas fa-coins" style="color:silver"></i> Price</span></div>
+      <div class="field-label" data-action="sortObjects" data-field="price">
+        <span data-tooltip="Buying price"><i data-tooltip="CM.currency.sp.label"
+            class="fas fa-coins" style="color:silver"></i> {{localize "CM.app.city.tab.chests.item.price"}}</span>
+        {{#if (eq @root.chestsSort.field "price")}}
+            <i class="fas fa-sort-{{#if (eq @root.chestsSort.direction 1)}}down{{else}}up{{/if}}"></i>
+        {{else}}
+            <i class="fas fa-sort"></i>
+        {{/if}}
+      </div>
     </div>
+    {{#if @root.isEditable}}
     <div class="flex1 center" style="max-width: 40px;">
       <div class="field-label"></div>
     </div>
+    {{/if}}
   </div>
 
   {{#each city.chests}}
   <div class="flexrow no-wrap cm-cities-app-tab-line" style="gap:4px">
     <div>
-      <a class="flexrow no-wrap" style="gap:4px" data-action="showDetails" data-uuid="{{uuid}}">
-        <img style="flex: none" width="30px" height="30px" src="{{img}}" />
-        <span style="flex: auto;"><strong>{{name}}</strong></span>
+      <a class="flexrow no-wrap" style="gap:4px" data-action="showDetails" data-uuid="{{uuid}}" {{#unless
+        uuid}}disabled{{/unless}}>
+        <img class="flex0" width="30px" height="30px" src="{{img}}" />
+        <span class="flexauto {{#if uuid}}underline{{/if}}"><strong>{{name}}</strong></span>
       </a>
     </div>
     <div class="flex1 center" style="max-width: 40px;">
@@ -32,17 +56,19 @@
       <input class="field-value center" type="text" name="city.chests.{{@key}}.price" value="{{price}}"
         data-dtype="Number" {{#unless @root.isEditable}}disabled{{/unless}} />
     </div>
+    {{#if @root.isEditable}}
     <div class="flex1 center" style="max-width: 40px;">
-      {{#if @root.isEditable}}
-      <button style="flex: none" type="button" data-action="removeTreasury" data-id="{{id}}"><i
+      <button class="flex0" type="button" data-action="removeTreasury" data-id="{{id}}"><i
           class='fas fa-trash'></i></button>
-      {{/if}}
     </div>
+    {{/if}}
   </div>
   {{/each}}
   {{#if isEditable}}
-  <div class="drop-zone" data-drop-chests="true">
-    {{#if hasNoTreasures}}<p class="center"><i>{{localize "CM.app.tab.chests.empty"}}</i></p>{{/if}}
+  <div class="drop-zone-header flexrow no-wrap">
+      {{#if hasNoTreasures}}<p class="center"><i>{{localize "CM.app.city.tab.chests.empty"}}</i></p>{{/if}}
+  </div>
+  <div class="drop-zone drag-over" data-drop-chests="true">
   </div>
   {{/if}}
 </section>

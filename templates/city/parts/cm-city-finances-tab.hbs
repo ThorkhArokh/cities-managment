@@ -1,24 +1,24 @@
 <section class='tab finances {{tab.cssClass}}' data-group='primary' data-tab='finances'>
   <!-- Treasury -->
   <div class="flexrow no-wrap cm-cities-app-tab-header cm-cities-app-treasury-currencies">
-    <div class="flex1 left">{{localize "CM.app.tab.treasury.currencies"}}</div>
+    <div class="flex1 left">{{localize "CM.app.city.tab.treasury.currencies"}}</div>
     <div class="flex1 left" style="gap:4px;">
-      <i title="{{localize " CM.currency.pp.label"}}" class="fas fa-coins" style="color:dimgray"></i>
+      <i data-tooltip="CM.currency.pp.label" class="fas fa-coins" style="color:dimgray"></i>
       <input class="field-value center" name="city.finances.treasury.currencies.pp" type="number"
         value="{{city.finances.treasury.currencies.pp}}" data-dtype="Number" {{#unless isEditable}}disabled{{/unless}}>
     </div>
     <div class="flex1 left" style="gap:4px;">
-      <i title="{{localize " CM.currency.gp.label"}}" class="fas fa-coins" style="color:goldenrod"></i>
+      <i data-tooltip="CM.currency.gp.label" class="fas fa-coins" style="color:goldenrod"></i>
       <input class="field-value center" name="city.finances.treasury.currencies.gp" type="number"
         value="{{city.finances.treasury.currencies.gp}}" data-dtype="Number" {{#unless isEditable}}disabled{{/unless}}>
     </div>
     <div class="flex1 left" style="gap:4px;">
-      <i title="{{localize " CM.currency.sp.label"}}" class="fas fa-coins" style="color:silver"></i>
+      <i data-tooltip="CM.currency.sp.label" class="fas fa-coins" style="color:silver"></i>
       <input class="field-value center" name="city.finances.treasury.currencies.sp" type="number"
         value="{{city.finances.treasury.currencies.sp}}" data-dtype="Number" {{#unless isEditable}}disabled{{/unless}}>
     </div>
     <div class="flex1 left" style="gap:4px;">
-      <i title="{{localize " CM.currency.cp.label"}}" class="fas fa-coins" style="color:saddlebrown"></i>
+      <i data-tooltip="CM.currency.cp.label" class="fas fa-coins" style="color:saddlebrown"></i>
       <input class="field-value center" name="city.finances.treasury.currencies.cp" type="number"
         value="{{city.finances.treasury.currencies.cp}}" data-dtype="Number" {{#unless isEditable}}disabled{{/unless}}>
     </div>
@@ -27,22 +27,48 @@
   <!-- Entries -->
   <div class="cm-cities-app-tab-header flexrow table-header no-wrap" style="gap:4px">
     <div class="center">
-      <div class="field-label">{{localize "CM.app.tab.finances.entries.header.label"}}</div>
+      <div class="field-label" data-action="sortObjects" data-field="label">
+        {{localize "CM.app.city.tab.finances.entries.header.label"}}
+        {{#if (eq @root.financesEntriesSort.field "label")}}
+            <i class="fas fa-sort-{{#if (eq @root.financesEntriesSort.direction 1)}}down{{else}}up{{/if}}"></i>
+        {{else}}
+            <i class="fas fa-sort"></i>
+        {{/if}}
+      </div>
     </div>
     <div class="flex1 center">
-      <div class="field-label">{{localize "CM.app.tab.finances.entries.header.type"}}</div>
+      <div class="field-label" data-action="sortObjects" data-field="type">
+        {{localize "CM.app.city.tab.finances.entries.header.type"}}
+        {{#if (eq @root.financesEntriesSort.field "type")}}
+            <i class="fas fa-sort-{{#if (eq @root.financesEntriesSort.direction 1)}}down{{else}}up{{/if}}"></i>
+        {{else}}
+            <i class="fas fa-sort"></i>
+        {{/if}}
+      </div>
     </div>
     <div class="flex1 center">
-      <div class="field-label"><span title="Value"><i title="{{localize " CM.currency.sp.label"}}" class="fas fa-coins"
-            style="color:#c0c0c0"></i> {{localize "CM.app.tab.finances.entries.header.value"}}</span></div>
+      <div class="field-label" data-action="sortObjects" data-field="value">
+        <span data-tooltip="Value"><i data-tooltip="CM.currency.sp.label" class="fas fa-coins"
+            style="color:#c0c0c0"></i> {{localize "CM.app.city.tab.finances.entries.header.value"}}</span>
+        {{#if (eq @root.financesEntriesSort.field "value")}}
+            <i class="fas fa-sort-{{#if (eq @root.financesEntriesSort.direction 1)}}down{{else}}up{{/if}}"></i>
+        {{else}}
+            <i class="fas fa-sort"></i>
+        {{/if}}
+      </div>
     </div>
+    {{#if @root.isEditable}}
     <div class="flex1 center" style="max-width: 40px;">
       <div class="field-label"></div>
     </div>
+    {{/if}}
   </div>
-  {{#if hasNoEntries}}<p class="center"><i>{{localize "CM.app.tab.finances.entries.empty"}}</i></p>{{/if}}
+  {{#if hasNoEntries}}<p class="center"><i>{{localize "CM.app.city.tab.finances.entries.empty"}}</i></p>{{/if}}
   {{#each city.finances.entries}}
   <div class="flexrow no-wrap cm-cities-app-tab-line" style="gap:4px">
+    <div class="flex0">
+        <i class="{{type.icon}}"></i>
+    </div>
     <div>
       <!-- label -->
       <input class="field-value center" type="text" name="city.finances.entries.{{@key}}.label" value="{{label}}"
@@ -60,64 +86,69 @@
       <input class="field-value center" type="text" data-dtype="Number" name="city.finances.entries.{{@key}}.value"
         value="{{value}}" {{#unless @root.isEditable}}disabled{{/unless}} />
     </div>
+    {{#if @root.isEditable}}
     <div class="flex1 center" style="max-width: 40px;">
-      {{#if @root.isEditable}}
       <button type="button" data-action="removeFinanceEntry" data-id="{{id}}"><i class='fas fa-trash'></i></button>
-      {{/if}}
     </div>
+    {{/if}}
   </div>
   {{/each}}
   <!-- New entry button -->
   {{#if isEditable}}
   <div class="cm-cities-app-tab-header right cm-cities-app-tab-line">
     <button type="button" data-action="addNewFinanceEntry"><i class='fas fa-plus'></i> {{localize
-      "CM.app.tab.finances.entries.new.btn"}}</button>
+      "CM.app.city.tab.finances.entries.new.btn"}}</button>
   </div>
   {{/if}}
   <hr>
+  <form>
   <!-- total line -->
-  <div class="cm-cities-app-tab-header cm-cities-app-tab-line right" style="gap:4px">
-    <!-- Treasury -->
-    <div class="flex1 right">
-      <div class="field-label">{{localize "CM.app.tab.finances.total.treasury.label"}}</div>
-    </div>
-    <div class="flex1 center">
-      <input readonly="true" data-dtype="Number" type="text" class="field-value center"
-        value="{{city.finances.total.treasury}}" />
-    </div>
+  <div class="cm-cities-app-tab-header cm-cities-app-tab-line left gap4">
     <!-- Incomes -->
-    <div class="flex1 right">
-      <div class="field-label">{{localize "CM.app.tab.finances.total.incomes.label"}}</div>
-    </div>
-    <div class="flex1 center">
+    <div class="flex1 flexrow gap4">
+      <div class="right field-label">{{localize "CM.app.city.tab.finances.total.incomes.label"}}</div>
       <input readonly="true" data-dtype="Number" type="text" class="field-value center"
-        value="{{city.finances.total.incomes}}" />
+        value="{{city.finances.total.incomes}}"/> <i data-tooltip="CM.currency.sp.label" class="fas fa-coins flex0" style="color:silver"></i>
     </div>
-    <!-- Expenses -->
-    <div class="flex1 right">
-      <div class="field-label">{{localize "CM.app.tab.finances.total.expenses.label"}}</div>
-    </div>
-    <div class="flex1 center">
+    <!-- Treasury -->
+    <div class="flex1 flexrow gap4">
+      <div class="right field-label">{{localize "CM.app.city.tab.finances.total.treasury.label"}}</div>
       <input readonly="true" data-dtype="Number" type="text" class="field-value center"
-        value="{{city.finances.total.expenses}}" />
+        value="{{city.finances.total.treasury}}"/> <i data-tooltip="CM.currency.sp.label" class="fas fa-coins flex0" style="color:silver"></i>
     </div>
-    <!-- Armies -->
-    <div class="flex1 right">
-      <div class="field-label">{{localize "CM.app.tab.finances.total.armies.label"}}</div>
-    </div>
-    <div class="flex1 center">
+    <!-- Vault -->
+    <div class="flexauto flexrow gap4">
+      <div class="right field-label">{{localize "CM.app.city.tab.finances.total.vaults.label"}}</div>
       <input readonly="true" data-dtype="Number" type="text" class="field-value center"
-        value="{{city.finances.total.armies}}" />
+        value="{{city.finances.total.vaults}}"/> <i data-tooltip="CM.currency.sp.label" class="fas fa-coins flex0" style="color:silver"></i>
     </div>
   </div>
-  <div class="cm-cities-app-tab-header cm-cities-app-tab-line right" style="gap:4px">
-    <!-- Total -->
-    <div class="flex1 right">
-      <div class="field-label">{{localize "CM.app.tab.finances.total.label"}}</div>
-    </div>
-    <div class="flex1 center">
+  <div class="cm-cities-app-tab-header cm-cities-app-tab-line left gap4">
+    <!-- Expenses -->
+    <div class="flex1 flexrow gap4">
+      <div class="right field-label">{{localize "CM.app.city.tab.finances.total.expenses.label"}}</div>
       <input readonly="true" data-dtype="Number" type="text" class="field-value center"
-        value="{{city.finances.total.value}}" />
+        value="{{city.finances.total.expenses}}"/> <i data-tooltip="CM.currency.sp.label" class="fas fa-coins flex0" style="color:silver"></i>
+    </div>
+    <!-- Armies -->
+    <div class="flex1 flexrow gap4">
+      <div class="right field-label">{{localize "CM.app.city.tab.finances.total.armies.label"}}</div>
+      <input readonly="true" data-dtype="Number" type="text" class="field-value center"
+        value="{{city.finances.total.armies}}"/> <i data-tooltip="CM.currency.sp.label" class="fas fa-coins flex0" style="color:silver"></i>
+    </div>
+    <!-- Buildings -->
+    <div class="flexauto flexrow gap4">
+      <div class="right field-label">{{localize "CM.app.city.tab.finances.total.building.label"}}</div>
+      <input readonly="true" data-dtype="Number" type="text" class="field-value center"
+        value="{{city.finances.total.buildings}}"/> <i data-tooltip="CM.currency.sp.label" class="fas fa-coins flex0" style="color:silver"></i>
+    </div>
+  </div>
+  <div class="cm-cities-app-tab-header cm-cities-app-tab-line right gap4">
+    <!-- Total -->
+    <div class="flex1 flexrow gap4">
+      <div class="right field-label">{{localize "CM.app.city.tab.finances.total.label"}}</div>
+      <input readonly="true" data-dtype="Number" type="text" class="field-value center"
+        value="{{city.finances.total.value}}"/> <i data-tooltip="CM.currency.sp.label" class="fas fa-coins flex0" style="color:silver"></i>
     </div>
   </div>
 </section>

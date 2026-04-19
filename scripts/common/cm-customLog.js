@@ -1,4 +1,4 @@
-import { MODULE_ID, IS_DEBUG_MODE } from "./constants.js"
+import { MODULE_ID, IS_DEBUG_MODE } from "./cm-constants.js"
 
 const prefixCustom = "CM | "
 

@@ -1,7 +1,54 @@
+hr {
+    margin: 0.5rem 0
+}
+
+.flexauto {
+    flex: auto
+}
+
+.gap4 {
+    gap: 4px
+}
+
+.underline {
+    text-decoration: underline;
+}
+
+.required {
+    color: brown;
+    cursor: help;
+}
+
+.info-icon {
+    display: inline-flex;
+    align-items: center;
+    cursor: help;
+    color: var(--color-text-hyperlink);
+    margin-left: 4px;
+    font-size: 0.85em;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.info-icon:hover {
+    opacity: 1;
+}
+
 .cm-cities-app {}
 
+.tab {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+}
+
+.cm-cities-app-header {
+    margin-bottom: 4px;
+}
+
 .cm-cities-app-header-avatar {
-    width: 40px;
+    max-width: 100px;
+    height: 100px;
     cursor: pointer;
     border-radius: 4px;
     border: 1px solid var(--color-border-light);
@@ -11,6 +58,23 @@
         opacity: 0.8;
         border-color: var(--color-border-highlight);
     }
+}
+
+.cm-cities-app-header-title {
+    margin-bottom: 2px
+}
+
+.cm-cities-app-header-title input {
+    height: 60px;
+}
+
+.cm-cities-app-header-title .map-img {
+    border: 1px solid var(--color-tabs-border);
+    width: 60px;
+    height: 60px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .cm-cities-app-tab-line {
@@ -24,15 +88,22 @@
 
 .cm-cities-app-tab-header {
     margin-top: 8px;
+    margin-bottom: 8px;
 }
 
 .cm-cities-app-treasury-currencies {
-    gap:4px;
+    gap: 4px;
+}
+
+.drop-zone-header {
+    margin-top: 8px;
 }
 
 .drop-zone {
-    min-height: 100px;
+    min-height: 50px;
     padding: 8px;
+    margin-top: 4px;
+    margin-bottom: 4px;
 }
 
 /* Feedback visuel quand on survole avec un élément */
@@ -41,4 +112,18 @@
     border-radius: 4px;
     transition: border-color 0.2s;
     background: rgba(0, 123, 255, 0.05);
+}
+
+.folder-drop-zone .droptarget {
+    outline: 2px dashed #aaa;
+    transition: border-color 0.2s;
+    background: rgba(0, 123, 255, 0.05);
+}
+
+.directory-item.document[draggable="true"] {
+    cursor: grab;
+}
+
+.directory-item.document[draggable="true"]:active {
+    cursor: grabbing;
 }

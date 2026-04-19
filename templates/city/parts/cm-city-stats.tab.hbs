@@ -1,53 +1,96 @@
 <section class='tab {{tab.cssClass}}' data-group='primary' data-tab='stats'>
-        <!--<p><b>{{localize "CM.app.tab.stats"}}</b></p>-->
+        <!-- Stats table header... -->
         <div class="cm-cities-app-tab-header flexrow table-header no-wrap" style="gap:4px">
-                <div class="flex1 center">
-                        <div class="field-label"></div>
-                </div>
-                <div class="flex1 center">
-                        <div class="field-label">Base</div>
-                </div>
-                <div class="flex1 center">
-                        <div class="field-label">Bonus</div>
-                </div>
-                <div class="flex1 center">
-                        <div class="field-label">Malus</div>
-                </div>
-                <div class="flex1 center">
-                        <div class="field-label">Total</div>
-                </div>
+                <!-- ...Roll -->
                 <div class="flex1 center" style="max-width: 30px;">
                         <div class="field-label"></div>
                 </div>
+                <!-- ...Label -->
+                <div class="flex1 center">
+                        <div class="field-label"></div>
+                </div>
+                <!-- ...Base value -->
+                <div class="flex1 center">
+                        <div class="field-label">{{localize "CM.app.city.tab.stats.header.base.label"}}</div>
+                </div>
+                <!-- ...Bonus value -->
+                <div class="flex1 center">
+                        <div class="field-label">{{localize "CM.app.city.tab.stats.header.bonus.label"}}</div>
+                </div>
+                <!-- ...Malus value -->
+                <div class="flex1 center">
+                        <div class="field-label">{{localize "CM.app.city.tab.stats.header.malus.label"}}</div>
+                </div>
+                <!-- ...Total value -->
+                <div class="flex1 center">
+                        <div class="field-label">{{localize "CM.app.city.tab.stats.header.total.label"}}</div>
+                </div>
+                {{#if @root.isEditable}}
+                <!-- ...Edit button -->
+                <div class="flex1 center" style="max-width: 40px;">
+                        <div class="field-label"></div>
+                </div>
+                <!-- ...Delete button -->
+                <div class="flex1 center" style="max-width: 40px;">
+                        <div class="field-label"></div>
+                </div>
+                {{/if}}
         </div>
-        {{#each city.stats as |stat id|}}
-        <div class="flexrow no-wrap cm-cities-app-tab-line" style="gap:4px">
-                <div class="flex1"> {{localize stat.label }}</div>
+        <!-- Stats table lines... -->
+        {{#if hasNoStats}}<p class="center"><i>{{localize "CM.app.city.tab.stats.empty"}}</i></p>{{/if}}
+        {{#each city.stats}}
+        <div class="flexrow no-wrap cm-cities-app-tab-line gap4">
+                <!-- ...Roll -->
+                <div class="flex1 center" style="max-width: 30px;">
+                        {{#if rollFormula}}
+                        <a class="flex0 center" data-tooltip="{{rollFormula}}" data-action="rollStats" data-id="{{id}}"><i class="fas fa-dice-d20"
+                                        style=""></i></a>
+                        {{/if}}
+                </div>
+                <!-- ...Label -->
+                <div class="flex1">{{localize label}}</div>
+                <!-- Base value -->
                 <div class="flex1 center">
                         <input class="field-value center" type="text" name="city.stats.{{id}}.base"
-                                value="{{stat.base}}" data-dtype="Number" data-keystat="{{id}}" data-keyatt="base"
+                                value="{{base}}" data-dtype="Number" data-keystat="{{id}}" data-keyatt="base"
                                 {{#unless @root.isEditable}}disabled{{/unless}} />
                 </div>
+                <!-- ...Bonus value -->
                 <div class="flex1 center">
                         <input class="field-value center" type="text" name="city.stats.{{id}}.bonus"
-                                value="{{numberFormat stat.bonus decimals=0 sign=true}}" data-dtype="Number"
+                                value="{{numberFormat bonus decimals=0 sign=true}}" data-dtype="Number"
                                 data-keystat="{{id}}" data-keyatt="bonus" {{#unless
                                 @root.isEditable}}disabled{{/unless}} />
                 </div>
+                <!-- ...Malus value -->
                 <div class="flex1 center">
                         <input class="field-value center" type="text" name="city.stats.{{id}}.malus"
-                                value="{{numberFormat stat.malusDisplay decimals=0}}" max="0" data-dtype="Number"
+                                value="{{numberFormat malusDisplay decimals=0}}" max="0" data-dtype="Number"
                                 data-keystat="{{id}}" data-keyatt="malus" {{#unless
                                 @root.isEditable}}disabled{{/unless}} />
                 </div>
+                <!-- ...Total value -->
                 <div class="flex1 center">
                         <input disabled readonly="true" class="field-value center" name="city.stats.{{id}}.value"
-                                type="text" value="{{stat.value}}" data-dtype="Number" />
+                                type="text" value="{{value}}" data-dtype="Number" />
                 </div>
-                <div class="flex1 center" style="max-width: 30px;">
-                        <a class="flex0 center" data-action="rollStats" data-id="{{id}}"><i class="fas fa-dice-d10"
-                                        style=""></i><i class="fas fa-dice-d10" style=""></i></a>
+                {{#if @root.isEditable}}
+                <!-- ...Edit button -->
+                <div class="flex1 center" style="max-width: 40px;">
+                        <button type="button" data-tooltip="CM.app.city.tab.stats.btn.edit.infos" data-action="editStat" data-id="{{id}}"><i class='fas fa-edit'></i></button>    
                 </div>
+                <!-- ...Delete button -->
+                <div class="flex1 center" style="max-width: 40px;">
+                        <button type="button" data-tooltip="CM.app.city.tab.stats.btn.delete.infos" data-action="removeStat" data-id="{{id}}"><i class='fas fa-trash'></i></button>    
+                </div>
+                {{/if}}
         </div>
         {{/each}}
+        <!-- New stat button -->
+        {{#if isEditable}}
+        <div class="cm-cities-app-tab-header right cm-cities-app-tab-line">
+                <button type="button" data-action="addNewStat"><i class='fas fa-plus'></i> {{localize
+                "CM.app.city.tab.stats.btn.new.label"}}</button>
+        </div>
+        {{/if}}
 </section>

@@ -1,8 +1,8 @@
-import { logger } from "./customLog.js"
-import { MODULE_ID, DATAS_STORE } from "./constants.js"
+import { logger } from "./cm-customLog.js"
+import { MODULE_ID, DATAS_STORE } from "./cm-constants.js"
 import { CityDto } from "../model/cm-city-dto.js"
 
-export class CmDataStore {
+export class CmCitiesDataStore {
 
     static get() {
         return game.settings.get(MODULE_ID, DATAS_STORE);
@@ -19,6 +19,10 @@ export class CmDataStore {
     }
 
     static async updateCity(city) {
+        if (!(city instanceof CityDto)) {
+            logger.error("updateCity - Object type is not CityDto", city)
+            return
+        }
         var cities = this.getCities();
         const index = cities.findIndex(item => item.id === city.id);
 
