@@ -9,8 +9,12 @@
     },
     "CM.tab.city-managment": "Villes",
     "CM.app.city.title": "Ville",
-    "CM.app.city.options.editmode.label": "Basculer mode édition",
-    "CM.app.city.actor.new.default.name": "Nouvel acteur",
+    "CM.app.city.options.editmode.label.on": "Mode édition : ON",
+    "CM.app.city.options.editmode.label.off": "Mode édition : OFF",
+    "CM.app.city.options.goToSettings.label": "Configurations du module", 
+    "CM.app.city.messages": {
+        "warn.render.permission": "Vous ne pouvez pas afficher les détails de cette ville."
+    },
     "CM.app.city.tab.header.city.desc.placeholder": "Aucune description...",
     "CM.app.city.tab.header.city.map.tooltip": "Glissez une scéne ici pour la lier à la ville",
     "CM.app.city.tab.stats": {
@@ -49,6 +53,10 @@
     "CM.app.city.tab.finances.total.vaults.label": "Total coffres",
     "CM.app.city.tab.finances.total.building.label": "Total bâtiments",
     "CM.app.city.tab.finances.total.label": "Total",
+    "CM.app.city.tab.buildings": {
+        "btn.edit.infos": "Modifie le bâtiment",
+        "btn.delete.infos": "Supprime le bâtiment"
+    },
     "CM.app.city.tab.buildings.label": "Bâtiments",
     "CM.app.city.tab.buildings.header.name": "Bâtiment",
     "CM.app.city.tab.buildings.header.nbr": "Nbr",
@@ -57,7 +65,6 @@
     "CM.app.city.tab.buildings.header.cost.label": "Coût",
     "CM.app.city.tab.buildings.header.cost.infos": "Coût de maintenance du bâtiment",
     "CM.app.city.tab.buildings.empty": "Aucun bâtiment, glisser un objet ici",
-    "CM.app.city.tab.buildings.btn.delete.infos": "Supprime le bâtiment",
     "CM.app.city.tab.buildings.new.btn": "Ajouter un nouveau bâtiment",
     "CM.app.city.tab.peoples.label": "Population",
     "CM.app.city.tab.peoples.empty": "Aucun habitant, glisser un acteur ici",
@@ -88,14 +95,14 @@
         "render.nopermission": "Vous ne pouvez pas afficher les détails de cette ville."
     },
     "CM.dialog": {
-        "field.mandatory":"Champ obligatoire",
+        "field.mandatory": "Champ obligatoire",
         "save.btn": "Enregistrer",
         "cancel.btn": "Annuler",
         "newStat": {
             "title": "Ajouter une nouvelle caractéristique",
             "emptyLabel": "Veuillez renseigner un label.",
             "name.label": "Label",
-            "stats.legend" : "Statistiques",
+            "stats.legend": "Statistiques",
             "stats.base.label": "Base",
             "stats.bonus.label": "Bonus",
             "stats.malus.label": "Malus",
@@ -104,7 +111,7 @@
             "roll.formula.placeholder": "ex : 1d6+1",
             "roll.formula.tooltip.description": "<i>Optionnel</i> - Permet l'ajout d'un jet sur la caractéristique avec une formule personnalisée (exemple : '1d6+1')"
         },
-        "editStat" : {
+        "editStat": {
             "title": "Modifier caractéristique"
         },
         "newUnit": {
@@ -132,17 +139,20 @@
             "name.label": "Nom",
             "name.placeholder": "Entrez un nom...",
             "name.default.value": "Nouveau bâtiment",
+            "details.legend": "Détails",
             "nbr.label": "Nombre",
             "price.label": "Prix d'achat",
             "cost.label": "Coût de maintenance",
-            "new.btn": "Ajouter un nouveau bâtiment",
             "emptyName": "Le nom du bâtiment ne peut pas être vide."
         },
-        "deleteFolder" : {
-            "title" : "Supprimer dossier : ",
-            "content" : "<p>Que faire du contenu de ce dossier ?</p>",
-            "btn.deleteAll" : "Supprimer tout",
-            "btn.keepContent" : "Garder le contenu"
+        "editBuilding": {
+            "title": "Modifier bâtiment"
+        },
+        "deleteFolder": {
+            "title": "Supprimer dossier : ",
+            "content": "<p>Que faire du contenu de ce dossier ?</p>",
+            "btn.deleteAll": "Supprimer tout",
+            "btn.keepContent": "Garder le contenu"
         }
     },
     "CM.currency": {

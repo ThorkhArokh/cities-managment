@@ -2,23 +2,29 @@
     <div class="form-group">
         <div class="form-fields">
             <div>
-                <label>{{localize "CM.dialog.newBuilding.name.label"}}</label>
-                <input class="field-value center" type="text" name="name" 
-                placeholder="{{localize "CM.dialog.newBuilding.name.placeholder"}}" 
-                    value="{{localize "CM.dialog.newBuilding.name.default.value"}}" />
-            </div>
-            <div>
-                <label>{{localize "CM.dialog.newBuilding.nbr.label"}}</label>
-                <input class="field-value center" type="number" name="nbr" value="1" />
-            </div>
-            <div>
-                <label>{{localize "CM.dialog.newBuilding.price.label"}}</label>
-                <input class="field-value center" type="number" name="price" value="1" />
-            </div>
-            <div>
-                <label>{{localize "CM.dialog.newBuilding.cost.label"}}</label>
-                <input class="field-value center" type="number" name="cost" value="0" />
+                <label>{{localize "CM.dialog.newBuilding.name.label"}} <span class="required" data-tooltip="CM.dialog.field.mandatory" data-tooltip-direction="UP">*</span></label>
+                <input class="field-value center" type="text" name="name" placeholder="{{localize "CM.dialog.newBuilding.name.placeholder"}}" 
+                value="{{localize name}}" />
             </div>
         </div>
     </div>
+    <fieldset>
+        <legend>{{localize "CM.dialog.newBuilding.details.legend"}}</legend>
+        <div class="form-group">
+            <div class="form-fields">
+                <div>
+                    <label>{{localize "CM.dialog.newBuilding.nbr.label"}}</label>
+                    <input class="field-value center" type="number" name="nbr" value="{{nbr}}" />
+                </div>
+                <div>
+                    <label>{{localize "CM.dialog.newBuilding.price.label"}}</label>
+                    <input class="field-value center" type="number" name="price" value="{{price}}" />
+                </div>
+                <div>
+                    <label>{{localize "CM.dialog.newBuilding.cost.label"}}</label>
+                    <input class="field-value center" type="number" name="cost" value="{{cost}}" />
+                </div>
+            </div>
+        </div>
+    </fieldset>
 </form>

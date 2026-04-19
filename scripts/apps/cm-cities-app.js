@@ -62,19 +62,21 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             controls: []
         },
         actions: {
+            optionEditAction: CmCityApp.#optionEditAction,
+            optionGoToSettings: CmCityApp.#optionGoToSettings,
             showJournal: CmCityApp.#showJournal,
             showDetails: CmCityApp.#showDetails,
             removePeople: CmCityApp.#removePeople,
             removeTreasury: CmCityApp.#removeTreasury,
-            removeBuilding: CmCityApp.#removeBuilding,
             editImage: CmCityApp.#onEditImage,
             addNewFinanceEntry: CmCityApp.#addNewFinanceEntry,
             removeFinanceEntry: CmCityApp.#removeFinanceEntry,
             addNewUnit: CmCityApp.#addNewUnit,
             removeUnit: CmCityApp.#removeUnit,
             addNewBuilding: CmCityApp.#addNewBuilding,
+            editBuilding: CmCityApp.#editBuilding,
+            removeBuilding: CmCityApp.#removeBuilding,
             showDetailsBuilding: CmCityApp.#showDetailsBuilding,
-            editAction: CmCityApp.#editAction,
             addNewStat: CmCityApp.#addNewStat,
             editStat: CmCityApp.#editStat,
             removeStat: CmCityApp.#removeStat,
@@ -140,12 +142,17 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
     /** Handle user app rendering */
     _canRender(options) {
         if (!this.city.testUserPermission(game.user, "OBSERVER")) {
-            ui.notifications.warn("Vous ne pouvez pas afficher les détails de cette ville.");
+            ui.notifications.warn(game.i18n.localize("CM.app.city.messages.warn.render.permission"));
             return false;
         }
         return super._canRender(options);
     }
 
+    /**
+     * Show city's journal entry
+     * @param {PointerEvent} event  click event
+     * @param {HTMLElement} target  click target
+     */
     static async #showJournal(event, target) {
         logger.debug("Cities App | showJournal", event, target)
         this.city.sheet.render(true)
@@ -226,11 +233,11 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             logger.debug("Edited stat datas", newStatDatas)
             if (!newStatDatas) return;
             foundry.utils.mergeObject(statToEdit, newStatDatas, {
-                insertKeys: true,    // ajouter les clés absentes de objA
-                insertValues: true,  // ajouter les valeurs manquantes
-                overwrite: true,     // objB écrase objA
-                recursive: true,     // fusion récursive des objets imbriqués
-                inplace: true,      // false = retourne un nouvel objet
+                insertKeys: true,
+                insertValues: true,
+                overwrite: true,
+                recursive: true,
+                inplace: true,
             });
             this.cityDatas.stats[statId] = statToEdit
             await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
@@ -291,7 +298,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
     * @param {HTMLElement} target  click target
     */
     static async #showDetailsBuilding(event, target) {
-        logger.debug("Show building details", target)
+        logger.debug("Cities App | showDetailsBuilding", event, target)
         if (!target.dataset.id) return
 
         var building = this.cityDatas.buildings[target.dataset.id]
@@ -311,10 +318,9 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
     */
     static async #addNewBuilding(event, target) {
         if (!this.isEditable) return
-        logger.debug("Add new building", target)
+        logger.debug("Cities App | addNewBuilding", event, target)
 
-        const dialogForm = await addBuildingDialog.config({})
-        let newBuildingDatas = await addBuildingDialog.render(dialogForm);
+        let newBuildingDatas = await addBuildingDialog.render();
         logger.debug("New building datas", newBuildingDatas)
         if (!newBuildingDatas) return;
         newBuildingDatas.id = foundry.utils.randomID();
@@ -326,6 +332,37 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
     }
 
     /**
+    * Edit building
+    * @param {PointerEvent} event  click event
+    * @param {HTMLElement} target  click target
+    */
+    static async #editBuilding(event, target) {
+        if (!this.isEditable) return
+        logger.debug("Cities App | editBuilding", event, target)
+        var buildingId = target.dataset.id
+
+        if (Object.hasOwn(this.cityDatas.buildings, buildingId)) {
+            const buildingToEdit = this.cityDatas.buildings[buildingId];
+            logger.debug("Cities App | editBuilding - building to edit", buildingToEdit)
+            let newBuildingDatas = await addBuildingDialog.render(buildingToEdit);
+            logger.debug("Cities App | editBuilding - edited building datas", newBuildingDatas)
+            if (!newBuildingDatas) return;
+            foundry.utils.mergeObject(buildingToEdit, newBuildingDatas, {
+                insertKeys: true,
+                insertValues: true,
+                overwrite: true,
+                recursive: true,
+                inplace: true,
+            });
+            this.cityDatas.buildings[buildingId] = buildingToEdit
+            await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
+            this.render();
+        } else {
+            logger.error("No building found", buildingId)
+        }
+    }
+
+    /**
      * Remove building
      * @param {PointerEvent} event  click event
      * @param {HTMLElement} target  click target
@@ -333,7 +370,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
     static async #removeBuilding(event, target) {
         if (!this.isEditable) return
 
-        logger.debug("Remove building", target)
+        logger.debug("Cities App | removeBuilding", event, target)
         var buildingId = target.dataset.id
 
         if (Object.hasOwn(this.cityDatas.buildings, buildingId)) {
@@ -798,14 +835,11 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
      * @protected
      */
     async _preparePartContext(partId, context) {
-        logger.debug("Cities App | context", context)
+        logger.debug("Cities App | context", partId, context)
 
         context.tab = context.tabs[partId];
         context.isEditable = this.isEditable
-        context.buttons = [
-            //{ type: "submit", icon: "fa-solid fa-save", label: "SETTINGS.Save" },
-            // { type: "reset", action: "reset", icon: "fa-solid fa-undo", label: "SETTINGS.Reset" },
-        ]
+        context.buttons = []
         context.tabs = this._prepareTabs("primary")
         const cityDatas = CmCitiesJournalDataStore.getCityData(this.city);
         logger.debug("Cities App | city datas", cityDatas)
@@ -915,14 +949,31 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
 
     _configureRenderOptions(options) {
         super._configureRenderOptions(options);
-        logger.debug("_configureRenderOptions", options)
+        logger.debug("Cities App | configureRenderOptions", options)
 
+        this.renderControls()
+    }
+
+    renderControls() {
         if (game.user.isGM) {
+            let toggleEditIcon = "fa-regular fa-solid fa-pen-to-square";
+            let toggleEditLabel = "CM.app.city.options.editmode.label.off";
+            if (this.isEditable) {
+                toggleEditIcon = "fa-solid fa-pen-to-square";
+                toggleEditLabel = "CM.app.city.options.editmode.label.on";
+            }
+
+            logger.debug("Cities App | renderControls - toggleEdit", toggleEditIcon, toggleEditLabel)
             this.options.window.controls = [
                 {
-                    icon: 'fa-solid fa-screwdriver-wrench',
-                    label: "CM.app.city.options.editmode.label",
-                    action: "editAction",
+                    icon: toggleEditIcon,
+                    label: toggleEditLabel,
+                    action: "optionEditAction",
+                },
+                {
+                    icon: 'fa-solid fa-cogs',
+                    label: "CM.app.city.options.goToSettings.label",
+                    action: "optionGoToSettings",
                 }
             ];
             logger.debug("Add controls", this.options.window.controls)
@@ -930,15 +981,27 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
     }
 
     /**
-    * Options edit
+    * Option : city edit toggle
     * @param {PointerEvent} event  click event
     * @param {HTMLElement} target  click target
     */
-    static async #editAction(event, target) {
+    static async #optionEditAction(event, target) {
         if (!game.user.isGM) return;
-        logger.debug("editAction", target)
+        logger.debug("Cities App | editAction", event, target)
         this.isEditable = !this.isEditable
         game.settings.set(MODULE_ID, IS_CITY_EDIT_MODE, this.isEditable)
-        this.render()
+
+        this.render({ force: true, window: { controls: true } });
+    }
+
+    /**
+    * Option : Go to the CM settings
+    * @param {PointerEvent} event  click event
+    * @param {HTMLElement} target  click target
+    */
+    static async #optionGoToSettings(event, target) {
+        if (!game.user.isGM) return;
+        logger.debug("Cities App | goToSettings", event, target)
+        game.settings.sheet.render(true, { activeTab: "modules" });
     }
 }

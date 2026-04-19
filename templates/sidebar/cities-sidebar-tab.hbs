@@ -1,15 +1,18 @@
 <section class="cm-cities-app flexcol tab sidebar-tab directory" data-application-part="main">
     <header class="cm-cities-app-header directory-header flexcol">
 
+        
         <div class="cm-cities-app-header-action-buttons header-actions action-buttons flexrow">
-            <button type="button" class="create-entry" data-action="createEntry" style="">
-                <i class="fa-solid fa-user" inert=""></i>
-                <span>{{localize "CM.sidebar.button.createCity"}}</span>
-            </button>
-            <button type="button" class="create-folder" data-action="createFolder">
-                <i class="fa-solid fa-folder" inert=""></i>
-                <span>{{localize "CM.sidebar.button.createCityFolder"}}</span>
-            </button>
+            {{#if @root.isEditable}}
+                <button type="button" class="create-entry" data-action="createEntry" style="">
+                    <i class="fa-solid fa-user" inert=""></i>
+                    <span>{{localize "CM.sidebar.button.createCity"}}</span>
+                </button>
+                <button type="button" class="create-folder" data-action="createFolder">
+                    <i class="fa-solid fa-folder" inert=""></i>
+                    <span>{{localize "CM.sidebar.button.createCityFolder"}}</span>
+                </button>
+            {{/if}}
         </div>
 
         <search class="cm-sidebar-search">

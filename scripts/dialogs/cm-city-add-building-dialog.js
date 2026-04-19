@@ -6,23 +6,32 @@ const { renderTemplate } = foundry.applications.handlebars;
 const { DialogV2 } = foundry.applications.api;
 
 export const addBuildingDialog = {
-    async render(dialogForm) {
-        if (!dialogForm) return
+    async render(dataConfig) {
         try {
+            const dialogForm = await addBuildingDialog.config(dataConfig)
             return await DialogV2.wait(dialogForm);
         } catch (ex) {
             logger.debug("User did not create new building.", ex);
             return;
         }
     },
-    async config(data) {
-        const dataForm = data ?? {}
+    async config(dataConfig) {
+        let titleTxt = "CM.dialog.newBuilding.title";
+        if (dataConfig) {
+            titleTxt = "CM.dialog.editBuilding.title"
+        }
+        const dataForm = dataConfig ?? {
+            "name": "CM.dialog.newBuilding.name.default.value",
+            "nbr": 0,
+            "price": 0,
+            "cost": 0
+        }
         return {
-            window: { title: "CM.dialog.newBuilding.title" },
+            window: { title: titleTxt },
             content: await renderTemplate(`modules/${MODULE_ID}/templates/dialogs/cm-city-add-building.hbs`, dataForm),
             buttons: [
                 {
-                    label: "CM.dialog.newBuilding.new.btn",
+                    label: "CM.dialog.save.btn",
                     icon: "fas fa-plus",
                     action: "confirm",
                     callback: async (event, button, dialog) => {

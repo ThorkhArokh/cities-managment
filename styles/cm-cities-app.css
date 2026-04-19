@@ -14,6 +14,11 @@ hr {
     text-decoration: underline;
 }
 
+.required {
+    color: brown;
+    cursor: help;
+}
+
 .info-icon {
     display: inline-flex;
     align-items: center;
@@ -31,7 +36,6 @@ hr {
 
 .cm-cities-app {}
 
-/* Le contenu des tabs prend le reste de la hauteur */
 .tab {
     flex: 1;
     overflow-y: auto;
@@ -57,7 +61,7 @@ hr {
 }
 
 .cm-cities-app-header-title {
-    margin-bottom: 4px
+    margin-bottom: 2px
 }
 
 .cm-cities-app-header-title input {

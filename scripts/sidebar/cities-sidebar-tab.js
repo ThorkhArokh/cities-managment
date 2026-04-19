@@ -37,6 +37,7 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
   constructor(...args) {
     super(...args);
     logger.debug("Cities Sidebar | constructed");
+    this.isEditable = game.user.isGM;
   }
 
   // --------------------------------------------------------------------
@@ -307,6 +308,7 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
 */
   async _preparePartContext(partId, context) {
     logger.debug(`Cities Sidebar | preparePartContext for ${partId}...`);
+    context.isEditable = this.isEditable
     // Cities
     let cities = CmCitiesJournalDataStore.getAllCities();
     logger.debug("Cities Sidebar | cities", cities)

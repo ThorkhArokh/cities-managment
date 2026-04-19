@@ -9,8 +9,12 @@
     },
     "CM.tab.city-managment": "Cities",
     "CM.app.city.title": "City",
-    "CM.app.city.options.editmode.label": "Toggle edit mode",
-    "CM.app.city.actor.new.default.name": "New actor",
+    "CM.app.city.options.editmode.label.on": "Edit Mode : ON",
+    "CM.app.city.options.editmode.label.off": "Edit Mode : OFF",
+    "CM.app.city.options.goToSettings.label": "Module's settings",
+    "CM.app.city.messages": {
+        "warn.render.permission": "You cannot display the details for this city."
+    },
     "CM.app.city.tab.header.city.desc.placeholder": "No description...",
     "CM.app.city.tab.header.city.map.tooltip": "Drop a scene here to link it to the city",
     "CM.app.city.tab.stats": {
@@ -49,6 +53,10 @@
     "CM.app.city.tab.finances.total.vaults.label": "Total vaults",
     "CM.app.city.tab.finances.total.building.label": "Total buildings",
     "CM.app.city.tab.finances.total.label": "Total",
+    "CM.app.city.tab.buildings": {
+        "btn.edit.infos": "Edit building",
+        "btn.delete.infos": "Delete building"
+    },
     "CM.app.city.tab.buildings.label": "Buildings",
     "CM.app.city.tab.buildings.header.name": "Building",
     "CM.app.city.tab.buildings.header.nbr": "Nbr",
@@ -57,7 +65,6 @@
     "CM.app.city.tab.buildings.header.cost.label": "Cost",
     "CM.app.city.tab.buildings.header.cost.infos": "Building's maintenance cost",
     "CM.app.city.tab.buildings.empty": "No building, drop item here",
-    "CM.app.city.tab.buildings.btn.delete.infos": "Delete building",
     "CM.app.city.tab.buildings.new.btn": "Add new building",
     "CM.app.city.tab.peoples.label": "Population",
     "CM.app.city.tab.peoples.empty": "No people, drop actor here",
@@ -131,11 +138,14 @@
             "name.label": "Name",
             "name.placeholder": "Enter building name...",
             "name.default.value": "New building",
+            "details.legend": "Details",
             "nbr.label": "Quantity",
             "price.label": "Buying price",
             "cost.label": "Maintenance cost",
-            "new.btn": "Add new building",
             "emptyName": "Building's name can't be empty."
+        },
+        "editBuilding": {
+            "title": "Edit building"
         },
         "deleteFolder": {
             "title": "Delete folder : ",

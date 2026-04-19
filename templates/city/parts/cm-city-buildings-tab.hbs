@@ -45,8 +45,13 @@
       </div>
     </div>
     {{#if @root.isEditable}}
+    <!-- ...Edit button -->
     <div class="flex1 center" style="max-width: 40px;">
-      <div class="field-label"></div>
+            <div class="field-label"></div>
+    </div>
+    <!-- ...Delete button -->
+    <div class="flex1 center" style="max-width: 40px;">
+            <div class="field-label"></div>
     </div>
     {{/if}}
   </div>
@@ -71,6 +76,11 @@
         data-dtype="Number" {{#unless @root.isEditable}}disabled{{/unless}} />
     </div>
     {{#if @root.isEditable}}
+    <!-- ...Edit button -->
+    <div class="flex1 center" style="max-width: 40px;">
+            <button type="button" data-tooltip="CM.app.city.tab.buildings.btn.edit.infos" data-action="editBuilding" data-id="{{id}}"><i class='fas fa-edit'></i></button>    
+    </div>
+    <!-- ...Delete button -->
     <div class="flex1 center" style="max-width: 40px;">
       <button type="button" data-action="removeBuilding" data-tooltip="CM.app.city.tab.buildings.btn.delete.infos"
         data-id="{{id}}"><i class='fas fa-trash'></i></button>
