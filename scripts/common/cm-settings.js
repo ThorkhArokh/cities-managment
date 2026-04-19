@@ -10,6 +10,15 @@ export const registerSystemSettings = function () {
         type: Boolean,
     })
 
+    game.settings.register(MODULE_ID, "toggleCityEditMode", {
+        name: "Toggle city edit",
+        hint: "Activate city edit",
+        scope: "world",
+        config: true,
+        default: false,
+        type: Boolean,
+    })
+
     game.settings.register(MODULE_ID, DATAS_STORE, {
         scope: "world",
         config: false,

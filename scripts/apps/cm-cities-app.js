@@ -1,5 +1,5 @@
 import { logger } from "../common/cm-customLog.js"
-import { MODULE_ID } from "../common/cm-constants.js"
+import { MODULE_ID, IS_CITY_EDIT_MODE } from "../common/cm-constants.js"
 import { CmCitiesJournalDataStore } from "../common/cm-cities-journal-ds.js"
 import { CityDto } from "../model/cm-city-dto.js"
 import { StatDto } from "../model/cm-stat-dto.js"
@@ -25,7 +25,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         this.city = city;
         this.cityDatas = CityDto.fromData(CmCitiesJournalDataStore.getCityData(city));
         this.#dragDrop = this.#createDragDropHandlers();
-        this.isEditable = game.user.isGM || city.testUserPermission(game.user, "OWNER");
+        this.isEditable = game.settings.get(MODULE_ID, IS_CITY_EDIT_MODE) && (game.user.isGM || city.testUserPermission(game.user, "OWNER"));
     }
 
     // Override title getter 
@@ -938,6 +938,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         if (!game.user.isGM) return;
         logger.debug("editAction", target)
         this.isEditable = !this.isEditable
+        game.settings.set(MODULE_ID, IS_CITY_EDIT_MODE, this.isEditable)
         this.render()
     }
 }

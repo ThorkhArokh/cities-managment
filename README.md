@@ -24,8 +24,8 @@ https://github.com/ThorkhArokh/cities-managment/releases/latest/download/module.
  - Dynamics treasury
  - City creation wizard
  - add duplicate menu on cities
- - add sheet for armies unit ?
- - add sheet for building ? (building class Extend Item class ?)
+ - update armies units (add sheet for armies unit ?)
+ - update buildings (add sheet for building ? (building class Extend Item class ?))
  
 ### WIP
 

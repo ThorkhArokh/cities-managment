@@ -94,6 +94,8 @@ hr {
 .drop-zone {
     min-height: 50px;
     padding: 8px;
+    margin-top: 4px;
+    margin-bottom: 4px;
 }
 
 /* Feedback visuel quand on survole avec un élément */
