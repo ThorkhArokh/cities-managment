@@ -38,6 +38,10 @@ hr {
     min-height: 0;
 }
 
+.cm-cities-app-header {
+    margin-bottom: 4px;
+}
+
 .cm-cities-app-header-avatar {
     max-width: 100px;
     height: 100px;
