@@ -21,10 +21,12 @@ https://github.com/ThorkhArokh/cities-managment/releases/latest/download/module.
  - Link to journal
 
 ## Change log
+Manage project : https://github.com/users/ThorkhArokh/projects/1
+
 ### v0.0.2
  - WIP
- 
-### v0.0.1
+
+### [v0.0.1](https://github.com/ThorkhArokh/cities-managment/releases/tag/v0.0.1)
  - update buildings
  - Add sort on tables columns headers
  - Add journal sheet rendering
