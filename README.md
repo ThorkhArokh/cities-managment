@@ -20,18 +20,13 @@ https://github.com/ThorkhArokh/cities-managment/releases/latest/download/module.
  - Link to map
  - Link to journal
 
-## Backlog
- - Dynamics treasury
- - City creation wizard
- - add duplicate menu on cities
- - update armies units 
- - add sheet for armies unit ?
- - add sheet for building ? (building class Extend Item class ?)
- 
-### WIP
+## Change log
+Manage project : https://github.com/users/ThorkhArokh/projects/1
 
+### v0.0.2
+ - WIP
 
-### DONE
+### [v0.0.1](https://github.com/ThorkhArokh/cities-managment/releases/tag/v0.0.1)
  - update buildings
  - Add sort on tables columns headers
  - Add journal sheet rendering

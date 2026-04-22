@@ -6,29 +6,38 @@ const { renderTemplate } = foundry.applications.handlebars;
 const { DialogV2 } = foundry.applications.api;
 
 export const addArmiesUnitDialog = {
-    async render(dialogForm) {
-        if (!dialogForm) return
+    async render(dataConfig) {
         try {
+            const dialogForm = await addArmiesUnitDialog.config(dataConfig)
             return await DialogV2.wait(dialogForm);
         } catch (ex) {
-            logger.debug("User did not create new unit.", ex);
+            logger.debug("User did not save unit.", ex);
             return;
         }
     },
-    async config(data) {
-        const dataForm = data ?? {}
+    async config(dataConfig) {
+        let titleTxt = "CM.dialog.newUnit.title";
+        if (dataConfig) {
+            titleTxt = "CM.dialog.newUnit.title"
+        }
+        const dataForm = dataConfig ?? {
+            "name": "CM.dialog.newUnit.name.default.value",
+            "role": "CM.dialog.newUnit.role.default.value",
+            "nbr": 1,
+            "cost": 0
+        }
         return {
-            window: { title: "CM.dialog.newUnit.title" },
+            window: { title: titleTxt },
             content: await renderTemplate(`modules/${MODULE_ID}/templates/dialogs/cm-city-add-armies-unit.hbs`, dataForm),
             buttons: [
                 {
-                    label: "CM.dialog.newUnit.new.btn",
+                    label: "CM.dialog.save.btn",
                     icon: "fas fa-plus",
                     action: "confirm",
                     callback: async (event, button, dialog) => {
                         const form = button.form;
                         const data = new FormDataExtended(form).object;
-                        logger.debug("Submit new army unit", data);
+                        logger.debug("Submit army unit", data);
 
                         if (!data.name?.trim()) {
                             ui.notifications.warn(game.i18n.localize("CM.dialog.newUnit.emptyName"));

@@ -15,6 +15,7 @@
     "CM.app.city.messages": {
         "warn.render.permission": "You cannot display the details for this city."
     },
+    "CM.app.city.tab.header.avatar.tooltip": "Change picture",
     "CM.app.city.tab.header.city.desc.placeholder": "No description...",
     "CM.app.city.tab.header.city.map.tooltip": "Drop a scene here to link it to the city",
     "CM.app.city.tab.stats": {
@@ -55,41 +56,50 @@
     "CM.app.city.tab.finances.total.label": "Total",
     "CM.app.city.tab.buildings": {
         "btn.edit.infos": "Edit building",
-        "btn.delete.infos": "Delete building"
+        "btn.delete.infos": "Delete building",
+        "label": "Buildings",
+        "header.name": "Building",
+        "header.nbr": "Nbr",
+        "header.price.label": "Price",
+        "header.price.infos": "Building's buying price",
+        "header.cost.label": "Cost",
+        "header.cost.infos": "Building's maintenance cost",
+        "empty": "No building",
+        "new.help": "Drop item here or create a new building",
+        "new.btn": "Add new building"
     },
-    "CM.app.city.tab.buildings.label": "Buildings",
-    "CM.app.city.tab.buildings.header.name": "Building",
-    "CM.app.city.tab.buildings.header.nbr": "Nbr",
-    "CM.app.city.tab.buildings.header.price.label": "Price",
-    "CM.app.city.tab.buildings.header.price.infos": "Building's buying price",
-    "CM.app.city.tab.buildings.header.cost.label": "Cost",
-    "CM.app.city.tab.buildings.header.cost.infos": "Building's maintenance cost",
-    "CM.app.city.tab.buildings.empty": "No building, drop item here",
-    "CM.app.city.tab.buildings.new.btn": "Add new building",
-    "CM.app.city.tab.peoples.label": "Population",
-    "CM.app.city.tab.peoples.empty": "No people, drop actor here",
-    "CM.app.city.tab.peoples.population.label": "Population",
-    "CM.app.city.tab.peoples.population.base.label": "Actual",
-    "CM.app.city.tab.peoples.population.max.label": "Max",
-    "CM.app.city.tab.peoples.header.significant.label": "Significant people",
-    "CM.app.city.tab.peoples.header.role.label": "Role",
+    "CM.app.city.tab.peoples": {
+        "label": "Population",
+        "empty": "No people",
+        "new.help":"Drop actor here",
+        "population.label": "Population",
+        "population.base.label": "Actual",
+        "population.max.label": "Max",
+        "header.significant.label": "Significant people",
+        "header.role.label": "Role"
+    },
     "CM.app.city.tab.treasury.label": "Treasury",
     "CM.app.city.tab.treasury.currencies": "Currencies",
     "CM.app.city.tab.chests": {
         "label": "Chests",
-        "empty": "Nothing in chests, drop item here",
+        "empty": "Nothing in chests",
+        "new.help": "Drop item here",
         "item.label": "Item",
         "item.nbr": "Qty",
         "item.price": "Price"
     },
-    "CM.app.city.tab.header.avatar.tooltip": "Change picture",
-    "CM.app.city.tab.armies.label": "Armies",
-    "CM.app.city.tab.armies.units.new.btn": "Add new unit",
-    "CM.app.city.tab.armies.units.empty": "No unit, drop actor here or create new unit",
-    "CM.app.city.header.unit.name": "Unit",
-    "CM.app.city.header.unit.role": "Type",
-    "CM.app.city.header.unit.nbr": "Nbr",
-    "CM.app.city.header.unit.cost": "Cost",
+    "CM.app.city.tab.armies": {
+        "label": "Armies",
+        "units.new.btn": "Add new unit",
+        "unites.new.help": "Drop actor here or create new unit",
+        "units.empty": "No unit",
+        "units.btn.edit.infos": "Edit unit",
+        "units.btn.delete.infos": "Delete unit",
+        "header.unit.name": "Unit",
+        "header.unit.role": "Type",
+        "header.unit.nbr": "Nbr",
+        "header.unit.cost": "Cost"
+    },
     "CM.app.city.messages.errors": {
         "render.nopermission": "You cannot display the details for this city."
     },
@@ -115,16 +125,16 @@
         },
         "newUnit": {
             "title": "Add new armies unit",
-            "new.btn": "Create unit",
             "emptyName": "Unit's name can be empty.",
             "name.label": "Name",
             "name.default.value": "New unit",
             "name.placeholder": "Enter unit name...",
+            "details.legend": "Details",
             "role.label": "Type",
             "role.default.value": "Soldier",
-            "role.placeholder": "Enter a role",
+            "role.placeholder": "Enter a role...",
             "nbr.label": "Quantity",
-            "cost.label": "Cost"
+            "cost.label": "Unit cost"
         },
         "newCity": {
             "title": "Add new city",

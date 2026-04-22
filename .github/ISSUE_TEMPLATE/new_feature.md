@@ -10,5 +10,5 @@ assignees: ThorkhArokh
 ### :dart: Objectif
 
 ### :zap: Actions
-- [x] tâche 1
-- [x] tâche 2
+- [ ] tâche 1
+- [ ] tâche 2

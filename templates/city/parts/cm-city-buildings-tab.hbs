@@ -55,12 +55,13 @@
     </div>
     {{/if}}
   </div>
+  {{#if hasNoBuildings}}<p class="center"><i>{{localize "CM.app.city.tab.buildings.empty"}}</i></p>{{/if}}
   {{#each city.buildings}}
-  <div class="flexrow no-wrap cm-cities-app-tab-line" style="gap:4px">
+  <div class="flexrow no-wrap cm-cities-app-tab-line gap4">
     <div>
-      <a class="flexrow no-wrap" style="gap:4px" data-action="showDetailsBuilding" data-id="{{id}}">
+      <a class="flexrow no-wrap gap4" data-action="showDetailsBuilding" data-id="{{id}}" {{#unless uuid}}disabled{{/unless}}>
         <img class="flex0" width="30px" height="30px" src="{{img}}" />
-        <span class="flexauto underline"><strong>{{name}}</strong></span>
+        <span class="flexauto {{#if uuid}}underline{{/if}}"><strong>{{name}}</strong></span>
       </a>
     </div>
     <div class="flex1 center" style="max-width: 40px;">
@@ -89,10 +90,10 @@
   </div>
   {{/each}}
   {{#if isEditable}}
-  <div class="drop-zone-header flexrow no-wrap">
-        {{#if hasNoBuildings}}<p class="center"><i>{{localize "CM.app.city.tab.buildings.empty"}}</i></p>{{/if}}
+  <div class="drop-zone-header no-wrap  gap8 right">
+        <p><i>{{localize "CM.app.city.tab.buildings.new.help"}}</i></p>
         <!-- New entry button -->
-        <div class="right cm-cities-app-tab-line">
+        <div>
             <button type="button" data-action="addNewBuilding"><i class='fas fa-plus'></i> {{localize
                 "CM.app.city.tab.buildings.new.btn"}}</button>
         </div>
