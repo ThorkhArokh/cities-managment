@@ -2,25 +2,30 @@
     <div class="form-group">
         <div class="form-fields">
             <div>
-                <label>{{localize "CM.dialog.newUnit.name.label"}}</label>
+                <label>{{localize "CM.dialog.newUnit.name.label"}} <span class="required" data-tooltip="CM.dialog.field.mandatory" data-tooltip-direction="UP">*</span></label>
                 <input class="field-value center" type="text" name="name" 
                 placeholder="{{localize "CM.dialog.newUnit.name.placeholder"}}" 
-                    value="{{localize "CM.dialog.newUnit.name.default.value"}}" />
+                    value="{{localize name}}" />
             </div>
-
+        </div>
+    </div>
+    <fieldset>
+        <legend>{{localize "CM.dialog.newUnit.details.legend"}}</legend>
+        <div class="form-group">
+            <div class="form-fields">
             <div>
                 <label>{{localize "CM.dialog.newUnit.role.label"}}</label>
                 <input class="field-value center" type="text" name="role" 
                     placeholder="{{localize "CM.dialog.newUnit.role.placeholder"}}" 
-                    value="{{localize "CM.dialog.newUnit.role.default.value"}}" />
+                    value="{{localize role}}" />
             </div>
             <div>
                 <label>{{localize "CM.dialog.newUnit.nbr.label"}}</label>
-                <input class="field-value center" type="number" name="nbr" value="1" />
+                <input class="field-value center" type="number" name="nbr" value="{{nbr}}" />
             </div>
             <div>
                 <label>{{localize "CM.dialog.newUnit.cost.label"}}</label>
-                <input class="field-value center" type="number" name="cost" value="0" />
+                <input class="field-value center" type="number" name="cost" value="{{cost}}" />
             </div>
         </div>
     </div>

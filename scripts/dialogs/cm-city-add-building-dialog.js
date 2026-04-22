@@ -11,7 +11,7 @@ export const addBuildingDialog = {
             const dialogForm = await addBuildingDialog.config(dataConfig)
             return await DialogV2.wait(dialogForm);
         } catch (ex) {
-            logger.debug("User did not create new building.", ex);
+            logger.debug("User did not save building.", ex);
             return;
         }
     },
@@ -37,7 +37,7 @@ export const addBuildingDialog = {
                     callback: async (event, button, dialog) => {
                         const form = button.form;
                         const data = new FormDataExtended(form).object;
-                        logger.debug("Submit new building", data);
+                        logger.debug("Submit building", data);
 
                         if (!data.name?.trim()) {
                             ui.notifications.warn(game.i18n.localize("CM.dialog.newBuilding.emptyName"));

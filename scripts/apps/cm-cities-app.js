@@ -72,6 +72,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             addNewFinanceEntry: CmCityApp.#addNewFinanceEntry,
             removeFinanceEntry: CmCityApp.#removeFinanceEntry,
             addNewUnit: CmCityApp.#addNewUnit,
+            editUnit: CmCityApp.#editUnit,
             removeUnit: CmCityApp.#removeUnit,
             addNewBuilding: CmCityApp.#addNewBuilding,
             editBuilding: CmCityApp.#editBuilding,
@@ -307,7 +308,8 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             const obj = await fromUuid(building.uuid);
             obj?.sheet?.render(true)
         } else {
-            building.getSheet().render(true)
+            // TODO : Building sheet feature
+            //building.getSheet().render(true)
         }
     }
 
@@ -390,10 +392,9 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
     */
     static async #addNewUnit(event, target) {
         if (!this.isEditable) return
-        logger.debug("Add new army unit", target)
+        logger.debug("Add new army unit", event, target)
 
-        const dialogForm = await addArmiesUnitDialog.config({})
-        let newUnitDatas = await addArmiesUnitDialog.render(dialogForm);
+        let newUnitDatas = await addArmiesUnitDialog.render();
         logger.debug("New unit", newUnitDatas)
         if (!newUnitDatas) return;
         newUnitDatas.id = foundry.utils.randomID();
@@ -403,13 +404,44 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
     }
 
     /**
+    * Edit army unit
+    * @param {PointerEvent} event  click event
+    * @param {HTMLElement} target  click target
+    */
+    static async #editUnit(event, target) {
+        if (!this.isEditable) return
+        logger.debug("Edit army unit", event, target)
+        var unitId = target.dataset.id
+
+        if (Object.hasOwn(this.cityDatas.armies.units, unitId)) {
+            const unitToEdit = this.cityDatas.armies.units[unitId];
+            logger.debug("Cities App | editUnit - unit to edit", unitToEdit)
+            let newUnitDatas = await addArmiesUnitDialog.render(unitToEdit);
+            logger.debug("Cities App | editUnit - edited unit datas", newUnitDatas)
+            if (!newUnitDatas) return;
+            foundry.utils.mergeObject(unitToEdit, newUnitDatas, {
+                insertKeys: true,
+                insertValues: true,
+                overwrite: true,
+                recursive: true,
+                inplace: true,
+            });
+            this.cityDatas.armies.units[unitId] = unitToEdit
+            await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
+            this.render();
+        } else {
+            logger.error("No Unit found", unitId)
+        }
+    }
+
+    /**
     * Remove army unit
     * @param {PointerEvent} event  click event
     * @param {HTMLElement} target  click target
     */
     static async #removeUnit(event, target) {
         if (!this.isEditable) return
-        logger.debug("Remove army unit", target)
+        logger.debug("Remove army unit", event, target)
         var peopleId = target.dataset.id
 
         if (Object.hasOwn(this.cityDatas.armies.units, peopleId)) {

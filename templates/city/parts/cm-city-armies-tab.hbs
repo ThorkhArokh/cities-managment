@@ -2,7 +2,7 @@
     <div class="cm-cities-app-tab-header flexrow table-header no-wrap" style="gap:4px">
         <div class="flex2 left">
             <div class="field-label" data-action="sortObjects" data-field="name">
-                {{localize "CM.app.city.header.unit.name"}}
+                {{localize "CM.app.city.tab.armies.header.unit.name"}}
                 {{#if (eq @root.armiesSort.field "name")}}
                     <i class="fas fa-sort-{{#if (eq @root.armiesSort.direction 1)}}down{{else}}up{{/if}}"></i>
                 {{else}}
@@ -12,7 +12,7 @@
         </div>
         <div class="flex1 center">
             <div class="field-label" data-action="sortObjects" data-field="role">
-                {{localize "CM.app.city.header.unit.role"}} 
+                {{localize "CM.app.city.tab.armies.header.unit.role"}} 
                 {{#if (eq @root.armiesSort.field "role")}}
                     <i class="fas fa-sort-{{#if (eq @root.armiesSort.direction 1)}}down{{else}}up{{/if}}"></i>
                 {{else}}
@@ -22,7 +22,7 @@
         </div>
         <div class="flex1 center" style="max-width: 40px;">
             <div class="field-label" data-action="sortObjects" data-field="nbr">
-                {{localize "CM.app.city.header.unit.nbr"}}
+                {{localize "CM.app.city.tab.armies.header.unit.nbr"}}
                 {{#if (eq @root.armiesSort.field "nbr")}}
                     <i class="fas fa-sort-{{#if (eq @root.armiesSort.direction 1)}}down{{else}}up{{/if}}"></i>
                 {{else}}
@@ -34,7 +34,7 @@
             <div class="field-label" data-action="sortObjects" data-field="cost">
                 <span>
                     <i data-tooltip="CM.currency.sp.label"
-                        class="fas fa-coins" style="color:silver"></i> {{localize "CM.app.city.header.unit.cost"}}
+                        class="fas fa-coins" style="color:silver"></i> {{localize "CM.app.city.tab.armies.header.unit.cost"}}
                 </span>
                 {{#if (eq @root.armiesSort.field "cost")}}
                     <i class="fas fa-sort-{{#if (eq @root.armiesSort.direction 1)}}down{{else}}up{{/if}}"></i>
@@ -44,11 +44,17 @@
             </div>
         </div>
         {{#if @root.isEditable}}
+        <!-- ...Edit button -->
+        <div class="flex1 center" style="max-width: 40px;">
+            <div class="field-label"></div>
+        </div>
+        <!-- ...Delete button -->
         <div class="flex1 center" style="max-width: 40px;">
             <div class="field-label"></div>
         </div>
         {{/if}}
     </div>
+    {{#if hasNoUnits}}<p class="center"><i>{{localize "CM.app.city.tab.armies.units.empty"}}</i></p>{{/if}}
     {{#each city.armies.units}}
     <div class="flexrow no-wrap cm-cities-app-tab-line" style="gap:4px">
         <div class="flex2 flexrow no-wrap" style="gap:4px">
@@ -72,18 +78,26 @@
                 {{#unless @root.isEditable}}disabled{{/unless}} />
         </div>
         {{#if @root.isEditable}}
+        <!-- ...Edit button -->
         <div class="flex1 center" style="max-width: 40px;">
-            <button class="flex0" type="button" data-action="removeUnit" data-id="{{id}}"><i
-                    class='fas fa-trash'></i></button>
+            <button type="button" data-tooltip="CM.app.city.tab.armies.units.btn.edit.infos" data-action="editUnit" data-id="{{id}}">
+                <i class='fas fa-edit'></i>
+            </button>    
+        </div>
+        <!-- ...Delete button -->
+        <div class="flex1 center" style="max-width: 40px;">
+            <button class="flex0" type="button" data-action="removeUnit" data-id="{{id}}" data-tooltip="CM.app.city.tab.armies.units.btn.delete.infos">
+                <i class='fas fa-trash'></i>
+            </button>
         </div>
         {{/if}}
     </div>
     {{/each}}
     {{#if isEditable}}
-    <div class="drop-zone-header flexrow no-wrap">
-        {{#if hasNoUnits}}<p><i>{{localize "CM.app.city.tab.armies.units.empty"}}</i></p>{{/if}}
+    <div class="drop-zone-header no-wrap gap8 right">
+        <p><i>{{localize "CM.app.city.tab.armies.unites.new.help"}}</i></p>
         <!-- New entry button -->
-        <div class="right">
+        <div>
             <button type="button" data-action="addNewUnit"><i class='fas fa-plus'></i> {{localize
                 "CM.app.city.tab.armies.units.new.btn"}}</button>
         </div>

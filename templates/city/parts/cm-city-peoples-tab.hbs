@@ -42,6 +42,7 @@
       <div class="field-label"></div>
     </div>
   </div>
+  {{#if hasNoPeoples}}<p class="center"><i>{{localize "CM.app.city.tab.peoples.empty"}}</i></p>{{/if}}
   {{#each city.population.peoples}}
   <div class="flexrow no-wrap cm-cities-app-tab-line" style="gap:4px">
     <div class="flex2">
@@ -65,9 +66,8 @@
   {{/each}}
   {{#if isEditable}}
   <div class="drop-zone-header flexrow no-wrap">
-    {{#if hasNoPeoples}}<p class="center"><i>{{localize "CM.app.city.tab.peoples.empty"}}</i></p>{{/if}}
+    <i>{{localize "CM.app.city.tab.peoples.new.help"}}</i>
   </div>
-    <div class="drop-zone drag-over" data-drop-peoples="true">
-  </div>
+  <div class="drop-zone drag-over" data-drop-peoples="true"></div>
   {{/if}}
 </section>

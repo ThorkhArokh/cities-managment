@@ -21,10 +21,10 @@ class FinanceEntryType {
         var type;
         switch (key) {
             case financeEntryTypes.income.key:
-                type = new FinanceEntryType("income", "CM.app.city.tab.finances.entry.types.income", "fa-solid fa-plus");
+                type = new FinanceEntryType("income", "CM.app.city.tab.finances.entry.types.income", "fa-solid fa-arrow-trend-up");
                 break;
             case financeEntryTypes.expense.key:
-                type = new FinanceEntryType("expense", "CM.app.city.tab.finances.entry.types.expense", "fa-solid fa-minus");
+                type = new FinanceEntryType("expense", "CM.app.city.tab.finances.entry.types.expense", "fa-solid fa-arrow-trend-down");
                 break;
             default:
                 ui.notifications.warn(game.i18n.localize("Unkown finance entry type"));
@@ -36,8 +36,8 @@ class FinanceEntryType {
 }
 
 export const financeEntryTypes = {
-    income: new FinanceEntryType("income", "CM.app.city.tab.finances.entry.types.income", "fa-solid fa-plus"),
-    expense: new FinanceEntryType("expense", "CM.app.city.tab.finances.entry.types.expense", "fa-solid fa-minus")
+    income: new FinanceEntryType("income", "CM.app.city.tab.finances.entry.types.income", "fa-solid fa-arrow-trend-up"),
+    expense: new FinanceEntryType("expense", "CM.app.city.tab.finances.entry.types.expense", "fa-solid fa-arrow-trend-down")
 }
 
 export class FinanceEntryDto {
