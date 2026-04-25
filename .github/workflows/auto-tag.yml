@@ -165,3 +165,26 @@ jobs:
           git commit -m "chore: bump version to ${{ steps.bump.outputs.new_version }} [skip ci]"
           git push origin develop
           echo "🚀 Pushed version bump to develop"
+
+      # ── Créer la milestone pour la prochaine version ──────────────────────
+      - name: Create milestone for next version
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          NEXT_VERSION="${{ steps.bump.outputs.new_version }}"
+          NEXT_TAG="${{ steps.bump.outputs.new_tag }}"
+
+          # Vérifier si la milestone existe déjà
+          EXISTING=$(gh api repos/${{ github.repository }}/milestones \
+            --jq ".[] | select(.title == \"$NEXT_TAG\") | .number")
+
+          if [ -n "$EXISTING" ]; then
+            echo "⚠️  Milestone $NEXT_TAG already exists (#$EXISTING)"
+          else
+            gh api repos/${{ github.repository }}/milestones \
+              --method POST \
+              --field title="$NEXT_TAG" \
+              --field description="Développements prévus pour la version $NEXT_VERSION" \
+              --field state="open"
+            echo "✅ Milestone $NEXT_TAG created"
+          fi
