@@ -56,9 +56,9 @@
     </div>
     {{#if hasNoUnits}}<p class="center"><i>{{localize "CM.app.city.tab.armies.units.empty"}}</i></p>{{/if}}
     {{#each city.armies.units}}
-    <div class="flexrow no-wrap cm-cities-app-tab-line" style="gap:4px">
-        <div class="flex2 flexrow no-wrap" style="gap:4px">
-            <img class="flex0" width="30px" height="30px" src="{{img}}" data-action="editImage"
+    <div class="flexrow no-wrap cm-cities-app-tab-line gap4">
+        <div class="flex2 flexrow no-wrap gap4">
+            <img class="flex0 cm-img-icon" src="{{img}}" data-action="editImage"
                 data-field="armies.units.{{@key}}.img" data-edit="city.armies.units.{{@key}}.img"
                 data-tooltip="CM.app.city.tab.header.avatar.tooltip" />
             <a data-action="showDetails" data-uuid="{{uuid}}" {{#unless uuid}}disabled{{/unless}}>

@@ -58,9 +58,11 @@
   {{#if hasNoBuildings}}<p class="center"><i>{{localize "CM.app.city.tab.buildings.empty"}}</i></p>{{/if}}
   {{#each city.buildings}}
   <div class="flexrow no-wrap cm-cities-app-tab-line gap4">
-    <div>
-      <a class="flexrow no-wrap gap4" data-action="showDetailsBuilding" data-id="{{id}}" {{#unless uuid}}disabled{{/unless}}>
-        <img class="flex0" width="30px" height="30px" src="{{img}}" />
+    <div class="flexrow no-wrap gap4">
+      <img class="flex0 cm-img-icon" src="{{img}}" data-action="editImage" 
+                data-field="buildings.{{@key}}.img" data-edit="city.buildings.{{@key}}.img"
+                data-tooltip="CM.app.city.tab.header.avatar.tooltip"/>
+      <a  data-action="showDetailsBuilding" data-id="{{id}}" {{#unless uuid}}disabled{{/unless}}>
         <span class="flexauto {{#if uuid}}underline{{/if}}"><strong>{{name}}</strong></span>
       </a>
     </div>
