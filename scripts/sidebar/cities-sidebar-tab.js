@@ -153,7 +153,7 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
     logger.debug("Cities Sidebar | Created city", city)
 
     // Open city sheet
-    new CmCityApp(city).render(true);
+    new CmCityApp(city, { isEditable: true }).render(true);
     this.render(true);
   }
 

@@ -25,7 +25,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         this.city = city;
         this.cityDatas = CityDto.fromData(CmCitiesJournalDataStore.getCityData(city));
         this.#dragDrop = this.#createDragDropHandlers();
-        this.isEditable = game.settings.get(MODULE_ID, IS_CITY_EDIT_MODE) && (game.user.isGM || city.testUserPermission(game.user, "OWNER"));
+        this.isEditable = options?.isEditable || (game.settings.get(MODULE_ID, IS_CITY_EDIT_MODE) && (game.user.isGM || city.testUserPermission(game.user, "OWNER")));
     }
 
     // Override title getter 

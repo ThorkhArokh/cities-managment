@@ -1,4 +1,10 @@
 {
+    "CM.settings": {
+        "debugMode.name": "Mode debug actif",
+        "debugMode.hint": "Active le mode debug, permet de voir les logs dans la console du navigateur (F12)",
+        "toggleEdit.name" : "Mode édition de ville actif",
+        "toggleEdit.hint" : "Active ou désactive le mode édition des villes pour le MJ ou les joueurs avec les droits nécessaires"
+    },
     "CM.sidebar.button.createCity": "Créer ville",
     "CM.sidebar.button.createCityFolder": "Créer dossier",
     "CM.city.contextmenu": {
@@ -71,7 +77,7 @@
     "CM.app.city.tab.peoples": {
         "label": "Population",
         "empty": "Aucun habitant",
-        "new.help":"Glisser un acteur ici",
+        "new.help": "Glisser un acteur ici",
         "population.label": "Population",
         "population.base.label": "Actuelle",
         "population.max.label": "Max",

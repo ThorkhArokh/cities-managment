@@ -1,4 +1,10 @@
 {
+    "CM.settings": {
+        "debugMode.name": "Toggle debug mode",
+        "debugMode.hint": "Activate debug mode, show logs in browser console (F12)",
+        "toggleEdit.name" : "Toggle city edit",
+        "toggleEdit.hint" : "Activate city edit for GM and players with ownership"
+    },
     "CM.sidebar.button.createCity": "Create City",
     "CM.sidebar.button.createCityFolder": "Create Folder",
     "CM.city.contextmenu": {
@@ -71,7 +77,7 @@
     "CM.app.city.tab.peoples": {
         "label": "Population",
         "empty": "No people",
-        "new.help":"Drop actor here",
+        "new.help": "Drop actor here",
         "population.label": "Population",
         "population.base.label": "Actual",
         "population.max.label": "Max",
