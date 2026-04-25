@@ -48,6 +48,20 @@ hr {
     min-height: 0;
 }
 
+.cm-img-icon {
+    max-width: 30px;
+    height: 30px;
+    cursor: pointer;
+    border-radius: 4px;
+    border: 1px solid var(--color-border-light);
+    transition: opacity 0.2s;
+
+    &:hover {
+        opacity: 0.8;
+        border-color: var(--color-border-highlight);
+    }
+}
+
 .cm-cities-app-header {
     margin-bottom: 4px;
 }

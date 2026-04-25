@@ -22,7 +22,7 @@ export const addBuildingDialog = {
         }
         const dataForm = dataConfig ?? {
             "name": "CM.dialog.newBuilding.name.default.value",
-            "nbr": 0,
+            "nbr": 1,
             "price": 0,
             "cost": 0
         }
