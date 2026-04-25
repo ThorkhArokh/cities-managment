@@ -827,12 +827,12 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         if (!this.isEditable) return
 
         // Do things with the returned FormData
-        logger.debug("Submit", event, form, formData)
+        logger.debug("submitFormHandler - Submit", event, form, formData)
 
         const datas = foundry.utils.expandObject(formData.object);
-        logger.debug("FormDatas", datas)
+        logger.debug("submitFormHandler - FormDatas", datas)
 
-        logger.debug("City to update", this.cityDatas)
+        logger.debug("submitFormHandler - City to update", this.cityDatas)
         foundry.utils.mergeObject(this.cityDatas, datas.city, {
             insertKeys: true,    // ajouter les clés absentes de objA
             insertValues: true,  // ajouter les valeurs manquantes
@@ -840,7 +840,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             recursive: true,     // fusion récursive des objets imbriqués
             inplace: true,      // false = retourne un nouvel objet
         });
-        logger.debug("Updated city", this.cityDatas)
+        logger.debug("submitFormHandler - Updated city", this.cityDatas)
 
         this.cityDatas = CityDto.fromData(this.cityDatas);
         logger.debug("City Datas", this.cityDatas)

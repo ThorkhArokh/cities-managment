@@ -56,6 +56,7 @@ export class CmCitiesJournalDataStore {
      */
     static async updateCity(journalEntry, cityDto) {
         logger.debug("Update city", journalEntry, cityDto)
+        await journalEntry.update({ name: cityDto.name });
         await journalEntry.unsetFlag(MODULE_ID, FLAG_KEY_CITY_DATAS);
         await journalEntry.setFlag(
             MODULE_ID,
