@@ -557,8 +557,13 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         logger.debug("IMG field", field)
         const current = foundry.utils.getProperty(this.cityDatas, field)
 
+        const source = (typeof ForgeVTT !== "undefined" && ForgeVTT.usingTheForge)
+        ? "forgevtt"
+        : "data";
+
         const fp = new FilePicker({
             type: "image",
+            source: source,
             current: current,
             callback: (path) => {
                 // Mettre à jour l'aperçu immédiatement
