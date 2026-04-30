@@ -15,6 +15,10 @@ the Setup menu of Foundry Virtual Tabletop:
 https://github.com/ThorkhArokh/cities-managment/releases/latest/download/module.json
 ```
 
+## Supported languages
+- English (en)
+- French (fr)
+
 ## Features
  1. [Manage cities with new tab](#manage-cities-with-new-tab)
  2. [Manage city's informations](#manage-citys-informations)
