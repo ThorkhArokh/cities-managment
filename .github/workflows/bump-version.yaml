@@ -68,6 +68,14 @@ jobs:
           echo "✅ module.json updated:"
           jq '{version, license, readme, changelog, download}' module.json
  
+      # ── Mettre à jour la version dans publish_release.http ────────────────
+      - name: Update version in publish_release.http
+        run: |
+          NEW_VERSION="${{ steps.bump.outputs.new_version }}"
+          sed -i "s|^@version=.*|@version=${NEW_VERSION}|" publish_release.http
+          echo "✅ publish_release.http updated:"
+          grep '@version' publish_release.http
+
       # ── Commit & push bumped ──────────────────────────────────────────────
       - name: Commit & push bumped module.json
         run: |
