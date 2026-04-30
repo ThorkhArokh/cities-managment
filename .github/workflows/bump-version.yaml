@@ -1,0 +1,110 @@
+name: Bump version on Develop
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  # ════════════════════════════════════════════════════════════════════════════
+  # JOB — Tag & Release sur main
+  # ════════════════════════════════════════════════════════════════════════════
+  tag-and-release:
+    name: Bump version
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── Checkout develop ──────────────────────────────────────────────
+      - name: Checkout develop
+        uses: actions/checkout@v4
+        with:
+          ref: develop
+          fetch-depth: 0
+
+      # ── Créer une branche pour la version courante ────────────────────────
+      - name: Create branch for current version
+        run: |
+          CURRENT=$(jq -r '.version' module.json)
+          BRANCH="release/v${CURRENT}"
+
+          if git ls-remote --exit-code --heads origin "$BRANCH" > /dev/null 2>&1; then
+            echo "⚠️  Branch $BRANCH already exists, skipping"
+          else
+            git checkout -b "$BRANCH"
+            git push origin "$BRANCH"
+            echo "✅ Branch $BRANCH created"
+            git checkout develop
+          fi
+ 
+      # ── Bump patch version in module.json ──────────────────────────────────────────────
+      - name: Bump minor version in module.json
+        id: bump
+        run: |
+          CURRENT=$(jq -r '.version' module.json)
+          MAJOR=$(echo "$CURRENT" | cut -d. -f1)
+          MINOR=$(echo "$CURRENT" | cut -d. -f2)
+          PATCH=$(echo "$CURRENT" | cut -d. -f3)
+          # Incrémenter le patch
+          NEW_PATCH=$((PATCH + 1))
+          NEW_VERSION="${MAJOR}.${MINOR}.${NEW_PATCH}"
+          NEW_TAG="v${NEW_VERSION}"
+ 
+          echo "🔢 $CURRENT → $NEW_VERSION"
+          echo "new_version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
+          echo "new_tag=$NEW_TAG"         >> "$GITHUB_OUTPUT"
+ 
+          # Mettre à jour tous les champs contenant l'ancienne version
+          # On remplace toutes les occurrences de l'ancien tag vX.Y.Z par le nouveau
+          OLD_TAG="v${CURRENT}"
+          sed -i "s|${OLD_TAG}|${NEW_TAG}|g" module.json
+ 
+          # Mettre à jour le champ "version" (valeur sans le "v")
+          jq --arg v "$NEW_VERSION" '.version = $v' module.json > module.tmp.json
+          mv module.tmp.json module.json
+ 
+          echo "✅ module.json updated:"
+          jq '{version, license, readme, changelog, download}' module.json
+ 
+      # ── Mettre à jour la version dans publish_release.http ────────────────
+      - name: Update version in publish_release.http
+        run: |
+          NEW_VERSION="${{ steps.bump.outputs.new_version }}"
+          sed -i "s|^@version=.*|@version=${NEW_VERSION}|" publish_release.http
+          echo "✅ publish_release.http updated:"
+          grep '@version' publish_release.http
+
+      # ── Commit & push bumped ──────────────────────────────────────────────
+      - name: Commit & push bumped module.json
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add module.json
+          git commit -m "chore: bump version to ${{ steps.bump.outputs.new_version }} [skip ci]"
+          git push origin develop
+          echo "🚀 Pushed version bump to develop"
+
+      # ── Créer la milestone pour la prochaine version ──────────────────────
+      - name: Create milestone for next version
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          NEXT_VERSION="${{ steps.bump.outputs.new_version }}"
+          NEXT_TAG="${{ steps.bump.outputs.new_tag }}"
+
+          # Vérifier si la milestone existe déjà
+          EXISTING=$(gh api repos/${{ github.repository }}/milestones \
+            --jq ".[] | select(.title == \"$NEXT_TAG\") | .number")
+
+          if [ -n "$EXISTING" ]; then
+            echo "⚠️  Milestone $NEXT_TAG already exists (#$EXISTING)"
+          else
+            gh api repos/${{ github.repository }}/milestones \
+              --method POST \
+              --field title="$NEXT_TAG" \
+              --field description="Développements prévus pour la version $NEXT_VERSION" \
+              --field state="open"
+            echo "✅ Milestone $NEXT_TAG created"
+          fi
