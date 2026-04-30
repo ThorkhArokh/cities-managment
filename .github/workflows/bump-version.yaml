@@ -23,6 +23,21 @@ jobs:
         with:
           ref: develop
           fetch-depth: 0
+
+      # ── Créer une branche pour la version courante ────────────────────────
+      - name: Create branch for current version
+        run: |
+          CURRENT=$(jq -r '.version' module.json)
+          BRANCH="release/v${CURRENT}"
+
+          if git ls-remote --exit-code --heads origin "$BRANCH" > /dev/null 2>&1; then
+            echo "⚠️  Branch $BRANCH already exists, skipping"
+          else
+            git checkout -b "$BRANCH"
+            git push origin "$BRANCH"
+            echo "✅ Branch $BRANCH created"
+            git checkout develop
+          fi
  
       # ── Bump patch version in module.json ──────────────────────────────────────────────
       - name: Bump minor version in module.json
