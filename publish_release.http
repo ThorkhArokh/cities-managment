@@ -1,0 +1,38 @@
+@version=1.0.6
+
+### DRYRUN - Publish release on FoundryVTT
+POST https://foundryvtt.com/_api/packages/release_version/
+Content-Type: 'application/json'
+Authorization: {{$dotenv FOUNDRY_TOKEN_KEY}}
+
+{
+    "id": "cities-managment",
+    "dry-run": true,
+    "release": {
+        "version": "{{version}}",
+        "manifest": "https://github.com/ThorkhArokh/cities-managment/releases/latest/download/module.json",
+        "notes": "https://github.com/ThorkhArokh/cities-managment/releases/tag/v{{version}}",
+        "compatibility": {
+            "minimum": "13",
+            "verified": "13"
+        }
+    }
+}
+
+### Publish release on FoundryVTT
+POST https://foundryvtt.com/_api/packages/release_version/
+Content-Type: 'application/json'
+Authorization: {{$dotenv FOUNDRY_TOKEN_KEY}}
+
+{
+    "id": "cities-managment",
+    "release": {
+        "version": "{{version}}",
+        "manifest": "https://github.com/ThorkhArokh/cities-managment/releases/latest/download/module.json",
+        "notes": "https://github.com/ThorkhArokh/cities-managment/releases/tag/v{{version}}",
+        "compatibility": {
+            "minimum": "13",
+            "verified": "13"
+        }
+    }
+}
