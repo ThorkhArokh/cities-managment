@@ -24,6 +24,16 @@ jobs:
           ref: develop
           fetch-depth: 0
 
+      # ── Resync develop avec main AVANT le bump ────────────────────────
+      - name: Merge main into develop
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          git merge origin/main --no-edit \
+            -m "chore: sync develop with main after release [skip ci]"
+          echo "🔄 develop synced with main"
+
       # ── Créer une branche pour la version courante ────────────────────────
       - name: Create branch for current version
         run: |
