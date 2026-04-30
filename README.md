@@ -1,6 +1,11 @@
 <h1 style="text-align: center;">Cities Managment</h1>
 <p style="text-align: center;"><img src="https://img.shields.io/github/v/release/ThorkhArokh/cities-managment?style=for-the-badge" alt="GitHub release" /> <img src="https://img.shields.io/github/downloads/ThorkhArokh/cities-managment/total?style=for-the-badge" alt="GitHub all releases" /></p>
 
+Allow to manage cities and domains with a sidebar tab and custom city view.
+
+## FoundryVTT
+Page : https://foundryvtt.com/packages/cities-managment
+
 ## Installation Instructions
 
 To install Cities-Managment, find Cities-Managment in the module browser, or paste the following URL into the Install Module dialog in
@@ -9,6 +14,10 @@ the Setup menu of Foundry Virtual Tabletop:
 ```
 https://github.com/ThorkhArokh/cities-managment/releases/latest/download/module.json
 ```
+
+## Supported languages
+- English (en)
+- French (fr)
 
 ## Features
  1. [Manage cities with new tab](#manage-cities-with-new-tab)
