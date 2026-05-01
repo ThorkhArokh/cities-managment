@@ -171,3 +171,8 @@ Manage project : https://github.com/users/ThorkhArokh/projects/1
  - Generics Stats
  - Add folders in cities tab; /!\ drag and drop cities in folders
  - show city or not to players (ownership)
+
+ ## Documentation
+ - https://foundryvtt.com/article/module-development/
+ - https://foundryvtt.com/article/module-sub-types/
+ - https://www.foundryvtt-hub.com/technical-guide/
