@@ -115,7 +115,7 @@ jobs:
             ### Installation Foundry VTT
             Colle cette URL dans *Install Module* :
             ```
-            https://github.com/ThorkhArokh/cities-managment/releases/latest/download/module.json
+            https://github.com/ThorkhArokh/cities-managment/releases/download/${{ steps.final_tag.outputs.tag }}/module.json
             ```
           files: |
             module.json
