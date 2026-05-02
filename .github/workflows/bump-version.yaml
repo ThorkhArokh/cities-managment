@@ -63,6 +63,7 @@ jobs:
           NEW_TAG="v${NEW_VERSION}"
  
           echo "🔢 $CURRENT → $NEW_VERSION"
+          echo "current_version=$CURRENT" >> "$GITHUB_OUTPUT"
           echo "new_version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
           echo "new_tag=$NEW_TAG"         >> "$GITHUB_OUTPUT"
  
@@ -81,7 +82,7 @@ jobs:
       # ── Mettre à jour la version dans publish_release.http ────────────────
       - name: Update version in publish_release.http
         run: |
-          NEW_VERSION="${{ steps.bump.outputs.new_version }}"
+          NEW_VERSION="${{ steps.bump.outputs.current_version }}"
           sed -i "s|^@version=.*|@version=${NEW_VERSION}|" publish_release.http
           echo "✅ publish_release.http updated:"
           grep '@version' publish_release.http

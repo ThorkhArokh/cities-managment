@@ -3,6 +3,8 @@
 
 Allow to manage cities and domains with a sidebar tab and custom city view.
 
+<a href='https://ko-fi.com/Z8Z11YI46Z' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi6.png?v=6' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+
 ## FoundryVTT
 Page : https://foundryvtt.com/packages/cities-managment
 
