@@ -2,8 +2,8 @@
     "CM.settings": {
         "debugMode.name": "Mode debug actif",
         "debugMode.hint": "Active le mode debug, permet de voir les logs dans la console du navigateur (F12)",
-        "toggleEdit.name" : "Mode édition de ville actif",
-        "toggleEdit.hint" : "Active ou désactive le mode édition des villes pour le MJ ou les joueurs avec les droits nécessaires"
+        "toggleEdit.name": "Mode édition de ville actif",
+        "toggleEdit.hint": "Active ou désactive le mode édition des villes pour le MJ ou les joueurs avec les droits nécessaires"
     },
     "CM.sidebar.button.createCity": "Créer ville",
     "CM.sidebar.button.createCityFolder": "Créer dossier",
@@ -70,6 +70,7 @@
         "header.price.infos": "Prix d'achat du bâtiment",
         "header.cost.label": "Coût",
         "header.cost.infos": "Coût de maintenance du bâtiment",
+        "header.owner.label": "Prop.",
         "empty": "Aucun bâtiment",
         "new.help": "Glisser un objet ici ou ajouter un nouveau bâtiment",
         "new.btn": "Ajouter un nouveau bâtiment"
@@ -159,7 +160,11 @@
             "nbr.label": "Nombre",
             "price.label": "Prix d'achat",
             "cost.label": "Coût de maintenance",
-            "emptyName": "Le nom du bâtiment ne peut pas être vide."
+            "emptyName": "Le nom du bâtiment ne peut pas être vide.",
+            "owner.legend": "Propriétaire",
+            "owner.placeholder": "Glisser un acteur ici",
+            "owner.invalidDrop": "Données fournies invalides",
+            "owner.mustBeActor": "Veuillez déposer un acteur valide"
         },
         "editBuilding": {
             "title": "Modifier bâtiment"

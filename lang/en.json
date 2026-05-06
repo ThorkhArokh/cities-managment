@@ -70,6 +70,7 @@
         "header.price.infos": "Building's buying price",
         "header.cost.label": "Cost",
         "header.cost.infos": "Building's maintenance cost",
+        "header.owner.label": "Owner",
         "empty": "No building",
         "new.help": "Drop item here or create a new building",
         "new.btn": "Add new building"
@@ -158,7 +159,11 @@
             "nbr.label": "Quantity",
             "price.label": "Buying price",
             "cost.label": "Maintenance cost",
-            "emptyName": "Building's name can't be empty."
+            "emptyName": "Building's name can't be empty.",
+            "owner.legend": "Owner",
+            "owner.placeholder": "Drop actor here",
+            "owner.invalidDrop": "Invalid drop datas",
+            "owner.mustBeActor": "Must be valid actor"
         },
         "editBuilding": {
             "title": "Edit building"

@@ -326,7 +326,21 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         logger.debug("New building datas", newBuildingDatas)
         if (!newBuildingDatas) return;
         newBuildingDatas.id = foundry.utils.randomID();
-        var newBuilding = new BuildingDto(newBuildingDatas.id, newBuildingDatas.uuid, newBuildingDatas.name, newBuildingDatas.img);
+        let owner = newBuildingDatas.ownerId ? {
+            "id": newBuildingDatas.ownerId,
+            "name": newBuildingDatas.ownerName,
+            "img": newBuildingDatas.ownerImg,
+            "uuid": newBuildingDatas.ownerUuid
+        } : {}
+        var newBuilding = new BuildingDto(newBuildingDatas.id,
+            newBuildingDatas.uuid,
+            newBuildingDatas.name,
+            newBuildingDatas.img,
+            newBuildingDatas.nbr,
+            newBuildingDatas.cost,
+            newBuildingDatas.price,
+            owner
+        );
         logger.debug("New building", newBuilding)
         this.cityDatas.buildings[newBuildingDatas.id] = newBuilding
         await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
@@ -349,6 +363,12 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             let newBuildingDatas = await addBuildingDialog.render(buildingToEdit);
             logger.debug("Cities App | editBuilding - edited building datas", newBuildingDatas)
             if (!newBuildingDatas) return;
+            newBuildingDatas.owner = newBuildingDatas.ownerId ? {
+                "id": newBuildingDatas.ownerId,
+                "name": newBuildingDatas.ownerName,
+                "img": newBuildingDatas.ownerImg,
+                "uuid": newBuildingDatas.ownerUuid
+            } : { id: "", name: "", img: "", uuid: "" }
             foundry.utils.mergeObject(buildingToEdit, newBuildingDatas, {
                 insertKeys: true,
                 insertValues: true,
@@ -356,6 +376,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
                 recursive: true,
                 inplace: true,
             });
+            logger.debug("Cities App | editBuilding - merged building datas", buildingToEdit)
             this.cityDatas.buildings[buildingId] = buildingToEdit
             await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
             this.render();

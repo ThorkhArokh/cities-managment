@@ -44,6 +44,11 @@
         {{/if}}
       </div>
     </div>
+    <div class="flex1 center" style="max-width: 40px;">
+      <div class="field-label">
+        <span></i> {{localize "CM.app.city.tab.buildings.header.owner.label"}}</span>
+      </div>
+    </div>
     {{#if @root.isEditable}}
     <!-- ...Edit button -->
     <div class="flex1 center" style="max-width: 40px;">
@@ -77,6 +82,13 @@
     <div class="flex1 center" style="max-width: 80px;">
       <input class="field-value center" type="text" name="city.buildings.{{@key}}.cost" value="{{cost}}"
         data-dtype="Number" {{#unless @root.isEditable}}disabled{{/unless}} />
+    </div>
+    <div class="flex1 center" style="max-width: 40px;">
+      {{#if owner}}
+      <a data-action="showDetails" data-uuid="{{owner.uuid}}" {{#unless owner.uuid}}disabled{{/unless}}>
+        <img src="{{owner.img}}" alt="{{owner.name}}" class="cm-img-icon"/>
+      </a>
+      {{/if}}
     </div>
     {{#if @root.isEditable}}
     <!-- ...Edit button -->
