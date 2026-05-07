@@ -1,8 +1,10 @@
 <section class='tab peoples {{tab.cssClass}}' data-group='primary' data-tab='peoples'>
   <div class="cm-cities-app-tab-header flexrow no-wrap" style="gap:4px;">
+    <!-- population label -->
     <div class="flex1 left">
       <div class="field-label">{{localize "CM.app.city.tab.peoples.population.label"}}</div>
     </div>
+    <!-- base population -->
     <div class="flex1 right">
       <div class="field-label">{{localize "CM.app.city.tab.peoples.population.base.label"}}</div>
     </div>
@@ -10,6 +12,7 @@
       <input class="field-value center" name="city.population.nbr" type="number" value="{{city.population.nbr}}"
         data-dtype="Number" {{#unless isEditable}}disabled{{/unless}}>
     </div>
+    <!-- max population -->
     <div class="flex1 right">
       <div class="field-label">{{localize "CM.app.city.tab.peoples.population.max.label"}}</div>
     </div>
@@ -20,6 +23,7 @@
   </div>
   <hr>
   <div class="cm-cities-app-tab-header flexrow table-header no-wrap" style="gap:4px">
+    <!-- actor infos header -->
     <div class="flex2" data-action="sortObjects" data-field="name">
       {{localize "CM.app.city.tab.peoples.header.significant.label"}} 
       {{#if (eq @root.peoplesSort.field "name")}}
@@ -28,6 +32,7 @@
           <i class="fas fa-sort"></i>
       {{/if}}
     </div>
+    <!-- role header -->
     <div class="flex1 center">
       <div class="field-label" data-action="sortObjects" data-field="role">
         {{localize "CM.app.city.tab.peoples.header.role.label"}}
@@ -38,36 +43,59 @@
         {{/if}}
       </div>
     </div>
+    <!-- toggle view button header -->
+    <div class="flex1 center" style="max-width: 40px;">
+      <div class="field-label"></div>
+    </div>
+    <!-- delete button header -->
     <div class="flex1 center" style="max-width: 40px;">
       <div class="field-label"></div>
     </div>
   </div>
   {{#if hasNoPeoples}}<p class="center"><i>{{localize "CM.app.city.tab.peoples.empty"}}</i></p>{{/if}}
   {{#each city.population.peoples}}
-  <div class="flexrow no-wrap cm-cities-app-tab-line" style="gap:4px">
-    <div class="flex2">
-      <a class="flexrow no-wrap" style="gap:4px" data-action="showDetails" data-uuid="{{uuid}}" {{#unless
-        uuid}}disabled{{/unless}}>
-        <img class="flex0" width="30px" height="30px" src="{{img}}" />
-        <span class="flexauto {{#if uuid}}underline{{/if}}" ><strong>{{name}}</strong></span>
-      </a>
-    </div>
-    <div class="flex1 center">
-      <input class="field-value" type="text" name="city.population.peoples.{{@key}}.role" value="{{role}}" {{#unless
-        @root.isEditable}}disabled{{/unless}} />
-    </div>
-    {{#if @root.isEditable}}
-    <div class="flex1 center" style="max-width: 40px;">
-      <button class="flex0" type="button" data-action="removePeople" data-id="{{id}}"><i
-          class='fas fa-trash'></i></button>
-    </div>
+    {{#if (or isVisibleForPlayer @root.isGM)}}
+      <div class="flexrow no-wrap cm-cities-app-tab-line" style="gap:4px">
+        <!-- actor infos -->
+        <div class="flex2">
+          <a class="flexrow no-wrap" style="gap:4px" data-action="showDetails" data-uuid="{{uuid}}" {{#unless
+            uuid}}disabled{{/unless}}>
+            <img class="flex0" width="30px" height="30px" src="{{img}}" />
+            <span class="flexauto {{#if uuid}}underline{{/if}}" ><strong>{{name}}</strong></span>
+          </a>
+        </div>
+        <!-- role -->
+        <div class="flex1 center">
+          <input class="field-value" type="text" name="city.population.peoples.{{@key}}.role" value="{{role}}" {{#unless
+            @root.isEditable}}disabled{{/unless}} />
+        </div>
+        
+        {{#if @root.isEditable}}
+          <!-- toggle view button -->
+          <div class="flex1 center" style="max-width: 40px;">
+            <button class="flex0" type="button" data-action="togglePeopleView" data-id="{{id}}" {{#unless
+              @root.isEditable}}disabled{{/unless}} data-tooltip="CM.app.city.tab.peoples.toggleHideForPlayers.infos">
+              {{#if isVisibleForPlayer}}
+                <i class="fa-solid fa-eye"></i>
+              {{else}}
+                <i class="fa-solid fa-eye-slash"></i>
+              {{/if}}
+            </button>
+          </div>
+          <!-- delete button -->
+          <div class="flex1 center" style="max-width: 40px;">
+            <button class="flex0" type="button" data-action="removePeople" data-id="{{id}}" {{#unless
+              @root.isEditable}}disabled{{/unless}} data-tooltip="CM.app.city.tab.peoples.delete.infos">
+              <i class='fas fa-trash'></i>
+            </button>
+          </div>
+        {{/if}}
+      </div>
     {{/if}}
-  </div>
   {{/each}}
   {{#if isEditable}}
-  <div class="drop-zone-header flexrow no-wrap">
-    <i>{{localize "CM.app.city.tab.peoples.new.help"}}</i>
+  <div class="drop-zone" data-drop-peoples="true">
+    <span><i class="fas fa-user-plus"></i> {{localize "CM.app.city.tab.peoples.new.help"}}</span>
   </div>
-  <div class="drop-zone drag-over" data-drop-peoples="true"></div>
   {{/if}}
 </section>

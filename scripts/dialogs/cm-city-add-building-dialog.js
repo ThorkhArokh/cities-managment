@@ -64,9 +64,9 @@ export const addBuildingDialog = {
         }
     },
     _initOwnerDropZone(html) {
-        logger.debug("addBuildingDialog - initOwnerDropZone", html)
+        logger.debug("addBuildingDialog | initOwnerDropZone", html)
         const dropZone = html.querySelector("#owner-drop-zone");
-        logger.debug("addBuildingDialog - initOwnerDropZone - dropZone", dropZone)
+        logger.debug("addBuildingDialog | initOwnerDropZone - dropZone", dropZone)
         if (!dropZone) return;
 
         const setOwner = (actor) => {

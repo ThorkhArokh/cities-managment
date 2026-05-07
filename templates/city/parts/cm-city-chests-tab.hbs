@@ -33,42 +33,59 @@
       </div>
     </div>
     {{#if @root.isEditable}}
-    <div class="flex1 center" style="max-width: 40px;">
-      <div class="field-label"></div>
-    </div>
+      <!-- toggle view button header -->
+      <div class="flex1 center" style="max-width: 40px;">
+        <div class="field-label"></div>
+      </div>
+      <!-- delete button header -->
+      <div class="flex1 center" style="max-width: 40px;">
+        <div class="field-label"></div>
+      </div>
     {{/if}}
   </div>
   {{#if hasNoTreasures}}<p class="center"><i>{{localize "CM.app.city.tab.chests.empty"}}</i></p>{{/if}}
   {{#each city.chests}}
-  <div class="flexrow no-wrap cm-cities-app-tab-line" style="gap:4px">
-    <div>
-      <a class="flexrow no-wrap" style="gap:4px" data-action="showDetails" data-uuid="{{uuid}}" {{#unless
-        uuid}}disabled{{/unless}}>
-        <img class="flex0" width="30px" height="30px" src="{{img}}" />
-        <span class="flexauto {{#if uuid}}underline{{/if}}"><strong>{{name}}</strong></span>
-      </a>
-    </div>
-    <div class="flex1 center" style="max-width: 40px;">
-      <input class="field-value center" type="text" name="city.chests.{{@key}}.nbr" value="{{nbr}}" data-dtype="Number"
-        {{#unless @root.isEditable}}disabled{{/unless}} />
-    </div>
-    <div class="flex1 center" style="max-width: 80px;">
-      <input class="field-value center" type="text" name="city.chests.{{@key}}.price" value="{{price}}"
-        data-dtype="Number" {{#unless @root.isEditable}}disabled{{/unless}} />
-    </div>
-    {{#if @root.isEditable}}
-    <div class="flex1 center" style="max-width: 40px;">
-      <button class="flex0" type="button" data-action="removeTreasury" data-id="{{id}}"><i
-          class='fas fa-trash'></i></button>
-    </div>
+    {{#if (or isVisibleForPlayer @root.isGM)}}
+      <div class="flexrow no-wrap cm-cities-app-tab-line" style="gap:4px">
+        <div>
+          <a class="flexrow no-wrap" style="gap:4px" data-action="showDetails" data-uuid="{{uuid}}" {{#unless
+            uuid}}disabled{{/unless}}>
+            <img class="flex0" width="30px" height="30px" src="{{img}}" />
+            <span class="flexauto {{#if uuid}}underline{{/if}}"><strong>{{name}}</strong></span>
+          </a>
+        </div>
+        <div class="flex1 center" style="max-width: 40px;">
+          <input class="field-value center" type="text" name="city.chests.{{@key}}.nbr" value="{{nbr}}" data-dtype="Number"
+            {{#unless @root.isEditable}}disabled{{/unless}} />
+        </div>
+        <div class="flex1 center" style="max-width: 80px;">
+          <input class="field-value center" type="text" name="city.chests.{{@key}}.price" value="{{price}}"
+            data-dtype="Number" {{#unless @root.isEditable}}disabled{{/unless}} />
+        </div>
+        {{#if @root.isEditable}}
+          <!-- toggle view button -->
+          <div class="flex1 center" style="max-width: 40px;">
+            <button class="flex0" type="button" data-action="toggleTreasuryView" data-id="{{id}}" 
+            {{#unless @root.isEditable}}disabled{{/unless}} data-tooltip="CM.app.city.tab.chests.toggleHideForPlayers.infos">
+              {{#if isVisibleForPlayer}}
+                <i class="fa-solid fa-eye"></i>
+              {{else}}
+                <i class="fa-solid fa-eye-slash"></i>
+              {{/if}}
+            </button>
+          </div>
+          <!-- Delete button -->
+          <div class="flex1 center" style="max-width: 40px;">
+            <button class="flex0" type="button" data-action="removeTreasury" data-id="{{id}}"><i
+                class='fas fa-trash'></i></button>
+          </div>
+        {{/if}}
+      </div>
     {{/if}}
-  </div>
   {{/each}}
   {{#if isEditable}}
-  <div class="drop-zone-header flexrow no-wrap">
-      <i>{{localize "CM.app.city.tab.chests.new.help"}}</i>
-  </div>
-  <div class="drop-zone drag-over" data-drop-chests="true">
+  <div class="drop-zone" data-drop-chests="true">
+    <span><i class="fa-solid fa-file-circle-plus"></i> {{localize "CM.app.city.tab.chests.new.help"}}</span>
   </div>
   {{/if}}
 </section>

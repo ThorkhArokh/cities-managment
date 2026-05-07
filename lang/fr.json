@@ -73,7 +73,8 @@
         "header.owner.label": "Prop.",
         "empty": "Aucun bâtiment",
         "new.help": "Glisser un objet ici ou ajouter un nouveau bâtiment",
-        "new.btn": "Ajouter un nouveau bâtiment"
+        "new.btn": "Ajouter un nouveau bâtiment",
+        "toggleHideForPlayers.infos": "Afficher/masquer le bâtiment pour les joueurs"
     },
     "CM.app.city.tab.peoples": {
         "label": "Population",
@@ -83,7 +84,9 @@
         "population.base.label": "Actuelle",
         "population.max.label": "Max",
         "header.significant.label": "Habitant notable",
-        "header.role.label": "Rôle"
+        "header.role.label": "Rôle",
+        "toggleHideForPlayers.infos": "Afficher/masquer l'habitant pour les joueurs",
+        "delete.infos": "Supprime l'habitant"
     },
     "CM.app.city.tab.treasury.label": "Trésorerie",
     "CM.app.city.tab.treasury.currencies": "Trésorerie",
@@ -93,7 +96,8 @@
         "new.help": "Glisser un objet ici",
         "item.label": "Objet",
         "item.nbr": "Nbr",
-        "item.price": "Prix"
+        "item.price": "Prix",
+        "toggleHideForPlayers.infos": "Afficher/masquer l'objet pour les joueurs"
     },
     "CM.app.city.tab.armies": {
         "label": "Armées",

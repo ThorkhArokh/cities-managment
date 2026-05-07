@@ -2,8 +2,8 @@
     "CM.settings": {
         "debugMode.name": "Toggle debug mode",
         "debugMode.hint": "Activate debug mode, show logs in browser console (F12)",
-        "toggleEdit.name" : "Toggle city edit",
-        "toggleEdit.hint" : "Activate city edit for GM and players with ownership"
+        "toggleEdit.name": "Toggle city edit",
+        "toggleEdit.hint": "Activate city edit for GM and players with ownership"
     },
     "CM.sidebar.button.createCity": "Create City",
     "CM.sidebar.button.createCityFolder": "Create Folder",
@@ -73,7 +73,8 @@
         "header.owner.label": "Owner",
         "empty": "No building",
         "new.help": "Drop item here or create a new building",
-        "new.btn": "Add new building"
+        "new.btn": "Add new building",
+        "toggleHideForPlayers.infos": "Show/hide building for players"
     },
     "CM.app.city.tab.peoples": {
         "label": "Population",
@@ -83,7 +84,9 @@
         "population.base.label": "Actual",
         "population.max.label": "Max",
         "header.significant.label": "Significant people",
-        "header.role.label": "Role"
+        "header.role.label": "Role",
+        "toggleHideForPlayers.help": "Show/hide people for players",
+        "delete.infos": "Delete people"
     },
     "CM.app.city.tab.treasury.label": "Treasury",
     "CM.app.city.tab.treasury.currencies": "Currencies",
@@ -93,7 +96,8 @@
         "new.help": "Drop item here",
         "item.label": "Item",
         "item.nbr": "Qty",
-        "item.price": "Price"
+        "item.price": "Price",
+        "toggleHideForPlayers.infos": "Show/hide item for players"
     },
     "CM.app.city.tab.armies": {
         "label": "Armies",
