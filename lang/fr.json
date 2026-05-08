@@ -2,8 +2,46 @@
     "CM.settings": {
         "debugMode.name": "Mode debug actif",
         "debugMode.hint": "Active le mode debug, permet de voir les logs dans la console du navigateur (F12)",
-        "toggleEdit.name" : "Mode édition de ville actif",
-        "toggleEdit.hint" : "Active ou désactive le mode édition des villes pour le MJ ou les joueurs avec les droits nécessaires"
+        "toggleEdit.name": "Mode édition de ville actif",
+        "toggleEdit.hint": "Active ou désactive le mode édition des villes pour le MJ ou les joueurs avec les droits nécessaires",
+        "tabs": {
+            "stats": {
+                "visible": {
+                    "name": "Statistiques",
+                    "hint": "Afficher ou masquer l'onglet Statistiques."
+                }
+            },
+            "finances": {
+                "visible": {
+                    "name": "Finances",
+                    "hint": "Afficher ou masquer l'onglet Finances."
+                }
+            },
+            "armies": {
+                "visible": {
+                    "name": "Armées",
+                    "hint": "Afficher ou masquer l'onglet Armées."
+                }
+            },
+            "peoples": {
+                "visible": {
+                    "name": "Peuples",
+                    "hint": "Afficher ou masquer l'onglet Peuples."
+                }
+            },
+            "buildings": {
+                "visible": {
+                    "name": "Bâtiments",
+                    "hint": "Afficher ou masquer l'onglet Bâtiments."
+                }
+            },
+            "chests": {
+                "visible": {
+                    "name": "Trésors",
+                    "hint": "Afficher ou masquer l'onglet Trésors."
+                }
+            }
+        }
     },
     "CM.sidebar.button.createCity": "Créer ville",
     "CM.sidebar.button.createCityFolder": "Créer dossier",
@@ -70,9 +108,11 @@
         "header.price.infos": "Prix d'achat du bâtiment",
         "header.cost.label": "Coût",
         "header.cost.infos": "Coût de maintenance du bâtiment",
+        "header.owner.label": "Prop.",
         "empty": "Aucun bâtiment",
         "new.help": "Glisser un objet ici ou ajouter un nouveau bâtiment",
-        "new.btn": "Ajouter un nouveau bâtiment"
+        "new.btn": "Ajouter un nouveau bâtiment",
+        "toggleHideForPlayers.infos": "Afficher/masquer le bâtiment pour les joueurs"
     },
     "CM.app.city.tab.peoples": {
         "label": "Population",
@@ -82,7 +122,9 @@
         "population.base.label": "Actuelle",
         "population.max.label": "Max",
         "header.significant.label": "Habitant notable",
-        "header.role.label": "Rôle"
+        "header.role.label": "Rôle",
+        "toggleHideForPlayers.infos": "Afficher/masquer l'habitant pour les joueurs",
+        "delete.infos": "Supprime l'habitant"
     },
     "CM.app.city.tab.treasury.label": "Trésorerie",
     "CM.app.city.tab.treasury.currencies": "Trésorerie",
@@ -92,7 +134,8 @@
         "new.help": "Glisser un objet ici",
         "item.label": "Objet",
         "item.nbr": "Nbr",
-        "item.price": "Prix"
+        "item.price": "Prix",
+        "toggleHideForPlayers.infos": "Afficher/masquer l'objet pour les joueurs"
     },
     "CM.app.city.tab.armies": {
         "label": "Armées",
@@ -159,7 +202,11 @@
             "nbr.label": "Nombre",
             "price.label": "Prix d'achat",
             "cost.label": "Coût de maintenance",
-            "emptyName": "Le nom du bâtiment ne peut pas être vide."
+            "emptyName": "Le nom du bâtiment ne peut pas être vide.",
+            "owner.legend": "Propriétaire",
+            "owner.placeholder": "Glisser un acteur ici",
+            "owner.invalidDrop": "Données fournies invalides",
+            "owner.mustBeActor": "Veuillez déposer un acteur valide"
         },
         "editBuilding": {
             "title": "Modifier bâtiment"

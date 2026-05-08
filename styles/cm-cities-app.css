@@ -124,14 +124,15 @@ hr {
     padding: 8px;
     margin-top: 4px;
     margin-bottom: 4px;
-}
-
-/* Feedback visuel quand on survole avec un élément */
-.drop-zone.drag-over {
     border: 2px dashed #aaa;
     border-radius: 4px;
     transition: border-color 0.2s;
     background: rgba(0, 123, 255, 0.05);
+}
+
+/* Feedback visuel quand on survole avec un élément */
+.drag-over {
+    border: 2px dashed darkslategrey;
 }
 
 .folder-drop-zone .droptarget {

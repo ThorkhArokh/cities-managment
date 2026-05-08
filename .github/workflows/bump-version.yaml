@@ -17,37 +17,38 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # ── Checkout develop ──────────────────────────────────────────────
-      - name: Checkout develop
+      # ── Checkout main ──────────────────────────────────────────────
+      - name: Checkout main
         uses: actions/checkout@v4
         with:
-          ref: develop
+          ref: main
           fetch-depth: 0
 
-      # ── Resync develop avec main AVANT le bump ────────────────────────
-      - name: Merge main into develop
+      # ── Créer une branche pour la prochaine version ────────────────────────
+      - name: Create branch for next version
+        id: newBranch
         run: |
-          git config user.name  "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git fetch origin main
-          git merge origin/main --no-edit \
-            -m "chore: sync develop with main after release [skip ci]"
-          echo "🔄 develop synced with main"
+          CURRENT=$(jq -r '.version' module.json)
+          MAJOR=$(echo "$CURRENT" | cut -d. -f1)
+          MINOR=$(echo "$CURRENT" | cut -d. -f2)
+          PATCH=$(echo "$CURRENT" | cut -d. -f3)
+          # Incrémenter le patch
+          NEW_PATCH=$((PATCH + 1))
+          NEW_VERSION="${MAJOR}.${MINOR}.${NEW_PATCH}"
+          BRANCH="release/v${NEW_VERSION}"
 
-      # ── Créer une branche pour la version courante ────────────────────────
-      # - name: Create branch for current version
-      #   run: |
-      #     CURRENT=$(jq -r '.version' module.json)
-      #     BRANCH="release/v${CURRENT}"
-
-      #     if git ls-remote --exit-code --heads origin "$BRANCH" > /dev/null 2>&1; then
-      #       echo "⚠️  Branch $BRANCH already exists, skipping"
-      #     else
-      #       git checkout -b "$BRANCH"
-      #       git push origin "$BRANCH"
-      #       echo "✅ Branch $BRANCH created"
-      #       git checkout develop
-      #     fi
+          if git ls-remote --exit-code --heads origin "$BRANCH" > /dev/null 2>&1; then
+            echo "⚠️  Branch $BRANCH already exists, skipping"
+          else
+            git checkout -b "$BRANCH"
+            git push origin "$BRANCH"
+            echo "✅ Branch $BRANCH created"
+          fi
+          echo "next_version_branch=$BRANCH" >> "$GITHUB_OUTPUT"
+      
+      # ── Checkout de la branche pour la prochaine version ────────────────────────
+      - name: Checkout new branch
+        run: git checkout ${{ steps.newBranch.outputs.next_version_branch }}
  
       # ── Bump patch version in module.json ──────────────────────────────────────────────
       - name: Bump minor version in module.json
@@ -94,8 +95,8 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add module.json publish_release.http
           git commit -m "chore: bump version to ${{ steps.bump.outputs.new_version }} [skip ci]"
-          git push origin develop
-          echo "🚀 Pushed version bump to develop"
+          git push origin ${{ steps.newBranch.outputs.next_version_branch }}
+          echo "🚀 Pushed version bump to ${{ steps.newBranch.outputs.next_version_branch }}"
 
       # ── Créer la milestone pour la prochaine version ──────────────────────
       - name: Create milestone for next version

@@ -44,12 +44,21 @@
         {{/if}}
       </div>
     </div>
+    <div class="flex1 center" style="max-width: 40px;">
+      <div class="field-label">
+        <span></i> {{localize "CM.app.city.tab.buildings.header.owner.label"}}</span>
+      </div>
+    </div>
     {{#if @root.isEditable}}
-    <!-- ...Edit button -->
+    <!-- ...Edit button header -->
     <div class="flex1 center" style="max-width: 40px;">
             <div class="field-label"></div>
     </div>
-    <!-- ...Delete button -->
+    <!-- ...toggle view button header -->
+    <div class="flex1 center" style="max-width: 40px;">
+      <div class="field-label"></div>
+    </div>
+    <!-- ...Delete button header -->
     <div class="flex1 center" style="max-width: 40px;">
             <div class="field-label"></div>
     </div>
@@ -57,49 +66,70 @@
   </div>
   {{#if hasNoBuildings}}<p class="center"><i>{{localize "CM.app.city.tab.buildings.empty"}}</i></p>{{/if}}
   {{#each city.buildings}}
-  <div class="flexrow no-wrap cm-cities-app-tab-line gap4">
-    <div class="flexrow no-wrap gap4">
-      <img class="flex0 cm-img-icon" src="{{img}}" data-action="editImage" 
-                data-field="buildings.{{@key}}.img" data-edit="city.buildings.{{@key}}.img"
-                data-tooltip="CM.app.city.tab.header.avatar.tooltip"/>
-      <a  data-action="showDetailsBuilding" data-id="{{id}}" {{#unless uuid}}disabled{{/unless}}>
-        <span class="flexauto {{#if uuid}}underline{{/if}}"><strong>{{name}}</strong></span>
-      </a>
-    </div>
-    <div class="flex1 center" style="max-width: 40px;">
-      <input class="field-value center" type="text" name="city.buildings.{{@key}}.nbr" value="{{nbr}}"
-        data-dtype="Number" {{#unless @root.isEditable}}disabled{{/unless}} />
-    </div>
-    <div class="flex1 center" style="max-width: 80px;">
-      <input class="field-value center" type="text" name="city.buildings.{{@key}}.price" value="{{price}}"
-        data-dtype="Number" {{#unless @root.isEditable}}disabled{{/unless}} />
-    </div>
-    <div class="flex1 center" style="max-width: 80px;">
-      <input class="field-value center" type="text" name="city.buildings.{{@key}}.cost" value="{{cost}}"
-        data-dtype="Number" {{#unless @root.isEditable}}disabled{{/unless}} />
-    </div>
-    {{#if @root.isEditable}}
-    <!-- ...Edit button -->
-    <div class="flex1 center" style="max-width: 40px;">
-            <button type="button" data-tooltip="CM.app.city.tab.buildings.btn.edit.infos" data-action="editBuilding" data-id="{{id}}"><i class='fas fa-edit'></i></button>    
-    </div>
-    <!-- ...Delete button -->
-    <div class="flex1 center" style="max-width: 40px;">
-      <button type="button" data-action="removeBuilding" data-tooltip="CM.app.city.tab.buildings.btn.delete.infos"
-        data-id="{{id}}"><i class='fas fa-trash'></i></button>
-    </div>
+    {{#if (or isVisibleForPlayer @root.isGM)}}
+      <div class="flexrow no-wrap cm-cities-app-tab-line gap4">
+        <div class="flexrow no-wrap gap4">
+          <img class="flex0 cm-img-icon" src="{{img}}" data-action="editImage" 
+                    data-field="buildings.{{@key}}.img" data-edit="city.buildings.{{@key}}.img"
+                    data-tooltip="CM.app.city.tab.header.avatar.tooltip"/>
+          <a  data-action="showDetailsBuilding" data-id="{{id}}" {{#unless uuid}}disabled{{/unless}}>
+            <span class="flexauto {{#if uuid}}underline{{/if}}"><strong>{{name}}</strong></span>
+          </a>
+        </div>
+        <div class="flex1 center" style="max-width: 40px;">
+          <input class="field-value center" type="text" name="city.buildings.{{@key}}.nbr" value="{{nbr}}"
+            data-dtype="Number" {{#unless @root.isEditable}}disabled{{/unless}} />
+        </div>
+        <div class="flex1 center" style="max-width: 80px;">
+          <input class="field-value center" type="text" name="city.buildings.{{@key}}.price" value="{{price}}"
+            data-dtype="Number" {{#unless @root.isEditable}}disabled{{/unless}} />
+        </div>
+        <div class="flex1 center" style="max-width: 80px;">
+          <input class="field-value center" type="text" name="city.buildings.{{@key}}.cost" value="{{cost}}"
+            data-dtype="Number" {{#unless @root.isEditable}}disabled{{/unless}} />
+        </div>
+        <div class="flex1 center" style="max-width: 40px;">
+          {{#if owner}}
+          <a data-action="showDetails" data-uuid="{{owner.uuid}}" data-tooltip="{{owner.name}}" {{#unless owner.uuid}}disabled{{/unless}}>
+            <img src="{{owner.img}}" alt="{{owner.name}}" class="cm-img-icon"/>
+          </a>
+          {{/if}}
+        </div>
+        {{#if @root.isEditable}}
+        <!-- ...Edit button -->
+        <div class="flex1 center" style="max-width: 40px;">
+                <button type="button" data-tooltip="CM.app.city.tab.buildings.btn.edit.infos" data-action="editBuilding" data-id="{{id}}"><i class='fas fa-edit'></i></button>    
+        </div>
+        <!-- ...toggle view button -->
+        <div class="flex1 center" style="max-width: 40px;">
+          <button class="flex0" type="button" data-action="toggleBuildingView" data-id="{{id}}" 
+          {{#unless @root.isEditable}}disabled{{/unless}} data-tooltip="CM.app.city.tab.buildings.toggleHideForPlayers.infos">
+            {{#if isVisibleForPlayer}}
+              <i class="fa-solid fa-eye"></i>
+            {{else}}
+              <i class="fa-solid fa-eye-slash"></i>
+            {{/if}}
+          </button>
+        </div>
+        <!-- ...Delete button -->
+        <div class="flex1 center" style="max-width: 40px;">
+          <button type="button" data-action="removeBuilding" data-tooltip="CM.app.city.tab.buildings.btn.delete.infos"
+            data-id="{{id}}"><i class='fas fa-trash'></i></button>
+        </div>
+        {{/if}}
+      </div>
     {{/if}}
-  </div>
   {{/each}}
   {{#if isEditable}}
   <div class="drop-zone-header no-wrap  gap8 right">
-        <p><i>{{localize "CM.app.city.tab.buildings.new.help"}}</i></p>
         <!-- New entry button -->
         <div>
             <button type="button" data-action="addNewBuilding"><i class='fas fa-plus'></i> {{localize
                 "CM.app.city.tab.buildings.new.btn"}}</button>
         </div>
   </div>
-  <div class="drop-zone drag-over" data-drop-buildings="true"></div>
+  <div class="drop-zone" data-drop-buildings="true">
+    <span><i class="fa-solid fa-file-circle-plus"></i> {{localize "CM.app.city.tab.buildings.new.help"}}</span>
+  </div>
   {{/if}}
 </section>

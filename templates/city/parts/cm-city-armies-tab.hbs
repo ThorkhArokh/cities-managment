@@ -95,13 +95,14 @@
     {{/each}}
     {{#if isEditable}}
     <div class="drop-zone-header no-wrap gap8 right">
-        <p><i>{{localize "CM.app.city.tab.armies.unites.new.help"}}</i></p>
         <!-- New entry button -->
         <div>
             <button type="button" data-action="addNewUnit"><i class='fas fa-plus'></i> {{localize
                 "CM.app.city.tab.armies.units.new.btn"}}</button>
         </div>
     </div>
-    <div class="drop-zone drag-over" data-drop-units="true"></div>
+    <div class="drop-zone" data-drop-units="true">
+        <span><i class="fas fa-user-plus"></i> {{localize "CM.app.city.tab.armies.unites.new.help"}}</span>
+    </div>
     {{/if}}
 </section>

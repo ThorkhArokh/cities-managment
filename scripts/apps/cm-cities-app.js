@@ -26,6 +26,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         this.cityDatas = CityDto.fromData(CmCitiesJournalDataStore.getCityData(city));
         this.#dragDrop = this.#createDragDropHandlers();
         this.isEditable = options?.isEditable || (game.settings.get(MODULE_ID, IS_CITY_EDIT_MODE) && (game.user.isGM || city.testUserPermission(game.user, "OWNER")));
+        this.isGM = game.user.isGM;
     }
 
     // Override title getter 
@@ -67,7 +68,9 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             showJournal: CmCityApp.#showJournal,
             showDetails: CmCityApp.#showDetails,
             removePeople: CmCityApp.#removePeople,
+            togglePeopleView: CmCityApp.#togglePeopleView,
             removeTreasury: CmCityApp.#removeTreasury,
+            toggleTreasuryView: CmCityApp.#toggleTreasuryView,
             editImage: CmCityApp.#onEditImage,
             addNewFinanceEntry: CmCityApp.#addNewFinanceEntry,
             removeFinanceEntry: CmCityApp.#removeFinanceEntry,
@@ -78,6 +81,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             editBuilding: CmCityApp.#editBuilding,
             removeBuilding: CmCityApp.#removeBuilding,
             showDetailsBuilding: CmCityApp.#showDetailsBuilding,
+            toggleBuildingView: CmCityApp.#toggleBuildingView,
             addNewStat: CmCityApp.#addNewStat,
             editStat: CmCityApp.#editStat,
             removeStat: CmCityApp.#removeStat,
@@ -140,6 +144,25 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         },
     };
 
+    static #getHiddenTabs() {
+        const TABS = ["stats", "finances", "armies", "peoples", "buildings", "chests"];
+        return TABS.filter(id => !game.settings.get(MODULE_ID, `tab.${id}.visible`));
+    }
+
+    _configureRenderOptions(options) {
+        super._configureRenderOptions(options);
+
+        // Masquer les parts désactivées (sauf header, tabs, footer)
+        const PROTECTED = ["header", "tabs", "footer"];
+        const hiddenTabs = CmCityApp.#getHiddenTabs();
+
+        options.parts = options.parts.filter(part =>
+            PROTECTED.includes(part) || !hiddenTabs.includes(part)
+        );
+
+        this.renderControls();
+    }
+
     /** Handle user app rendering */
     _canRender(options) {
         if (!this.city.testUserPermission(game.user, "OBSERVER")) {
@@ -185,7 +208,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
      * @param {HTMLElement} target  click target
      */
     static async #showMap(event, target) {
-        logger.debug("Show map", target)
+        logger.debug("Cities App | showMap", event, target)
         const scene = await fromUuid(target.dataset.uuid);
         if (!scene) return;
 
@@ -314,6 +337,29 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
     }
 
     /**
+     * Toggle element view for players
+     * @param {PointerEvent} event  click event
+     * @param {HTMLElement} target  click target
+     */
+    static async #toggleBuildingView(event, target) {
+        if (!this.isEditable) return
+
+        logger.debug("Cities App | toggleBuildingView", event, target)
+        var buildingId = target.dataset.id
+
+        if (Object.hasOwn(this.cityDatas.buildings, buildingId)) {
+            logger.debug("Cities App | toggleBuildingView - datas", this.cityDatas)
+            let buildingToEdit = this.cityDatas.buildings[buildingId];
+            logger.debug("Cities App | toggleBuildingView - building to edit", buildingToEdit)
+            buildingToEdit.isVisibleForPlayer = buildingToEdit.isVisibleForPlayer ? false : true
+            this.cityDatas.buildings[buildingId] = buildingToEdit
+            logger.debug("Cities App | toggleBuildingView - datas", this.cityDatas)
+            await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
+            this.render();
+        }
+    }
+
+    /**
     * Add new building
     * @param {PointerEvent} event  click event
     * @param {HTMLElement} target  click target
@@ -326,7 +372,21 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         logger.debug("New building datas", newBuildingDatas)
         if (!newBuildingDatas) return;
         newBuildingDatas.id = foundry.utils.randomID();
-        var newBuilding = new BuildingDto(newBuildingDatas.id, newBuildingDatas.uuid, newBuildingDatas.name, newBuildingDatas.img);
+        let owner = newBuildingDatas.ownerId ? {
+            "id": newBuildingDatas.ownerId,
+            "name": newBuildingDatas.ownerName,
+            "img": newBuildingDatas.ownerImg,
+            "uuid": newBuildingDatas.ownerUuid
+        } : {}
+        var newBuilding = new BuildingDto(newBuildingDatas.id,
+            newBuildingDatas.uuid,
+            newBuildingDatas.name,
+            newBuildingDatas.img,
+            newBuildingDatas.nbr,
+            newBuildingDatas.cost,
+            newBuildingDatas.price,
+            owner
+        );
         logger.debug("New building", newBuilding)
         this.cityDatas.buildings[newBuildingDatas.id] = newBuilding
         await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
@@ -349,6 +409,12 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             let newBuildingDatas = await addBuildingDialog.render(buildingToEdit);
             logger.debug("Cities App | editBuilding - edited building datas", newBuildingDatas)
             if (!newBuildingDatas) return;
+            newBuildingDatas.owner = newBuildingDatas.ownerId ? {
+                "id": newBuildingDatas.ownerId,
+                "name": newBuildingDatas.ownerName,
+                "img": newBuildingDatas.ownerImg,
+                "uuid": newBuildingDatas.ownerUuid
+            } : { id: "", name: "", img: "", uuid: "" }
             foundry.utils.mergeObject(buildingToEdit, newBuildingDatas, {
                 insertKeys: true,
                 insertValues: true,
@@ -356,6 +422,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
                 recursive: true,
                 inplace: true,
             });
+            logger.debug("Cities App | editBuilding - merged building datas", buildingToEdit)
             this.cityDatas.buildings[buildingId] = buildingToEdit
             await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
             this.render();
@@ -484,7 +551,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
    */
     static async #removeFinanceEntry(event, target) {
         if (!this.isEditable) return
-        logger.debug("remove finance entry", target)
+        logger.debug("Cities App | removeFinanceEntry", event, target)
         const entryId = target.dataset.id
 
         if (Object.hasOwn(this.cityDatas.finances.entries, entryId)) {
@@ -503,10 +570,33 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
    * @param {HTMLElement} target  click target
    */
     static async #showDetails(event, target) {
-        logger.debug("Show object details", target)
+        logger.debug("Cities App | showDetails", event, target)
         if (!target.dataset.uuid) return
         const obj = await fromUuid(target.dataset.uuid);
         obj?.sheet?.render(true)
+    }
+
+    /**
+     * Toggle element view for players
+     * @param {PointerEvent} event  click event
+     * @param {HTMLElement} target  click target
+     */
+    static async #toggleTreasuryView(event, target) {
+        if (!this.isEditable) return
+
+        logger.debug("Cities App | toggleTreasuryView", event, target)
+        var treasuryId = target.dataset.id
+
+        if (Object.hasOwn(this.cityDatas.chests, treasuryId)) {
+            logger.debug("Cities App | toggleTreasuryView - datas", this.cityDatas)
+            let treasuryToEdit = this.cityDatas.chests[treasuryId];
+            logger.debug("Cities App | toggleTreasuryView - building to edit", treasuryToEdit)
+            treasuryToEdit.isVisibleForPlayer = treasuryToEdit.isVisibleForPlayer ? false : true
+            this.cityDatas.chests[treasuryId] = treasuryToEdit
+            logger.debug("Cities App | toggleTreasuryView - datas", this.cityDatas)
+            await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
+            this.render();
+        }
     }
 
     /**
@@ -517,7 +607,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
     static async #removeTreasury(event, target) {
         if (!this.isEditable) return
 
-        logger.debug("Remove treasury", target)
+        logger.debug("Cities App | removeTreasury", event, target)
         var treasuryId = target.dataset.id
 
         if (Object.hasOwn(this.cityDatas.chests, treasuryId)) {
@@ -531,6 +621,29 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
     // PEOPLES
     // -------------------------------------------------------------------- 
     /**
+     * Toggle element view for players
+     * @param {PointerEvent} event  click event
+     * @param {HTMLElement} target  click target
+     */
+    static async #togglePeopleView(event, target) {
+        if (!this.isEditable) return
+
+        logger.debug("Cities App | togglePeopleView", event, target)
+        var peopleId = target.dataset.id
+
+        if (Object.hasOwn(this.cityDatas.population.peoples, peopleId)) {
+            logger.debug("Cities App | togglePeopleView - datas", this.cityDatas)
+            let peopleToEdit = this.cityDatas.population.peoples[peopleId];
+            logger.debug("Cities App | togglePeopleView - people to edit", peopleToEdit)
+            peopleToEdit.isVisibleForPlayer = peopleToEdit.isVisibleForPlayer ? false : true
+            this.cityDatas.population.peoples[peopleId] = peopleToEdit
+            logger.debug("Cities App | togglePeopleView - datas", this.cityDatas)
+            await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
+            this.render();
+        }
+    }
+
+    /**
      * Remove people
      * @param {PointerEvent} event  click event
      * @param {HTMLElement} target  click target
@@ -538,7 +651,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
     static async #removePeople(event, target) {
         if (!this.isEditable) return
 
-        logger.debug("Remove people", target)
+        logger.debug("Cities App | removePeople", event, target)
         var peopleId = target.dataset.id
 
         if (Object.hasOwn(this.cityDatas.population.peoples, peopleId)) {
@@ -875,10 +988,24 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
     async _preparePartContext(partId, context) {
         logger.debug("Cities App | context", partId, context)
 
-        context.tab = context.tabs[partId];
+        context.isGM = this.isGM
         context.isEditable = this.isEditable
         context.buttons = []
-        context.tabs = this._prepareTabs("primary")
+
+        // tabs configuration override
+        const hiddenTabs = CmCityApp.#getHiddenTabs();
+        const allTabs = this._prepareTabs("primary");
+        context.tabs = Object.fromEntries(
+            Object.entries(allTabs).filter(([id]) => !hiddenTabs.includes(id))
+        );
+        const activeTab = this.tabGroups.primary;
+        if (hiddenTabs.includes(activeTab)) {
+            const TAB_ORDER = ["stats", "finances", "armies", "peoples", "buildings", "chests"];
+            const firstVisible = TAB_ORDER.find(id => !hiddenTabs.includes(id));
+            if (firstVisible) this.tabGroups.primary = firstVisible;
+        }
+        context.tab = context.tabs[partId];
+
         const cityDatas = CmCitiesJournalDataStore.getCityData(this.city);
         logger.debug("Cities App | city datas", cityDatas)
         const sourceCity = CityDto.fromData(cityDatas);

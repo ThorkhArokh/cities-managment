@@ -27,4 +27,26 @@
             </div>
         </div>
     </fieldset>
+    <fieldset>
+        <legend>{{localize "CM.dialog.newBuilding.owner.legend"}}</legend>
+        <div>
+            <div class="drop-zone" id="owner-drop-zone" data-owner-id="{{owner.id}}">
+                {{#if owner.id}}
+                <div class="owner-preview flexrow gap8">
+                    <img src="{{owner.img}}" alt="{{owner.name}}" class="cm-img-icon"/>
+                    <span>{{owner.name}}</span>
+                    <button type="button" class="flex0 owner-clear" title="Delete">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                {{else}}
+                    <span><i class="fas fa-user-plus"></i> {{localize "CM.dialog.newBuilding.owner.placeholder"}}</span>
+                {{/if}}
+            </div>
+            <input type="hidden" name="ownerUuid" value="{{owner.uuid}}"/>
+            <input type="hidden" name="ownerId" value="{{owner.id}}"/>
+            <input type="hidden" name="ownerName" value="{{owner.name}}"/>
+            <input type="hidden" name="ownerImg" value="{{owner.img}}"/>
+        </div>
+    </fieldset>
 </form>
