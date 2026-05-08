@@ -144,6 +144,25 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         },
     };
 
+    static #getHiddenTabs() {
+        const TABS = ["stats", "finances", "armies", "peoples", "buildings", "chests"];
+        return TABS.filter(id => !game.settings.get(MODULE_ID, `tab.${id}.visible`));
+    }
+
+    _configureRenderOptions(options) {
+        super._configureRenderOptions(options);
+
+        // Masquer les parts désactivées (sauf header, tabs, footer)
+        const PROTECTED = ["header", "tabs", "footer"];
+        const hiddenTabs = CmCityApp.#getHiddenTabs();
+
+        options.parts = options.parts.filter(part =>
+            PROTECTED.includes(part) || !hiddenTabs.includes(part)
+        );
+
+        this.renderControls();
+    }
+
     /** Handle user app rendering */
     _canRender(options) {
         if (!this.city.testUserPermission(game.user, "OBSERVER")) {
@@ -969,11 +988,24 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
     async _preparePartContext(partId, context) {
         logger.debug("Cities App | context", partId, context)
 
-        context.tab = context.tabs[partId];
         context.isGM = this.isGM
         context.isEditable = this.isEditable
         context.buttons = []
-        context.tabs = this._prepareTabs("primary")
+
+        // tabs configuration override
+        const hiddenTabs = CmCityApp.#getHiddenTabs();
+        const allTabs = this._prepareTabs("primary");
+        context.tabs = Object.fromEntries(
+            Object.entries(allTabs).filter(([id]) => !hiddenTabs.includes(id))
+        );
+        const activeTab = this.tabGroups.primary;
+        if (hiddenTabs.includes(activeTab)) {
+            const TAB_ORDER = ["stats", "finances", "armies", "peoples", "buildings", "chests"];
+            const firstVisible = TAB_ORDER.find(id => !hiddenTabs.includes(id));
+            if (firstVisible) this.tabGroups.primary = firstVisible;
+        }
+        context.tab = context.tabs[partId];
+
         const cityDatas = CmCitiesJournalDataStore.getCityData(this.city);
         logger.debug("Cities App | city datas", cityDatas)
         const sourceCity = CityDto.fromData(cityDatas);

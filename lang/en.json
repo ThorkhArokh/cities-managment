@@ -3,7 +3,45 @@
         "debugMode.name": "Toggle debug mode",
         "debugMode.hint": "Activate debug mode, show logs in browser console (F12)",
         "toggleEdit.name": "Toggle city edit",
-        "toggleEdit.hint": "Activate city edit for GM and players with ownership"
+        "toggleEdit.hint": "Activate city edit for GM and players with ownership",
+        "tabs": {
+            "stats": {
+                "visible": {
+                    "name": "Statistics",
+                    "hint": "Show or hide the Statistics tab."
+                }
+            },
+            "finances": {
+                "visible": {
+                    "name": "Finances",
+                    "hint": "Show or hide the Finances tab."
+                }
+            },
+            "armies": {
+                "visible": {
+                    "name": "Armies",
+                    "hint": "Show or hide the Armies tab."
+                }
+            },
+            "peoples": {
+                "visible": {
+                    "name": "Peoples",
+                    "hint": "Show or hide the Peoples tab."
+                }
+            },
+            "buildings": {
+                "visible": {
+                    "name": "Buildings",
+                    "hint": "Show or hide the Buildings tab."
+                }
+            },
+            "chests": {
+                "visible": {
+                    "name": "Treasures",
+                    "hint": "Show or hide the Treasures tab."
+                }
+            }
+        }
     },
     "CM.sidebar.button.createCity": "Create City",
     "CM.sidebar.button.createCityFolder": "Create Folder",

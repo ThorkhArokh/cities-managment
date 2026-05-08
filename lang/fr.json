@@ -3,7 +3,45 @@
         "debugMode.name": "Mode debug actif",
         "debugMode.hint": "Active le mode debug, permet de voir les logs dans la console du navigateur (F12)",
         "toggleEdit.name": "Mode édition de ville actif",
-        "toggleEdit.hint": "Active ou désactive le mode édition des villes pour le MJ ou les joueurs avec les droits nécessaires"
+        "toggleEdit.hint": "Active ou désactive le mode édition des villes pour le MJ ou les joueurs avec les droits nécessaires",
+        "tabs": {
+            "stats": {
+                "visible": {
+                    "name": "Statistiques",
+                    "hint": "Afficher ou masquer l'onglet Statistiques."
+                }
+            },
+            "finances": {
+                "visible": {
+                    "name": "Finances",
+                    "hint": "Afficher ou masquer l'onglet Finances."
+                }
+            },
+            "armies": {
+                "visible": {
+                    "name": "Armées",
+                    "hint": "Afficher ou masquer l'onglet Armées."
+                }
+            },
+            "peoples": {
+                "visible": {
+                    "name": "Peuples",
+                    "hint": "Afficher ou masquer l'onglet Peuples."
+                }
+            },
+            "buildings": {
+                "visible": {
+                    "name": "Bâtiments",
+                    "hint": "Afficher ou masquer l'onglet Bâtiments."
+                }
+            },
+            "chests": {
+                "visible": {
+                    "name": "Trésors",
+                    "hint": "Afficher ou masquer l'onglet Trésors."
+                }
+            }
+        }
     },
     "CM.sidebar.button.createCity": "Créer ville",
     "CM.sidebar.button.createCityFolder": "Créer dossier",

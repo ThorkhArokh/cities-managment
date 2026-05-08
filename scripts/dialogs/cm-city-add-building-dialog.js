@@ -95,18 +95,17 @@ export const addBuildingDialog = {
             html.querySelector('[name="ownerName"]').value = "";
             html.querySelector('[name="ownerImg"]').value = "";
             dropZone.dataset.ownerId = "";
-            dropZone.innerHTML = `<div class="owner-placeholder">
-                    <i class="fas fa-user-plus"></i>
-                    <span>${game.i18n.localize("CM.dialog.newBuilding.owner.placeholder")}</span>
-                </div>`;
+            dropZone.innerHTML = `<span><i class="fas fa-user-plus"></i> ${game.i18n.localize("CM.dialog.newBuilding.owner.placeholder")}</span>`;
         };
 
         // --- drag & drop ---
         dropZone.addEventListener("dragover", (e) => {
             e.preventDefault();
+            event.target.classList.add("drag-over");
         });
 
         dropZone.addEventListener("dragleave", () => {
+            event.target.classList.remove("drag-over");
         });
 
         dropZone.addEventListener("drop", (e) => {

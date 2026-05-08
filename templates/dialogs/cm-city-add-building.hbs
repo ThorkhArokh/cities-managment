@@ -30,7 +30,7 @@
     <fieldset>
         <legend>{{localize "CM.dialog.newBuilding.owner.legend"}}</legend>
         <div>
-            <div class="drop-zone drag-over" id="owner-drop-zone" data-owner-id="{{owner.id}}">
+            <div class="drop-zone" id="owner-drop-zone" data-owner-id="{{owner.id}}">
                 {{#if owner.id}}
                 <div class="owner-preview flexrow gap8">
                     <img src="{{owner.img}}" alt="{{owner.name}}" class="cm-img-icon"/>
@@ -40,10 +40,7 @@
                     </button>
                 </div>
                 {{else}}
-                <div class="owner-placeholder">
-                    <i class="fas fa-user-plus"></i>
-                    <span>{{localize "CM.dialog.newBuilding.owner.placeholder"}}</span>
-                </div>
+                    <span><i class="fas fa-user-plus"></i> {{localize "CM.dialog.newBuilding.owner.placeholder"}}</span>
                 {{/if}}
             </div>
             <input type="hidden" name="ownerUuid" value="{{owner.uuid}}"/>
