@@ -4,7 +4,7 @@ export class StatDto {
     base;
     bonus;
     malus;
-    roll;
+    rollFormula;
 
     constructor(id, label, base, bonus, malus, rollFormula) {
         this.id = id;
@@ -15,4 +15,14 @@ export class StatDto {
         this.rollFormula = rollFormula
     }
 
+    toObject() {
+        return { 
+            id: this.id, 
+            label: this.label, 
+            base: this.base, 
+            bonus: this.bonus,
+            malus: this.malus,
+            rollFormula: this.rollFormula
+        };
+    }
 }

@@ -23,25 +23,14 @@ Hooks.on("init", function () {
   logger.debug("init UI", CONFIG.ui)
 
   logger.info(`Module ${MODULE_ID} ...sidebar...`);
-  // Custom sidebar tab
-  const Sidebar = foundry?.applications?.sidebar?.Sidebar;
-  if (!Sidebar) {
-    console.warn(`${MODULE_ID} | Sidebar API not found (v13+ required).`);
-    return;
+  // Add a custom sidebar tab
+  CONFIG.ui.sidebar.TABS.citiesmanagment = {
+    active: false,
+    icon: `fa-solid fa-landmark`,
+    tooltip: `CM.tab.city-managment`,
   }
-  logger.debug("Sidebar", Sidebar)
-
-  // Register the tab metadata (v13.351-compatible)
-  if (!Sidebar.TABS["citiesmanagment"]) {
-    logger.debug("tabs", Sidebar.TABS);
-    Sidebar.TABS["citiesmanagment"] = {
-      icon: "fa-solid fa-landmark",
-      tooltip: "CM.tab.city-managment",
-      gmOnly: false,
-
-    };
-    logger.debug("tabs", Sidebar.TABS);
-  }
+  CONFIG.ui.citiesmanagment = CitiesTab
+  logger.debug("... sidebar init : ok")
 
   // Hooks
   logger.info(`Module ${MODULE_ID} ...hooks...`);

@@ -17,4 +17,15 @@ export class ArmyUnitDto {
         this.cost = Number(cost) || 0;
     }
 
+    toObject() {
+        return { 
+            id: this.id, 
+            uuid: this.uuid, 
+            name: this.name, 
+            img: this.img,
+            role: this.role,
+            nbr: this.nbr,
+            cost: this.cost
+        };
+    }
 }

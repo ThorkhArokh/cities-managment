@@ -37,12 +37,13 @@ export class CmCitiesJournalDataStore {
     // Création
     static async createCity(name, folderId) {
         const dto = new CityDto(name);
+        logger.debug("CmCitiesJournalDataStore | createCity", name, dto)
         const journal = await JournalEntry.create({
             name: dto.name,
             folder: folderId,
             flags: {
                 [MODULE_ID]: {
-                    [FLAG_KEY_CITY_DATAS]: dto
+                    [FLAG_KEY_CITY_DATAS]: {...dto}
                 }
             }
         });

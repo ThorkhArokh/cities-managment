@@ -33,6 +33,21 @@ export class BuildingDto {
         var building = new BuildingDto(data.id, data.uuid, data.name, data.img, data.nbr, data.cost, data.price, data.owner);
         building.description = data.description;
         building.isVisibleForPlayer = data.isVisibleForPlayer;
-        return building;
+        return building.toObject();
+    }
+
+    toObject() {
+        return {
+            id: this.id,
+            uuid: this.uuid,
+            name: this.name,
+            img: this.img,
+            nbr: this.nbr,
+            cost: this.cost,
+            price: this.price,
+            description: this.description,
+            owner: this.owner,
+            isVisibleForPlayer: this.isVisibleForPlayer
+        };
     }
 }
