@@ -14,7 +14,7 @@ Authorization: {{$dotenv FOUNDRY_TOKEN_KEY}}
         "notes": "https://github.com/ThorkhArokh/cities-managment/releases/tag/v{{version}}",
         "compatibility": {
             "minimum": "13",
-            "verified": "13"
+            "verified": "14"
         }
     }
 }
@@ -32,7 +32,7 @@ Authorization: {{$dotenv FOUNDRY_TOKEN_KEY}}
         "notes": "https://github.com/ThorkhArokh/cities-managment/releases/tag/v{{version}}",
         "compatibility": {
             "minimum": "13",
-            "verified": "13"
+            "verified": "14"
         }
     }
 }
