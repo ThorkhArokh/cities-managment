@@ -135,7 +135,7 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
   }
 
   static async onCreateCity(event, target) {
-    logger.debug("Cities Sidebar | onCreateCity", target)
+    logger.debug("Cities Sidebar | onCreateCity", event, target)
     const button = event.currentTarget;
     const rect = button.getBoundingClientRect();
     const folderId = target.dataset.folderId;
@@ -163,8 +163,10 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
   _getCityContextMenuItems() {
     return [
       {
-        name: game.i18n.localize("CM.city.contextmenu.ownership"),
+        name: "CM.city.contextmenu.ownership",
+        label: "CM.city.contextmenu.ownership",
         icon: "<i class='fas fa-lock'></i>",
+        visible: (element) => game.user.isGM,
         condition: (element) => game.user.isGM,
         callback: (element) => {
           logger.debug("Cities Sidebar | Callback context menu", element)
@@ -172,24 +174,47 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
           const city = CmCitiesJournalDataStore.getCityById(cityId)
           // FIXME : Ouvre la fenêtre native de configuration des droits
           new DocumentOwnershipConfig({ document: city }).render(true);
+        },
+        onClick: (element) => {
+          logger.debug("Cities Sidebar | onClick context menu item - owernship", element)
+          const cityId = element.target.closest("[data-id]")?.dataset.id;
+          const city = CmCitiesJournalDataStore.getCityById(cityId)
+          // FIXME : Ouvre la fenêtre native de configuration des droits
+          new DocumentOwnershipConfig({ document: city }).render(true);
         }
       },
       {
         name: "CM.city.contextmenu.open",
+        label: "CM.city.contextmenu.open",
         icon: "<i class='fas fa-edit'></i>",
         callback: (element) => {
           logger.debug("Cities Sidebar | Callback context menu", element)
           const cityId = element.dataset.id;
           const city = CmCitiesJournalDataStore.getCityById(cityId)
           new CmCityApp(city).render(true);
+        },
+        onClick: (element) => {
+          logger.debug("Cities Sidebar | onClick context menu item - edit", element)
+          const cityId = element.target.closest("[data-id]")?.dataset.id;
+          logger.debug("Cities Sidebar | onClick context menu - edit - id", cityId)
+          const city = CmCitiesJournalDataStore.getCityById(cityId)
+          new CmCityApp(city).render(true);
         }
       },
       {
         name: "CM.city.contextmenu.delete",
+        label: "CM.city.contextmenu.delete",
         icon: "<i class='fas fa-trash'></i>",
+        visible: (element) => game.user.isGM,
         condition: (element) => game.user.isGM,
         callback: async (element) => {
           const cityId = element.dataset.id;
+          await CmCitiesJournalDataStore.deleteCity(cityId);
+          this.render();
+        },
+        onClick: async (element) => {
+          logger.debug("Cities Sidebar | onClick context menu item - delete", element)
+          const cityId = element.target.closest("[data-id]")?.dataset.id;
           await CmCitiesJournalDataStore.deleteCity(cityId);
           this.render();
         }
@@ -201,11 +226,24 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
     return [
       {
         name: "CM.city.contextmenu.edit",
+        label: "CM.city.contextmenu.edit",
         icon: '<i class="fas fa-edit"></i>',
+        visible: (element) => {
+          logger.debug("Cities Sidebar | visible context menu folder - edit", element)
+          const folderId = element.dataset.folderId;
+          const folder = game.folders.get(folderId);
+          return folder?.isOwner;
+        },
         condition: (element) => {
           const folderId = element.dataset.folderId;
           const folder = game.folders.get(folderId);
           return folder?.isOwner;
+        },
+        onClick: (element) => {
+          logger.debug("Cities Sidebar | onClick context menu folder - edit", element)
+          const folderId = element.target.closest("[data-folder-id]")?.dataset.folderId;
+          const folder = game.folders.get(folderId);
+          this._onEditFolder(folder);
         },
         callback: (element) => {
           const folderId = element.dataset.folderId;
@@ -215,18 +253,31 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
       },
       {
         name: "CM.city.contextmenu.delete",
+        label: "CM.city.contextmenu.delete",
         icon: '<i class="fas fa-trash"></i>',
+        visible: (element) => {
+          logger.debug("Cities Sidebar | visible context menu folder - delete", element)
+          const folderId = element.dataset.folderId;
+          const folder = game.folders.get(folderId);
+          return folder?.isOwner;
+        },
         condition: (element) => {
           const folderId = element.dataset.folderId;
           const folder = game.folders.get(folderId);
           return folder?.isOwner;
+        },
+        onClick: async (element) => {
+          logger.debug("Cities Sidebar | onClick context menu folder - delete", element)
+          const folderId = element.target.closest("[data-folder-id]")?.dataset.folderId;
+          const folder = game.folders.get(folderId);
+          this._onDeleteFolder(folder);
         },
         callback: async (element) => {
           logger.debug("Cities Sidebar | Delete folder", element)
           const folderId = element.dataset.folderId;
           const folder = game.folders.get(folderId);
           this._onDeleteFolder(folder);
-        },
+        }
       },
     ];
   }

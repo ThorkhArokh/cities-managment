@@ -55,12 +55,12 @@ export class CityDto {
         let repId = foundry.utils.randomID();
         let proId = foundry.utils.randomID();
         var stats = {}
-        stats[popId] = new StatDto(popId, "CM.app.city.tab.stats.population.label");
-        stats[dipId] = new StatDto(dipId, "CM.app.city.tab.stats.diplomacy.label");
-        stats[magId] = new StatDto(magId, "CM.app.city.tab.stats.managment.label");
-        stats[powId] = new StatDto(powId, "CM.app.city.tab.stats.power.label");
-        stats[repId] = new StatDto(repId, "CM.app.city.tab.stats.reputation.label");
-        stats[proId] = new StatDto(proId, "CM.app.city.tab.stats.production.label");
+        stats[popId] = new StatDto(popId, "CM.app.city.tab.stats.population.label").toObject();
+        stats[dipId] = new StatDto(dipId, "CM.app.city.tab.stats.diplomacy.label").toObject();
+        stats[magId] = new StatDto(magId, "CM.app.city.tab.stats.managment.label").toObject();
+        stats[powId] = new StatDto(powId, "CM.app.city.tab.stats.power.label").toObject();
+        stats[repId] = new StatDto(repId, "CM.app.city.tab.stats.reputation.label").toObject();
+        stats[proId] = new StatDto(proId, "CM.app.city.tab.stats.production.label").toObject();
         return stats;
     }
 

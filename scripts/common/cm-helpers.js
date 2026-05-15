@@ -1,7 +1,7 @@
 export const registerHandlebarsHelpers = function () {
     Handlebars.registerPartial("cityFolderNode", `
-    <li class="folder-drop-zone directory-item folder flexcol {{#if node.expanded}}expanded{{/if}}" data-folder-id="{{node.folder.id}}" draggable="true">
-      <header class="city-folder folder-header" data-folder-id="{{node.folder.id}}">
+    <li class="city-folder folder-drop-zone directory-item folder flexcol {{#if node.expanded}}expanded{{/if}}" data-folder-id="{{node.folder.id}}" draggable="true">
+      <header class="folder-header" data-folder-id="{{node.folder.id}}">
         <i class="fas fa-folder{{#if node.expanded}}-open{{/if}}"></i>
         <span class="folder-name" data-folder-id="{{node.folder.id}}">{{node.folder.name}}</span>
         <a class="create-entry" data-action="createEntry" data-folder-id="{{node.folder.id}}">

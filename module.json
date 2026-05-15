@@ -9,16 +9,16 @@
     }
   ],
   "url": "https://github.com/ThorkhArokh/cities-managment",
-  "license": "https://raw.githubusercontent.com/ThorkhArokh/cities-managment/v1.0.11/LICENSE",
-  "readme": "https://raw.githubusercontent.com/ThorkhArokh/cities-managment/v1.0.11/README.md",
+  "license": "https://raw.githubusercontent.com/ThorkhArokh/cities-managment/v1.0.12/LICENSE",
+  "readme": "https://raw.githubusercontent.com/ThorkhArokh/cities-managment/v1.0.12/README.md",
   "bugs": "https://github.com/ThorkhArokh/cities-managment/issues",
-  "changelog": "https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.0.11",
-  "manifest": "https://github.com/ThorkhArokh/cities-managment/releases/download/v1.0.11/module.json",
-  "download": "https://github.com/ThorkhArokh/cities-managment/releases/download/v1.0.11/module.zip",
-  "version": "1.0.11",
+  "changelog": "https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.0.12",
+  "manifest": "https://github.com/ThorkhArokh/cities-managment/releases/download/v1.0.12/module.json",
+  "download": "https://github.com/ThorkhArokh/cities-managment/releases/download/v1.0.12/module.zip",
+  "version": "1.0.12",
   "compatibility": {
     "minimum": "13",
-    "verified": "13"
+    "verified": "14"
   },
   "flags": {
     "canUpload": true

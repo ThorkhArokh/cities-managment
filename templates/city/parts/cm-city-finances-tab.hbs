@@ -2,24 +2,28 @@
   <!-- Treasury -->
   <div class="flexrow no-wrap cm-cities-app-tab-header cm-cities-app-treasury-currencies">
     <div class="flex1 left">{{localize "CM.app.city.tab.treasury.currencies"}}</div>
-    <div class="flex1 left" style="gap:4px;">
-      <i data-tooltip="CM.currency.pp.label" class="fas fa-coins" style="color:dimgray"></i>
-      <input class="field-value center" name="city.finances.treasury.currencies.pp" type="number"
+    <!-- Platine coin -->
+    <div class="flex1 left flexrow" style="gap:4px;">
+      <i data-tooltip="CM.currency.pp.label" class="flex0 fas fa-coins" style="color:dimgray"></i>
+      <input class="flex1 field-value center" name="city.finances.treasury.currencies.pp" type="number"
         value="{{city.finances.treasury.currencies.pp}}" data-dtype="Number" {{#unless isEditable}}disabled{{/unless}}>
     </div>
-    <div class="flex1 left" style="gap:4px;">
-      <i data-tooltip="CM.currency.gp.label" class="fas fa-coins" style="color:goldenrod"></i>
-      <input class="field-value center" name="city.finances.treasury.currencies.gp" type="number"
+    <!-- Gold coin -->
+    <div class="flex1 left flexrow" style="gap:4px;">
+      <i data-tooltip="CM.currency.gp.label" class="flex0 fas fa-coins" style="color:goldenrod"></i>
+      <input class="flex1 field-value center" name="city.finances.treasury.currencies.gp" type="number"
         value="{{city.finances.treasury.currencies.gp}}" data-dtype="Number" {{#unless isEditable}}disabled{{/unless}}>
     </div>
-    <div class="flex1 left" style="gap:4px;">
-      <i data-tooltip="CM.currency.sp.label" class="fas fa-coins" style="color:silver"></i>
-      <input class="field-value center" name="city.finances.treasury.currencies.sp" type="number"
+    <!-- Silver coin -->
+    <div class="flex1 left flexrow" style="gap:4px;">
+      <i data-tooltip="CM.currency.sp.label" class="flex0 fas fa-coins" style="color:silver"></i>
+      <input class="flex1 field-value center" name="city.finances.treasury.currencies.sp" type="number"
         value="{{city.finances.treasury.currencies.sp}}" data-dtype="Number" {{#unless isEditable}}disabled{{/unless}}>
     </div>
-    <div class="flex1 left" style="gap:4px;">
-      <i data-tooltip="CM.currency.cp.label" class="fas fa-coins" style="color:saddlebrown"></i>
-      <input class="field-value center" name="city.finances.treasury.currencies.cp" type="number"
+    <!-- Copper coin -->
+    <div class="flex1 left flexrow" style="gap:4px;">
+      <i data-tooltip="CM.currency.cp.label" class="flex0 fas fa-coins" style="color:saddlebrown"></i>
+      <input class="flex1 field-value center" name="city.finances.treasury.currencies.cp" type="number"
         value="{{city.finances.treasury.currencies.cp}}" data-dtype="Number" {{#unless isEditable}}disabled{{/unless}}>
     </div>
   </div>
@@ -57,6 +61,7 @@
         {{/if}}
       </div>
     </div>
+    <!-- delete button header -->
     {{#if @root.isEditable}}
     <div class="flex1 center" style="max-width: 40px;">
       <div class="field-label"></div>
@@ -86,6 +91,7 @@
       <input class="field-value center" type="text" data-dtype="Number" name="city.finances.entries.{{@key}}.value"
         value="{{value}}" {{#unless @root.isEditable}}disabled{{/unless}} />
     </div>
+    <!-- delete button -->
     {{#if @root.isEditable}}
     <div class="flex1 center" style="max-width: 40px;">
       <button type="button" data-action="removeFinanceEntry" data-id="{{id}}"><i class='fas fa-trash'></i></button>

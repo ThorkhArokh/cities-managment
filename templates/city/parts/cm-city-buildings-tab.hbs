@@ -10,7 +10,7 @@
         {{/if}}
       </div>
     </div>
-    <div class="flex1 center" style="max-width: 40px;">
+    <div class="flex1 center" style="max-width: 50px;">
       <div class="field-label" data-action="sortObjects" data-field="nbr">
         {{localize "CM.app.city.tab.buildings.header.nbr"}}
         {{#if (eq @root.buildingsSort.field "nbr")}}
@@ -44,6 +44,7 @@
         {{/if}}
       </div>
     </div>
+    <!-- ...owner header -->
     <div class="flex1 center" style="max-width: 40px;">
       <div class="field-label">
         <span></i> {{localize "CM.app.city.tab.buildings.header.owner.label"}}</span>
@@ -76,7 +77,7 @@
             <span class="flexauto {{#if uuid}}underline{{/if}}"><strong>{{name}}</strong></span>
           </a>
         </div>
-        <div class="flex1 center" style="max-width: 40px;">
+        <div class="flex1 center" style="max-width: 50px;">
           <input class="field-value center" type="text" name="city.buildings.{{@key}}.nbr" value="{{nbr}}"
             data-dtype="Number" {{#unless @root.isEditable}}disabled{{/unless}} />
         </div>
@@ -88,6 +89,7 @@
           <input class="field-value center" type="text" name="city.buildings.{{@key}}.cost" value="{{cost}}"
             data-dtype="Number" {{#unless @root.isEditable}}disabled{{/unless}} />
         </div>
+        <!-- ...owner -->
         <div class="flex1 center" style="max-width: 40px;">
           {{#if owner}}
           <a data-action="showDetails" data-uuid="{{owner.uuid}}" data-tooltip="{{owner.name}}" {{#unless owner.uuid}}disabled{{/unless}}>

@@ -386,7 +386,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             newBuildingDatas.cost,
             newBuildingDatas.price,
             owner
-        );
+        ).toObject();
         logger.debug("New building", newBuilding)
         this.cityDatas.buildings[newBuildingDatas.id] = newBuilding
         await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
@@ -465,7 +465,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         logger.debug("New unit", newUnitDatas)
         if (!newUnitDatas) return;
         newUnitDatas.id = foundry.utils.randomID();
-        this.cityDatas.armies.units[newUnitDatas.id] = new ArmyUnitDto(newUnitDatas.id, newUnitDatas.uuid, newUnitDatas.name, newUnitDatas.img, newUnitDatas.role, newUnitDatas.nbr, newUnitDatas.cost);
+        this.cityDatas.armies.units[newUnitDatas.id] = new ArmyUnitDto(newUnitDatas.id, newUnitDatas.uuid, newUnitDatas.name, newUnitDatas.img, newUnitDatas.role, newUnitDatas.nbr, newUnitDatas.cost).toObject();
         await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
         this.render();
     }
@@ -850,7 +850,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
 
         // Add unit to current city
         let defaultRole = game.i18n.localize("CM.dialog.newUnit.role.default.value");
-        this.cityDatas.armies.units[actor.id] = new ArmyUnitDto(actor.id, actor.uuid, actor.name, actor.img, defaultRole, 1, 0);
+        this.cityDatas.armies.units[actor.id] = new ArmyUnitDto(actor.id, actor.uuid, actor.name, actor.img, defaultRole, 1, 0).toObject();
         await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
         this.render();
     }
@@ -861,7 +861,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         logger.debug("Drop building", item)
 
         // Add building to current city
-        this.cityDatas.buildings[item.id] = new BuildingDto(item.id, item.uuid, item.name, item.img)
+        this.cityDatas.buildings[item.id] = new BuildingDto(item.id, item.uuid, item.name, item.img).toObject();
         await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
         this.render();
     }
@@ -877,8 +877,8 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             uuid: item.uuid,
             name: item.name,
             img: item.img,
-            nbr: item.system?.qty ?? 1,
-            price: item.system?.price ?? 0
+            nbr: 1,
+            price: 0
         };
 
         await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
@@ -903,7 +903,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
                 logger.debug("Hook update actor", actor)
                 if (Object.hasOwn(this.cityDatas.armies.units, actor.id)) {
                     logger.debug("Update army unit", actor)
-                    this.cityDatas.armies.units[actor.id] = new ArmyUnitDto(actor.id, actor.uuid, actor.name, actor.img, "soldier", 1, 0);
+                    this.cityDatas.armies.units[actor.id] = new ArmyUnitDto(actor.id, actor.uuid, actor.name, actor.img, "soldier", 1, 0).toObject();
                     CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
                     this.render();
                 };

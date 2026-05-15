@@ -1,4 +1,4 @@
-@version=1.0.10
+@version=1.0.11
 
 ### DRYRUN - Publish release on FoundryVTT
 POST https://foundryvtt.com/_api/packages/release_version/
