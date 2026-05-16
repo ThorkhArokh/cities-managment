@@ -23,11 +23,8 @@
   "flags": {
     "canUpload": true
   },
-  "scripts": [
-    {
-      "src": "scripts/init.js",
-      "type": "module"
-    }
+  "esmodules": [
+    "scripts/init.js"
   ],
   "styles": [
     "styles/cm-cities-app.css"
