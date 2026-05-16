@@ -1,5 +1,10 @@
 {
     "CM.settings": {
+        "citySizes.app.title": "Set city sizes",
+        "citySizes.button.edit": "Edit",
+        "citySizes.button.add": "Add",
+        "citySizes.name": "Edit cities sizes",
+        "citySizes.hint": "Allow to edit cities sizes with custom values",
         "debugMode.name": "Toggle debug mode",
         "debugMode.hint": "Activate debug mode, show logs in browser console (F12)",
         "toggleEdit.name": "Toggle city edit",
@@ -156,6 +161,7 @@
         "field.mandatory": "Required field",
         "save.btn": "Save",
         "cancel.btn": "Cancel",
+        "reset.btn": "Reset",
         "newStat": {
             "title": "Add new stat",
             "emptyLabel": "Stat's label can be empty.",

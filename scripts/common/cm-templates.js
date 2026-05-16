@@ -23,7 +23,10 @@ export const preloadHandlebarsTemplates = async function () {
 
         // DIALOGS
         `modules/${MODULE_ID}/templates/dialogs/cm-city-add-armies-unit.hbs`,
-        `modules/${MODULE_ID}/templates/dialogs/cm-city-add-finance-entry.hbs`
+        `modules/${MODULE_ID}/templates/dialogs/cm-city-add-finance-entry.hbs`,
+
+        // SETTINGS
+        `modules/${MODULE_ID}/templates/settings/city-sizes-settings.hbs`
     ];
 
     // Load the template parts

@@ -1,5 +1,10 @@
 {
     "CM.settings": {
+        "citySizes.app.title": "Définir les tailles pour une ville",
+        "citySizes.button.edit": "Modifier",
+        "citySizes.button.add": "Ajouter",
+        "citySizes.name": "Modifier tailles pour une ville",
+        "citySizes.hint": "Permet de modifier les tailles possibles pour une ville avec des valeurs personnalisées",
         "debugMode.name": "Mode debug actif",
         "debugMode.hint": "Active le mode debug, permet de voir les logs dans la console du navigateur (F12)",
         "toggleEdit.name": "Mode édition de ville actif",
@@ -157,6 +162,7 @@
         "field.mandatory": "Champ obligatoire",
         "save.btn": "Enregistrer",
         "cancel.btn": "Annuler",
+        "reset.btn": "Réinitialiser",
         "newStat": {
             "title": "Ajouter une nouvelle caractéristique",
             "emptyLabel": "Veuillez renseigner un label.",

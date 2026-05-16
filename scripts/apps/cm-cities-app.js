@@ -37,7 +37,6 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
 
     static DEFAULT_OPTIONS = {
         id: "cm-city-app",
-        icon: "fa-solid fa-landmark",
         tag: "form",
         form: {
             handler: CmCityApp.submitFormHandler,
@@ -59,6 +58,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         },
         window: {
             title: "CM.app.city.title",
+            icon: "fa-solid fa-landmark",
             resizable: true,
             controls: []
         },
@@ -946,12 +946,12 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         if (!this.isEditable) return
 
         // Do things with the returned FormData
-        logger.debug("submitFormHandler - Submit", event, form, formData)
+        logger.debug("Cities App | submitFormHandler - Submit", event, form, formData)
 
         const datas = foundry.utils.expandObject(formData.object);
-        logger.debug("submitFormHandler - FormDatas", datas)
+        logger.debug("Cities App | submitFormHandler - FormDatas", datas)
 
-        logger.debug("submitFormHandler - City to update", this.cityDatas)
+        logger.debug("Cities App | submitFormHandler - City to update", this.cityDatas)
         foundry.utils.mergeObject(this.cityDatas, datas.city, {
             insertKeys: true,    // ajouter les clés absentes de objA
             insertValues: true,  // ajouter les valeurs manquantes
@@ -959,10 +959,10 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             recursive: true,     // fusion récursive des objets imbriqués
             inplace: true,      // false = retourne un nouvel objet
         });
-        logger.debug("submitFormHandler - Updated city", this.cityDatas)
+        logger.debug("Cities App | submitFormHandler - Updated city", this.cityDatas)
 
         this.cityDatas = CityDto.fromData(this.cityDatas);
-        logger.debug("City Datas", this.cityDatas)
+        logger.debug("Cities App | submitFormHandler - City Datas", this.cityDatas)
         await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
 
         await this._updateFrame({

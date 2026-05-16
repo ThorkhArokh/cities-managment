@@ -1,4 +1,5 @@
-import { MODULE_ID, IS_DEBUG_MODE, DATAS_STORE } from "./cm-constants.js"
+import { MODULE_ID, IS_DEBUG_MODE, DATAS_STORE, SETTING_CITY_SIZES_KEY } from "./cm-constants.js"
+import { CitySizesSettings } from "../apps/cm-city-sizes-settings.js"
 
 const TABS_CONFIG = [
     { id: "stats", labelKey: "CM.app.city.tab.stats.label", icon: "fa-solid fa-scroll" },
@@ -10,14 +11,27 @@ const TABS_CONFIG = [
 ];
 
 export const registerSystemSettings = function () {
-    game.settings.register(MODULE_ID, IS_DEBUG_MODE, {
-        name: "CM.settings.debugMode.name",
-        hint: "CM.settings.debugMode.hint",
+    game.settings.registerMenu(MODULE_ID, "citySizesMenu", {
+        name: "CM.settings.citySizes.name",
+        label: "CM.settings.citySizes.button.edit",
+        hint: "CM.settings.citySizes.hint",
+        icon: "fas fa-city",
+        type: CitySizesSettings,
+        restricted: true   // GM seulement
+    });
+
+    game.settings.register(MODULE_ID, SETTING_CITY_SIZES_KEY, {
+        name: "CM.settings.citySizes.name",
+        hint: "CM.settings.citySizes.hint",
         scope: "world",
-        config: true,
-        default: false,
-        type: Boolean,
-    })
+        config: false,
+        type: Object,
+        default: CONFIG.CM.city.sizes,
+        onChange: () => {
+            // Reload CONFIG.CM
+            CONFIG.CM.city.sizes = game.settings.get(MODULE_ID, SETTING_CITY_SIZES_KEY);
+        }
+    });
 
     game.settings.register(MODULE_ID, "toggleCityEditMode", {
         name: "CM.settings.toggleEdit.name",
@@ -46,4 +60,13 @@ export const registerSystemSettings = function () {
         type: Object,
         default: {},
     });
+
+    game.settings.register(MODULE_ID, IS_DEBUG_MODE, {
+        name: "CM.settings.debugMode.name",
+        hint: "CM.settings.debugMode.hint",
+        scope: "world",
+        config: true,
+        default: false,
+        type: Boolean,
+    })
 }

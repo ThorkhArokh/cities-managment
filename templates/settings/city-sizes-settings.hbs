@@ -1,0 +1,21 @@
+<section>
+    <div id="cm-city-sizes-sortable" class="cm-city-sizes">
+        {{#each sizes}}
+        <div class="cm-cities-app-tab-line flexrow gap4" data-index="{{key}}">
+            <i class="fas fa-grip-vertical cm-drag-handle flex0" style="cursor:grab"></i>
+            <input class="flex1" type="text" name="sizes.{{key}}" value="{{localize label}}" placeholder="rename me..." />
+            <button class="flex0" type="button" data-action="delete" data-key="{{key}}"><i class="fas fa-trash"></i></button>
+        </div>
+        {{/each}}
+    </div>
+    <hr>
+    <footer class="flexrow gap4">
+        <button type="button" data-action="addNew">
+            <i class="fas fa-plus"></i> {{localize "CM.settings.citySizes.button.add"}}
+        </button>
+        <button type="button" data-action="reset">
+            <i class="fas fa-undo"></i> {{localize "CM.dialog.reset.btn"}}
+        </button>
+        <button type="button" data-action="save"><i class="fas fa-save"></i> {{localize "CM.dialog.save.btn"}}</button>
+    </footer>
+</section>
