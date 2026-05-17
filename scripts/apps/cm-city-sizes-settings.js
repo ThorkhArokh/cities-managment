@@ -120,7 +120,7 @@ export class CitySizesSettings extends HandlebarsApplicationMixin(ApplicationV2)
     static async #addNew(event, target) {
         logger.debug("CitySizesSettings | addNew...", event, target)
         const newSizeKey = foundry.utils.randomID();
-        this.sizes[newSizeKey] = "newSize";
+        this.sizes[newSizeKey] = "CM.settings.citySizes.app.new.size.default.label";
         this.render();
     }
 

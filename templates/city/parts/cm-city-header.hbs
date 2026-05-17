@@ -12,9 +12,13 @@
                 <button class="flex0" type="button" data-action="showJournal"><i class="fas fa-book-open"></i></button>
                 <input class="flex2" type="text" name="city.description" value="{{city.description}}" placeholder="{{localize "CM.app.city.tab.header.city.desc.placeholder"}}"
                 {{#unless isEditable}}disabled{{/unless}} />
-                <select name="city.size" {{#unless isEditable}}disabled{{/unless}}>
+                {{#if isEditable}}
+                <select name="city.size" {{#unless isEditable}}disabled{{/unless}} data-tooltip="CM.app.city.select.sizes.tooltip" data-tooltip-direction="UP">
                     {{selectOptions citySizeChoices selected=city.size localize=true}}
                 </select>
+                {{else}}
+                    <input type="text" name="city.name" value="{{localize selectedCitySizeLabel}}" {{#unless isEditable}}disabled{{/unless}} />
+                {{/if}}
             </div>
         </div>
     </header>

@@ -1037,7 +1037,14 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         context.hasNoEntries = Object.keys(sourceCity.finances.entries ?? {}).length < 1;
         context.hasNoUnits = Object.keys(sourceCity.armies.units ?? {}).length < 1;
 
-        context.citySizeChoices = CONFIG.CM.city.sizes;
+        context.citySizeChoices = foundry.utils.deepClone(CONFIG.CM.city.sizes);
+        context.citySizeChoices["0"] = game.i18n.localize("Choose size...");
+        if (Object.hasOwn(CONFIG.CM.city.sizes, context.city.size)) {
+            context.selectedCitySizeLabel = CONFIG.CM.city.sizes[context.city.size];
+        } else {
+            context.city.size = "0"
+            context.selectedCitySizeLabel = "N/A"
+        }
 
         // Sorts
         switch (partId) {

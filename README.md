@@ -35,6 +35,7 @@ https://github.com/ThorkhArokh/cities-managment/releases/latest/download/module.
  6. [Manage city's population](#manage-citys-population)
  7. [Manage city's buildings](#manage-citys-buildings)
  8. [Manage city's chests](#manage-citys-chests)
+ 9. [Module's settings](#modules-settings)
 
 ### Manage cities with new tab
 This module add a new tab "Cities" to the sidebar.
@@ -161,6 +162,26 @@ Features (cf. [Fig. City's chests panel](doc/assets/city_panel_chests.png)):
 <figure>
   <img src="doc/assets/city_panel_chests.png" alt="City's chests panel"/>
   <figcaption>Fig. City's chests panel</figcaption>
+</figure>
+
+### Module's Settings
+Module's settings allow to : 
+- Edit and sort cities sizes
+- Toggle edition mode for cities
+- Show/hide city's tabs (stats, finances, armies, buildings, chests)
+- Toggle debug mode (for developers)
+
+<figure>
+  <img src="doc/assets/settings_general.png" alt="General settings panel"/>
+  <figcaption>Fig. General settings panel</figcaption>
+</figure>
+
+#### Edit and sort cities sizes
+Allow to edit with custom values and/or sort cities sizes.
+
+<figure>
+  <img src="doc/assets/settings_sizes.png" alt="Cities sizes settings panel"/>
+  <figcaption>Fig. Cities sizes settings panel</figcaption>
 </figure>
 
 ## Change log

@@ -1,11 +1,15 @@
 {
     "CM.settings": {
         "citySizes.app.title": "Définir les tailles pour une ville",
+        "citySizes.app.label.placeholder": "Entrer un label...",
+        "citySizes.app.sort.tooltip": "Glisser / déplacer pour ordonner",
+        "citySizes.app.delete.tooltip" : "<b>Attention</b> : Supprimer cette taille affectera toutes les villes associées",
+        "citySizes.app.new.size.default.label": "Nouvelle taille",
+        "citySizes.app.button.add": "Ajouter",
         "citySizes.button.edit": "Modifier",
-        "citySizes.button.add": "Ajouter",
         "citySizes.name": "Modifier tailles pour une ville",
-        "citySizes.hint": "Permet de modifier les tailles possibles pour une ville avec des valeurs personnalisées",
-        "debugMode.name": "Mode debug actif",
+        "citySizes.hint": "Permet de modifier avec des valeurs personnalisées et/ou ordonner les tailles possibles pour une ville",
+        "debugMode.name": "Mode debug actif (pour les développeurs)",
         "debugMode.hint": "Active le mode debug, permet de voir les logs dans la console du navigateur (F12)",
         "toggleEdit.name": "Mode édition de ville actif",
         "toggleEdit.hint": "Active ou désactive le mode édition des villes pour le MJ ou les joueurs avec les droits nécessaires",
@@ -67,6 +71,8 @@
     "CM.app.city.tab.header.avatar.tooltip": "Changer l'image",
     "CM.app.city.tab.header.city.desc.placeholder": "Aucune description...",
     "CM.app.city.tab.header.city.map.tooltip": "Glissez une scéne ici pour la lier à la ville",
+    "CM.app.city.select.sizes.tooltip" : "Vous pouvez modifier ou ordonner les valeurs via le panneau de configuration du module",
+    "CM.app.city.select.sizes.none.label": "Choisissez une taille...",
     "CM.app.city.tab.stats": {
         "empty": "Aucune caractéristique",
         "btn.new.label": "Ajouter une nouvelle caractéristique",
