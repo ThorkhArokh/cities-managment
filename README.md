@@ -10,10 +10,10 @@ Allow to manage cities and domains with a sidebar tab and custom city view.
 
 <a href='https://ko-fi.com/Z8Z11YI46Z' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi6.png?v=6' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 
-## FoundryVTT
+## :game_die: FoundryVTT
 Page : https://foundryvtt.com/packages/cities-managment
 
-## Installation Instructions
+## :package: Installation Instructions
 
 To install Cities-Managment, find Cities-Managment in the module browser, or paste the following URL into the Install Module dialog in
 the Setup menu of Foundry Virtual Tabletop:
@@ -22,11 +22,11 @@ the Setup menu of Foundry Virtual Tabletop:
 https://github.com/ThorkhArokh/cities-managment/releases/latest/download/module.json
 ```
 
-## Supported languages
+## :globe_with_meridians: Supported languages
 - English (en)
 - French (fr)
 
-## Features
+## :sparkles: Features
  1. [Manage cities with new tab](#manage-cities-with-new-tab)
  2. [Manage city's informations](#manage-citys-informations)
  3. [Manage city's stats](#manage-city-stats)
@@ -184,7 +184,7 @@ Allow to edit with custom values and/or sort cities sizes.
   <figcaption>Fig. Cities sizes settings panel</figcaption>
 </figure>
 
-## Change log
+## :clipboard: Change log
 Manage project : https://github.com/users/ThorkhArokh/projects/1
 
 ### [v1.0.13](https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.0.13)
@@ -219,7 +219,7 @@ Manage project : https://github.com/users/ThorkhArokh/projects/1
  - :sparkles: Add folders in cities tab
  - :sparkles: show city or not to players (ownership)
 
- ## Documentation
+ ## :books: Documentation
  - https://foundryvtt.com/article/module-development/
  - https://foundryvtt.com/article/module-sub-types/
  - https://www.foundryvtt-hub.com/technical-guide/
