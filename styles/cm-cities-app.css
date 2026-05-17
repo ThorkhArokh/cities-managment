@@ -113,6 +113,11 @@ hr {
     gap: 4px;
 }
 
+.cm-dragging {
+    opacity: 0.4;
+    border: 1px dashed var(--color-border-highlight);
+}
+
 .drop-zone-header {
     margin-top: 8px;
 }

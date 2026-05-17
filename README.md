@@ -10,10 +10,10 @@ Allow to manage cities and domains with a sidebar tab and custom city view.
 
 <a href='https://ko-fi.com/Z8Z11YI46Z' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi6.png?v=6' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 
-## FoundryVTT
+## :game_die: FoundryVTT
 Page : https://foundryvtt.com/packages/cities-managment
 
-## Installation Instructions
+## :package: Installation Instructions
 
 To install Cities-Managment, find Cities-Managment in the module browser, or paste the following URL into the Install Module dialog in
 the Setup menu of Foundry Virtual Tabletop:
@@ -22,11 +22,11 @@ the Setup menu of Foundry Virtual Tabletop:
 https://github.com/ThorkhArokh/cities-managment/releases/latest/download/module.json
 ```
 
-## Supported languages
+## :globe_with_meridians: Supported languages
 - English (en)
 - French (fr)
 
-## Features
+## :sparkles: Features
  1. [Manage cities with new tab](#manage-cities-with-new-tab)
  2. [Manage city's informations](#manage-citys-informations)
  3. [Manage city's stats](#manage-city-stats)
@@ -35,6 +35,7 @@ https://github.com/ThorkhArokh/cities-managment/releases/latest/download/module.
  6. [Manage city's population](#manage-citys-population)
  7. [Manage city's buildings](#manage-citys-buildings)
  8. [Manage city's chests](#manage-citys-chests)
+ 9. [Module's settings](#modules-settings)
 
 ### Manage cities with new tab
 This module add a new tab "Cities" to the sidebar.
@@ -163,23 +164,62 @@ Features (cf. [Fig. City's chests panel](doc/assets/city_panel_chests.png)):
   <figcaption>Fig. City's chests panel</figcaption>
 </figure>
 
-## Change log
+### Module's Settings
+Module's settings allow to : 
+- Edit and sort cities sizes
+- Toggle edition mode for cities
+- Show/hide city's tabs (stats, finances, armies, buildings, chests)
+- Toggle debug mode (for developers)
+
+<figure>
+  <img src="doc/assets/settings_general.png" alt="General settings panel"/>
+  <figcaption>Fig. General settings panel</figcaption>
+</figure>
+
+#### Edit and sort cities sizes
+Allow to edit with custom values and/or sort cities sizes.
+
+<figure>
+  <img src="doc/assets/settings_sizes.png" alt="Cities sizes settings panel"/>
+  <figcaption>Fig. Cities sizes settings panel</figcaption>
+</figure>
+
+## :clipboard: Change log
 Manage project : https://github.com/users/ThorkhArokh/projects/1
 
-### [v1.0.0](https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.0.0)
- - update doc
- - update armies unit
- - update buildings
- - Add sort on tables columns headers
- - Add journal sheet rendering
- - Drop city on scenes (journal mode)
- - Can add bonus, malus, base to stat roll
- - Edit stats
- - Generics Stats
- - Add folders in cities tab; /!\ drag and drop cities in folders
- - show city or not to players (ownership)
+### [v1.0.13](https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.0.13)
+ - :sparkles: add cities sizes settings
+ - :book: update doc
 
- ## Documentation
+### [v1.0.12](https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.0.12)
+ - :sparkles: FoundryVTT v14 compatibility
+ - :book: update doc
+ - :gear: update github actions
+
+### [v1.0.11](https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.0.11)
+ - :sparkles: show/hide city's tabs
+ - :sparkles: show/hide actors, buildings in tabs for players
+ - :sparkles: add owner for buildinds
+
+### [v1.0.10](https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.0.10)
+ - :gear: add github actions
+ - :gear: deploy on FoundryVTT
+ - :book: update doc
+
+### [v1.0.0](https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.0.0)
+ - :book: update doc
+ - :sparkles: update armies unit
+ - :sparkles: update buildings
+ - :sparkles: Add sort on tables columns headers
+ - :sparkles: Add journal sheet rendering
+ - :sparkles: Drop city on scenes (journal mode)
+ - :sparkles: Can add bonus, malus, base to stat roll
+ - :sparkles: Edit stats
+ - :sparkles: Generics Stats
+ - :sparkles: Add folders in cities tab
+ - :sparkles: show city or not to players (ownership)
+
+ ## :books: Documentation
  - https://foundryvtt.com/article/module-development/
  - https://foundryvtt.com/article/module-sub-types/
  - https://www.foundryvtt-hub.com/technical-guide/

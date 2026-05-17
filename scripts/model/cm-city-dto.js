@@ -21,7 +21,7 @@ export class CityDto {
         this.id = foundry.utils.randomID();
         this.img = "icons/svg/city.svg";
         this.description = "";
-        this.size = "city";
+        this.size = CONFIG.CM.city.defaultSize.key;
         this.map = {};
         this.chests = {};
         this.stats = this._defaultStats();

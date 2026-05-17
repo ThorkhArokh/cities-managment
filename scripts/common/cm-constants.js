@@ -5,3 +5,4 @@ export const ENTITY_TYPE_CITY = "city-entity";
 export const DATAS_STORE = "cm-datas-store";
 export const IS_DEBUG_MODE = "isDebugMode";
 export const IS_CITY_EDIT_MODE = "toggleCityEditMode";
+export const SETTING_CITY_SIZES_KEY = "citySizes";

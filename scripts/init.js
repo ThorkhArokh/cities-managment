@@ -1,5 +1,5 @@
 import { logger } from "./common/cm-customLog.js"
-import { MODULE_ID, FLAG_KEY_CITY_DATAS, FLAG_KEY_TYPE, ENTITY_TYPE_CITY } from "./common/cm-constants.js"
+import { MODULE_ID, FLAG_KEY_CITY_DATAS, FLAG_KEY_TYPE, ENTITY_TYPE_CITY, SETTING_CITY_SIZES_KEY } from "./common/cm-constants.js"
 import { CitiesTab } from "./sidebar/cities-sidebar-tab.js"
 import { registerSystemSettings } from "./common/cm-settings.js"
 import { preloadHandlebarsTemplates } from "./common/cm-templates.js"
@@ -11,7 +11,8 @@ logger.info(`Module ${MODULE_ID} loaded`);
 Hooks.on("init", function () {
   logger.info(`Module ${MODULE_ID} Initializing...`);
   logger.info(`Module ${MODULE_ID} ...config...`);
-  CONFIG.CM = CM_CONFIG;
+  CONFIG.CM = foundry.utils.deepClone(CM_CONFIG);
+  logger.info(`Module ${MODULE_ID} ...config...`, CM_CONFIG, CONFIG.CM)
 
   logger.info(`Module ${MODULE_ID} ...settings...`);
   registerSystemSettings();
@@ -86,6 +87,9 @@ Hooks.on("ready", function () {
   const mod = game.modules.get(MODULE_ID);
   if (!mod) return;
   logger.info(`Module ${MODULE_ID} Ready...`);
+
+  // Load city sizes config
+  CONFIG.CM.city.sizes = game.settings.get(MODULE_ID, SETTING_CITY_SIZES_KEY);
 
   logger.debug("Ready UI", ui)
   // Create the tab instance once

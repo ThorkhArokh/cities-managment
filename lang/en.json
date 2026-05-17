@@ -1,6 +1,15 @@
 {
     "CM.settings": {
-        "debugMode.name": "Toggle debug mode",
+        "citySizes.app.title": "Set city sizes",
+        "citySizes.app.label.placeholder": "Enter a label...",
+        "citySizes.app.sort.tooltip": "Drag and drop to sort",
+        "citySizes.app.delete.tooltip" : "<b>Warning</b>: Removing this size will affect all associated cities",
+        "citySizes.app.new.size.default.label": "New size",
+        "citySizes.app.button.add": "Add",
+        "citySizes.button.edit": "Edit",
+        "citySizes.name": "Edit cities sizes",
+        "citySizes.hint": "Allow to edit with custom values and/or sort cities sizes",
+        "debugMode.name": "Toggle debug mode (for developers)",
         "debugMode.hint": "Activate debug mode, show logs in browser console (F12)",
         "toggleEdit.name": "Toggle city edit",
         "toggleEdit.hint": "Activate city edit for GM and players with ownership",
@@ -62,6 +71,8 @@
     "CM.app.city.tab.header.avatar.tooltip": "Change picture",
     "CM.app.city.tab.header.city.desc.placeholder": "No description...",
     "CM.app.city.tab.header.city.map.tooltip": "Drop a scene here to link it to the city",
+    "CM.app.city.select.sizes.tooltip": "You can modify or order the values ​​via the module's configuration panel",
+    "CM.app.city.select.sizes.none.label": "Choose size...",
     "CM.app.city.tab.stats": {
         "empty": "No stat",
         "btn.new.label": "Add new stat",
@@ -156,6 +167,7 @@
         "field.mandatory": "Required field",
         "save.btn": "Save",
         "cancel.btn": "Cancel",
+        "reset.btn": "Reset",
         "newStat": {
             "title": "Add new stat",
             "emptyLabel": "Stat's label can be empty.",

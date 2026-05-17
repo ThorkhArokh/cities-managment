@@ -9,6 +9,10 @@ export const CM_CONFIG = {
             "capital": "CM.city.size.capital",
             "metropolis": "CM.city.size.metropolis",
             "megalopolis": "CM.city.size.megalopolis"
+        },
+        defaultSize: {
+            "key": "city",
+            "label": "CM.city.size.city"
         }
     }
 };
