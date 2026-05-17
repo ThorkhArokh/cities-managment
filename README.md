@@ -187,18 +187,37 @@ Allow to edit with custom values and/or sort cities sizes.
 ## Change log
 Manage project : https://github.com/users/ThorkhArokh/projects/1
 
+### [v1.0.13](https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.0.13)
+ - :sparkles: add cities sizes settings
+ - :book: update doc
+
+### [v1.0.12](https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.0.12)
+ - :sparkles: FoundryVTT v14 compatibility
+ - :book: update doc
+ - :gear: update github actions
+
+### [v1.0.11](https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.0.11)
+ - :sparkles: show/hide city's tabs
+ - :sparkles: show/hide actors, buildings in tabs for players
+ - :sparkles: add owner for buildinds
+
+### [v1.0.10](https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.0.10)
+ - :gear: add github actions
+ - :gear: deploy on FoundryVTT
+ - :book: update doc
+
 ### [v1.0.0](https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.0.0)
- - update doc
- - update armies unit
- - update buildings
- - Add sort on tables columns headers
- - Add journal sheet rendering
- - Drop city on scenes (journal mode)
- - Can add bonus, malus, base to stat roll
- - Edit stats
- - Generics Stats
- - Add folders in cities tab; /!\ drag and drop cities in folders
- - show city or not to players (ownership)
+ - :book: update doc
+ - :sparkles: update armies unit
+ - :sparkles: update buildings
+ - :sparkles: Add sort on tables columns headers
+ - :sparkles: Add journal sheet rendering
+ - :sparkles: Drop city on scenes (journal mode)
+ - :sparkles: Can add bonus, malus, base to stat roll
+ - :sparkles: Edit stats
+ - :sparkles: Generics Stats
+ - :sparkles: Add folders in cities tab
+ - :sparkles: show city or not to players (ownership)
 
  ## Documentation
  - https://foundryvtt.com/article/module-development/
