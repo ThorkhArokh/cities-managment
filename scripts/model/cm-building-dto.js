@@ -1,5 +1,3 @@
-import { BuildingItemSheet } from "../items/cm-building-sheet.js"
-
 export class BuildingDto {
     id;
     uuid;
