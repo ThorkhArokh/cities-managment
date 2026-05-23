@@ -27,6 +27,9 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         this.#dragDrop = this.#createDragDropHandlers();
         this.isEditable = options?.isEditable || (game.settings.get(MODULE_ID, IS_CITY_EDIT_MODE) && (game.user.isGM || city.testUserPermission(game.user, "OWNER")));
         this.isGM = game.user.isGM;
+
+        // Register hooks once
+        this.#registerHooks();
     }
 
     // Override title getter 
@@ -67,8 +70,10 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             optionGoToSettings: CmCityApp.#optionGoToSettings,
             showJournal: CmCityApp.#showJournal,
             showDetails: CmCityApp.#showDetails,
+            addNewPeople: CmCityApp.#addNewPeople,
             removePeople: CmCityApp.#removePeople,
             togglePeopleView: CmCityApp.#togglePeopleView,
+            addNewTreasury: CmCityApp.#addNewTreasury,
             removeTreasury: CmCityApp.#removeTreasury,
             toggleTreasuryView: CmCityApp.#toggleTreasuryView,
             editImage: CmCityApp.#onEditImage,
@@ -87,7 +92,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             removeStat: CmCityApp.#removeStat,
             rollStats: CmCityApp.#rollStats,
             showMap: CmCityApp.#showMap,
-            sortObjects: CmCityApp.#sortObjects,
+            sortObjects: CmCityApp.#sortObjects
         }
     };
 
@@ -144,6 +149,117 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         },
     };
 
+    /**
+     * Register hooks to catch externals events
+     */
+    #registerHooks() {
+        this.#hooks.push(
+            Hooks.on("updateActor", async (actor, changes, options, userId) => {
+                // Armies unit
+                if (Object.hasOwn(this.cityDatas.armies.units, actor.id)) {
+                    this.cityDatas.armies.units[actor.id].name = actor.name;
+                    this.cityDatas.armies.units[actor.id].img = actor.img;
+                    await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
+                    this.render();
+                }
+
+                // People
+                if (Object.hasOwn(this.cityDatas.population.peoples, actor.id)) {
+                    this.cityDatas.population.peoples[actor.id].name = actor.name;
+                    this.cityDatas.population.peoples[actor.id].img = actor.img;
+                    await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
+                    this.render();
+                }
+
+                // Buildings owner
+                const ownedBuildings = Object.values(this.cityDatas.buildings)
+                    .filter(b => b.owner?.id === actor.id);
+
+                if (ownedBuildings.length > 0) {
+                    for (const building of ownedBuildings) {
+                        this.cityDatas.buildings[building.id].owner.name = actor.name;
+                        this.cityDatas.buildings[building.id].owner.img = actor.img;
+                    }
+                    await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
+                    this.render();
+                }
+            })
+        );
+
+        this.#hooks.push(
+            Hooks.on("deleteActor", async (actor) => {
+                logger.debug("Cities App | Hooks | deleteActor", actor);
+                // Armies unit
+                if (Object.hasOwn(this.cityDatas.armies.units, actor.id)) {
+                    delete this.cityDatas.armies.units[actor.id];
+                    await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
+                    this.render();
+                }
+
+                // People
+                if (Object.hasOwn(this.cityDatas.population.peoples, actor.id)) {
+                    delete this.cityDatas.population.peoples[actor.id];
+                    await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
+                    this.render();
+                }
+
+                // Buildings owner
+                const ownedBuildings = Object.values(this.cityDatas.buildings)
+                    .filter(b => b.owner?.id === actor.id);
+
+                if (ownedBuildings.length > 0) {
+                    for (const building of ownedBuildings) {
+                        this.cityDatas.buildings[building.id].owner = {};
+                    }
+                    await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
+                    this.render();
+                }
+            })
+        );
+
+        this.#hooks.push(
+            Hooks.on("updateItem", async (item, changes, options, userId) => {
+                logger.debug("Cities App | Hooks | updateItem", item);
+
+                // Chests
+                if (Object.hasOwn(this.cityDatas.chests, item.id)) {
+                    this.cityDatas.chests[item.id].name = item.name;
+                    this.cityDatas.chests[item.id].img = item.img;
+                    await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
+                    this.render();
+                }
+
+                // Buildings
+                if (Object.hasOwn(this.cityDatas.buildings, item.id)) {
+                    this.cityDatas.buildings[item.id].name = item.name;
+                    this.cityDatas.buildings[item.id].img = item.img;
+                    await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
+                    this.render();
+                }
+            })
+        );
+
+        this.#hooks.push(
+            Hooks.on("deleteItem", async (item, options, userId) => {
+                logger.debug("Cities App | Hooks | deleteItem", item);
+
+                // Chests
+                if (Object.hasOwn(this.cityDatas.chests, item.id)) {
+                    delete this.cityDatas.chests[item.id];
+                    await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
+                    this.render();
+                }
+
+                // Buildings
+                if (Object.hasOwn(this.cityDatas.buildings, item.id)) {
+                    delete this.cityDatas.buildings[item.id];
+                    await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
+                    this.render();
+                }
+            })
+        );
+    }
+
     static #getHiddenTabs() {
         const TABS = ["stats", "finances", "armies", "peoples", "buildings", "chests"];
         return TABS.filter(id => !game.settings.get(MODULE_ID, `tab.${id}.visible`));
@@ -151,6 +267,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
 
     _configureRenderOptions(options) {
         super._configureRenderOptions(options);
+        logger.debug("Cities App | configureRenderOptions", options)
 
         // Masquer les parts désactivées (sauf header, tabs, footer)
         const PROTECTED = ["header", "tabs", "footer"];
@@ -562,7 +679,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
     }
 
     // --------------------------------------------------------------------
-    // OBJECTS
+    // OBJECTS / TREASURY
     // -------------------------------------------------------------------- 
     /**
    * Show object details
@@ -573,6 +690,10 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         logger.debug("Cities App | showDetails", event, target)
         if (!target.dataset.uuid) return
         const obj = await fromUuid(target.dataset.uuid);
+        if (!obj) {
+            ui.notifications.warn(game.i18n.localize("CM.app.city.messages.warn.object.notfound"));
+            return
+        }
         obj?.sheet?.render(true)
     }
 
@@ -597,6 +718,35 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
             this.render();
         }
+    }
+
+    /**
+     * Add new treasury
+     * @param {PointerEvent} event  click event
+     * @param {HTMLElement} target  click target
+     */
+    static async #addNewTreasury(event, target) {
+        if (!this.isEditable) return
+
+        logger.debug("Cities App | addNewTreasury", event, target)
+
+        // Call Item dialog creation
+        const item = await Item.implementation.createDialog();
+        if (item) {
+            logger.debug("Cities App | addNewTreasury - created", item);
+        }
+        // Add treasure to current city chests
+        this.cityDatas.chests[item.id] = {
+            id: item.id,
+            uuid: item.uuid,
+            name: item.name,
+            img: item.img,
+            nbr: 1,
+            price: 0
+        };
+        await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
+        this.render();
+
     }
 
     /**
@@ -641,6 +791,34 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
             this.render();
         }
+    }
+
+    /**
+     * Add new people
+     * @param {PointerEvent} event  click event
+     * @param {HTMLElement} target  click target
+     */
+    static async #addNewPeople(event, target) {
+        if (!this.isEditable) return
+
+        logger.debug("Cities App | addNewPeople", event, target)
+
+        const actor = await Actor.implementation.createDialog();
+        if (actor) {
+            console.log("Cities App | addNewPeople - created", actor);
+        }
+
+        // Add people to current city
+        this.cityDatas.population.peoples[actor.id] = {
+            id: actor.id,
+            uuid: actor.uuid,
+            name: actor.name,
+            img: actor.img,
+            role: "CM.app.city.tab.peoples.new.role.default"
+        };
+
+        await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
+        this.render();
     }
 
     /**
@@ -836,7 +1014,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             uuid: actor.uuid,
             name: actor.name,
             img: actor.img,
-            role: "people"
+            role: "CM.app.city.tab.peoples.new.role.default"
         };
 
         await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
@@ -897,33 +1075,6 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
     */
     _onRender(context, options) {
         super._onRender(context, options);
-
-        this.#hooks.push(
-            Hooks.on("updateActor", (actor, changes, options, userId) => {
-                logger.debug("Hook update actor", actor)
-                if (Object.hasOwn(this.cityDatas.armies.units, actor.id)) {
-                    logger.debug("Update army unit", actor)
-                    this.cityDatas.armies.units[actor.id] = new ArmyUnitDto(actor.id, actor.uuid, actor.name, actor.img, "soldier", 1, 0).toObject();
-                    CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
-                    this.render();
-                };
-
-                // TODO peoples
-            })
-        );
-
-        this.#hooks.push(
-            Hooks.on("deleteActor", (actor) => {
-                if (Object.hasOwn(this.cityDatas.armies.units, actor.id)) {
-                    delete this.cityDatas.armies.units[actor.id]
-                    CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
-                    this.render();
-                }
-
-                // TODO peoples
-            })
-        );
-
         this.#dragDrop.forEach((d) => d.bind(this.element));
     }
 
@@ -1100,7 +1251,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             let valA = a[field] ?? "";
             let valB = b[field] ?? "";
 
-            // Cas objet imbriqué avec propriété label (ex: type = { key, label })
+            // Object with sub label property (ex: type = { key, label })
             if (typeof valA === "object" && valA !== null) valA = valA.label ?? "";
             if (typeof valB === "object" && valB !== null) valB = valB.label ?? "";
 
@@ -1117,13 +1268,6 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             stat.value = Number(stat.base) + Number(stat.bonus) - Number(stat.malus);
             stat.malusDisplay = stat.malus === 0 ? 0 : -Math.abs(stat.malus);
         }
-    }
-
-    _configureRenderOptions(options) {
-        super._configureRenderOptions(options);
-        logger.debug("Cities App | configureRenderOptions", options)
-
-        this.renderControls()
     }
 
     renderControls() {

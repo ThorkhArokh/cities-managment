@@ -3,7 +3,7 @@
         "citySizes.app.title": "Définir les tailles pour une ville",
         "citySizes.app.label.placeholder": "Entrer un label...",
         "citySizes.app.sort.tooltip": "Glisser / déplacer pour ordonner",
-        "citySizes.app.delete.tooltip" : "<b>Attention</b> : Supprimer cette taille affectera toutes les villes associées",
+        "citySizes.app.delete.tooltip": "<b>Attention</b> : Supprimer cette taille affectera toutes les villes associées",
         "citySizes.app.new.size.default.label": "Nouvelle taille",
         "citySizes.app.button.add": "Ajouter",
         "citySizes.button.edit": "Modifier",
@@ -58,7 +58,8 @@
         "open": "Ouvrir",
         "edit": "Modifier",
         "delete": "Supprimer",
-        "ownership": "Configurer droits"
+        "ownership": "Configurer droits",
+        "duplicate": "Dupliquer"
     },
     "CM.tab.city-managment": "Villes",
     "CM.app.city.title": "Ville",
@@ -66,12 +67,13 @@
     "CM.app.city.options.editmode.label.off": "Mode édition : OFF",
     "CM.app.city.options.goToSettings.label": "Configurations du module",
     "CM.app.city.messages": {
-        "warn.render.permission": "Vous ne pouvez pas afficher les détails de cette ville."
+        "warn.render.permission": "Vous ne pouvez pas afficher les détails de cette ville.",
+        "warn.object.notfound": "L'object ou l'acteur sélectionné n'a pas été trouvé"
     },
     "CM.app.city.tab.header.avatar.tooltip": "Changer l'image",
     "CM.app.city.tab.header.city.desc.placeholder": "Aucune description...",
     "CM.app.city.tab.header.city.map.tooltip": "Glissez une scéne ici pour la lier à la ville",
-    "CM.app.city.select.sizes.tooltip" : "Vous pouvez modifier ou ordonner les valeurs via le panneau de configuration du module",
+    "CM.app.city.select.sizes.tooltip": "Vous pouvez modifier ou ordonner les valeurs via le panneau de configuration du module",
     "CM.app.city.select.sizes.none.label": "Choisissez une taille...",
     "CM.app.city.tab.stats": {
         "empty": "Aucune caractéristique",
@@ -128,7 +130,9 @@
     "CM.app.city.tab.peoples": {
         "label": "Population",
         "empty": "Aucun habitant",
+        "new.btn": "Ajouter un nouvel acteur",
         "new.help": "Glisser un acteur ici",
+        "new.role.default": "habitant",
         "population.label": "Population",
         "population.base.label": "Actuelle",
         "population.max.label": "Max",
@@ -146,7 +150,8 @@
         "item.label": "Objet",
         "item.nbr": "Nbr",
         "item.price": "Prix",
-        "toggleHideForPlayers.infos": "Afficher/masquer l'objet pour les joueurs"
+        "toggleHideForPlayers.infos": "Afficher/masquer l'objet pour les joueurs",
+        "new.item.btn": "Ajouter un nouvel objet"
     },
     "CM.app.city.tab.armies": {
         "label": "Armées",
@@ -204,6 +209,11 @@
             "placeholder": "Entrez un nom...",
             "create": "Créer ville",
             "emptyName": "Le nom ne peut pas être vide."
+        },
+        "deleteCity": {
+            "title": "Suppression ville : {name}",
+            "content": "<p>Êtes-vous sûr de vouloir supprimer la ville <strong>{name}</strong> ? Cette action est irréversible.</p>",
+            "confirm": "Supprimer"
         },
         "newBuilding": {
             "title": "Ajouter un nouveau bâtiment",

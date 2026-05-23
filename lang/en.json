@@ -3,7 +3,7 @@
         "citySizes.app.title": "Set city sizes",
         "citySizes.app.label.placeholder": "Enter a label...",
         "citySizes.app.sort.tooltip": "Drag and drop to sort",
-        "citySizes.app.delete.tooltip" : "<b>Warning</b>: Removing this size will affect all associated cities",
+        "citySizes.app.delete.tooltip": "<b>Warning</b>: Removing this size will affect all associated cities",
         "citySizes.app.new.size.default.label": "New size",
         "citySizes.app.button.add": "Add",
         "citySizes.button.edit": "Edit",
@@ -58,7 +58,8 @@
         "open": "Open",
         "edit": "Edit",
         "delete": "Delete",
-        "ownership": "Configure ownership"
+        "ownership": "Configure ownership",
+        "duplicate": "Duplicate"
     },
     "CM.tab.city-managment": "Cities",
     "CM.app.city.title": "City",
@@ -66,7 +67,8 @@
     "CM.app.city.options.editmode.label.off": "Edit Mode : OFF",
     "CM.app.city.options.goToSettings.label": "Module's settings",
     "CM.app.city.messages": {
-        "warn.render.permission": "You cannot display the details for this city."
+        "warn.render.permission": "You cannot display the details for this city.",
+        "warn.object.notfound": "Selected item or actor not found"
     },
     "CM.app.city.tab.header.avatar.tooltip": "Change picture",
     "CM.app.city.tab.header.city.desc.placeholder": "No description...",
@@ -128,7 +130,9 @@
     "CM.app.city.tab.peoples": {
         "label": "Population",
         "empty": "No people",
+        "new.btn": "Add new actor",
         "new.help": "Drop actor here",
+        "new.role.default": "people",
         "population.label": "Population",
         "population.base.label": "Actual",
         "population.max.label": "Max",
@@ -146,7 +150,8 @@
         "item.label": "Item",
         "item.nbr": "Qty",
         "item.price": "Price",
-        "toggleHideForPlayers.infos": "Show/hide item for players"
+        "toggleHideForPlayers.infos": "Show/hide item for players",
+        "new.item.btn": "Add new item"
     },
     "CM.app.city.tab.armies": {
         "label": "Armies",
@@ -203,6 +208,11 @@
             "placeholder": "Enter city name...",
             "create": "Create city",
             "emptyName": "City's name can't be empty."
+        },
+        "deleteCity": {
+            "title": "Delete city: {name}",
+            "content": "<p>Are you sure you want to delete the city <strong>{name}</strong>? This action cannot be undone.</p>",
+            "confirm": "Delete"
         },
         "newBuilding": {
             "title": "Add new building",

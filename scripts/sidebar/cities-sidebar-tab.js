@@ -2,7 +2,7 @@ import { logger } from "../common/cm-customLog.js"
 import { MODULE_ID, FLAG_KEY_TYPE, ENTITY_TYPE_CITY } from "../common/cm-constants.js"
 import { CmCitiesJournalDataStore } from "../common/cm-cities-journal-ds.js"
 import { CmCityApp } from "../apps/cm-cities-app.js"
-import { addCityDialog, deleteFolderDialog } from "../dialogs/cm-cities-tab-dialog.js"
+import { addCityDialog, deleteFolderDialog, deleteCityDialog } from "../dialogs/cm-cities-tab-dialog.js"
 
 const { DocumentOwnershipConfig } = foundry.applications.apps;
 const { DialogV2, HandlebarsApplicationMixin } = foundry.applications.api;
@@ -157,10 +157,42 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
     this.render(true);
   }
 
+  async _onDeleteCity(cityId) {
+    const city = CmCitiesJournalDataStore.getCityById(cityId);
+    if (!city) return;
+
+    const confirmed = await deleteCityDialog.render(city);
+    if (!confirmed) return;
+
+    await CmCitiesJournalDataStore.deleteCity(cityId);
+    this.render();
+  }
+
   // --------------------------------------------------------------------
   // CONTEXT MENUS
   // -------------------------------------------------------------------- 
   _getCityContextMenuItems() {
+    const duplicateCity = async (cityId) => {
+      const city = CmCitiesJournalDataStore.getCityById(cityId);
+      if (!city) return;
+
+      const duplicate = await city.clone({
+        name: `${city.name} (copie)`,
+        folder: city.folder?.id ?? null,
+      }, { save: true });
+
+      const cityDatas = CmCitiesJournalDataStore.getCityData(duplicate);
+      cityDatas.name = duplicate.name;
+      await CmCitiesJournalDataStore.updateCity(duplicate, cityDatas);
+
+      logger.debug("Cities Sidebar | Duplicated city", duplicate);
+      this.render();
+    };
+
+    const deleteCity = async (cityId) => {
+      await this._onDeleteCity(cityId);
+    };
+
     return [
       {
         name: "CM.city.contextmenu.ownership",
@@ -172,14 +204,12 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
           logger.debug("Cities Sidebar | Callback context menu", element)
           const cityId = element.dataset.id;
           const city = CmCitiesJournalDataStore.getCityById(cityId)
-          // FIXME : Ouvre la fenêtre native de configuration des droits
           new DocumentOwnershipConfig({ document: city }).render(true);
         },
         onClick: (element) => {
           logger.debug("Cities Sidebar | onClick context menu item - owernship", element)
           const cityId = element.target.closest("[data-id]")?.dataset.id;
           const city = CmCitiesJournalDataStore.getCityById(cityId)
-          // FIXME : Ouvre la fenêtre native de configuration des droits
           new DocumentOwnershipConfig({ document: city }).render(true);
         }
       },
@@ -202,22 +232,24 @@ export class CitiesTab extends HandlebarsApplicationMixin(AbstractSidebarTab) {
         }
       },
       {
+        name: "CM.city.contextmenu.duplicate",
+        label: "CM.city.contextmenu.duplicate",
+        icon: "<i class='fas fa-copy'></i>",
+        visible: (element) => game.user.isGM,
+        condition: (element) => game.user.isGM,
+        callback: (element) => duplicateCity(element.dataset.id),
+        onClick: (element) => duplicateCity(element.target.closest("[data-id]")?.dataset.id),
+      },
+      {
         name: "CM.city.contextmenu.delete",
         label: "CM.city.contextmenu.delete",
         icon: "<i class='fas fa-trash'></i>",
         visible: (element) => game.user.isGM,
         condition: (element) => game.user.isGM,
-        callback: async (element) => {
-          const cityId = element.dataset.id;
-          await CmCitiesJournalDataStore.deleteCity(cityId);
-          this.render();
-        },
-        onClick: async (element) => {
-          logger.debug("Cities Sidebar | onClick context menu item - delete", element)
-          const cityId = element.target.closest("[data-id]")?.dataset.id;
-          await CmCitiesJournalDataStore.deleteCity(cityId);
-          this.render();
-        }
+        callback: (element) => deleteCity(element.dataset.id),
+        onClick: (element) => deleteCity(
+          element.target.closest("[data-id]")?.dataset.id
+        ),
       }
     ];
   }

@@ -16,7 +16,7 @@ export const addCityDialog = {
                     </div>
                 `,
             ok: {
-                label: game.i18n.localize("CM.dialog.newCity.create"),
+                label: "CM.dialog.newCity.create",
                 callback: (event, button, dialog) => {
                     return button.form.elements.cityName.value;
                 }
@@ -24,6 +24,18 @@ export const addCityDialog = {
         });
     }
 }
+
+export const deleteCityDialog = {
+    async render(city) {
+        return await DialogV2.confirm({
+            window: { title: game.i18n.format("CM.dialog.deleteCity.title", { name: city.name }) },
+            content: game.i18n.format("CM.dialog.deleteCity.content", { name: city.name }),
+            yes: { label: "CM.dialog.deleteCity.confirm", icon: "fas fa-trash" },
+            no: { label: "CM.dialog.cancel.btn", icon: "fas fa-times" },
+            defaultYes: false,
+        });
+    }
+};
 
 export const deleteFolderDialog = {
     async render(dialogForm) {
