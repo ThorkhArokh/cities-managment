@@ -58,7 +58,8 @@
         "open": "Open",
         "edit": "Edit",
         "delete": "Delete",
-        "ownership": "Configure ownership"
+        "ownership": "Configure ownership",
+        "duplicate": "Duplicate"
     },
     "CM.tab.city-managment": "Cities",
     "CM.app.city.title": "City",
@@ -207,6 +208,11 @@
             "placeholder": "Enter city name...",
             "create": "Create city",
             "emptyName": "City's name can't be empty."
+        },
+        "deleteCity": {
+            "title": "Delete city: {name}",
+            "content": "<p>Are you sure you want to delete the city <strong>{name}</strong>? This action cannot be undone.</p>",
+            "confirm": "Delete"
         },
         "newBuilding": {
             "title": "Add new building",

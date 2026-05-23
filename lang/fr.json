@@ -3,7 +3,7 @@
         "citySizes.app.title": "Définir les tailles pour une ville",
         "citySizes.app.label.placeholder": "Entrer un label...",
         "citySizes.app.sort.tooltip": "Glisser / déplacer pour ordonner",
-        "citySizes.app.delete.tooltip" : "<b>Attention</b> : Supprimer cette taille affectera toutes les villes associées",
+        "citySizes.app.delete.tooltip": "<b>Attention</b> : Supprimer cette taille affectera toutes les villes associées",
         "citySizes.app.new.size.default.label": "Nouvelle taille",
         "citySizes.app.button.add": "Ajouter",
         "citySizes.button.edit": "Modifier",
@@ -58,7 +58,8 @@
         "open": "Ouvrir",
         "edit": "Modifier",
         "delete": "Supprimer",
-        "ownership": "Configurer droits"
+        "ownership": "Configurer droits",
+        "duplicate": "Dupliquer"
     },
     "CM.tab.city-managment": "Villes",
     "CM.app.city.title": "Ville",
@@ -72,7 +73,7 @@
     "CM.app.city.tab.header.avatar.tooltip": "Changer l'image",
     "CM.app.city.tab.header.city.desc.placeholder": "Aucune description...",
     "CM.app.city.tab.header.city.map.tooltip": "Glissez une scéne ici pour la lier à la ville",
-    "CM.app.city.select.sizes.tooltip" : "Vous pouvez modifier ou ordonner les valeurs via le panneau de configuration du module",
+    "CM.app.city.select.sizes.tooltip": "Vous pouvez modifier ou ordonner les valeurs via le panneau de configuration du module",
     "CM.app.city.select.sizes.none.label": "Choisissez une taille...",
     "CM.app.city.tab.stats": {
         "empty": "Aucune caractéristique",
@@ -208,6 +209,11 @@
             "placeholder": "Entrez un nom...",
             "create": "Créer ville",
             "emptyName": "Le nom ne peut pas être vide."
+        },
+        "deleteCity": {
+            "title": "Suppression ville : {name}",
+            "content": "<p>Êtes-vous sûr de vouloir supprimer la ville <strong>{name}</strong> ? Cette action est irréversible.</p>",
+            "confirm": "Supprimer"
         },
         "newBuilding": {
             "title": "Ajouter un nouveau bâtiment",
