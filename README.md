@@ -190,6 +190,7 @@ Manage project : https://github.com/users/ThorkhArokh/projects/1
 ### [v1.0.15](https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.0.14)
  - :sparkles: Add new item and people buttons (#52)
  - :sparkles: Duplicate city (#8)
+ - :sparkles: Add verification when deleting a city (#53)
 
 ### [v1.0.14](https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.0.14)
  - :bug: Fix launch bug
