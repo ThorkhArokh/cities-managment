@@ -193,37 +193,37 @@ Allow to edit with custom values and/or sort cities sizes.
 Manage project : https://github.com/users/ThorkhArokh/projects/1
 
 ### [v1.0.15](https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.0.14)
- - :sparkles: Add new item and people buttons (#52)
- - :sparkles: Duplicate city (#8)
- - :sparkles: Add verification when deleting a city (#53)
- - :book: update doc
+ - :sparkles: [Add new item and people buttons](#52)
+ - :sparkles: [Duplicate city](#8)
+ - :sparkles: [Add verification when deleting a city](#53)
+ - :book: Update doc
 
 ### [v1.0.14](https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.0.14)
  - :bug: Fix launch bug
 
 ### [v1.0.13](https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.0.13)
- - :sparkles: add cities sizes settings (#15)
- - :book: update doc
+ - :sparkles: [Add cities sizes settings](#15)
+ - :book: Update doc
 
 ### [v1.0.12](https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.0.12)
- - :sparkles: FoundryVTT v14 compatibility (#33)
- - :book: update doc
- - :gear: update github actions
+ - :sparkles: [FoundryVTT v14 compatibility](#33)
+ - :book: Update doc
+ - :gear: Update github actions
 
 ### [v1.0.11](https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.0.11)
- - :sparkles: show/hide city's tabs (#34)
- - :sparkles: show/hide actors, buildings in tabs for players (#35)
- - :sparkles: add owner for buildinds (#32)
+ - :sparkles: [Show/hide city's tabs](#34)
+ - :sparkles: [Show/hide actors, buildings in tabs for players](#35)
+ - :sparkles: [Add owner for buildinds](#32)
 
 ### [v1.0.10](https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.0.10)
- - :gear: add github actions
- - :gear: deploy on FoundryVTT (#14)
- - :book: update doc
+ - :gear: Add github actions
+ - :gear: [Deploy on FoundryVTT](#14)
+ - :book: Update doc
 
 ### [v1.0.0](https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.0.0)
- - :book: update doc
- - :sparkles: update armies unit
- - :sparkles: update buildings
+ - :book: Update doc
+ - :sparkles: Update armies unit
+ - :sparkles: Update buildings
  - :sparkles: Add sort on tables columns headers
  - :sparkles: Add journal sheet rendering
  - :sparkles: Drop city on scenes (journal mode)
