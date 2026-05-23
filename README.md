@@ -1,6 +1,7 @@
 <h1 style="text-align: center;">Cities Managment</h1>
 <p style="text-align: center;">
-<img src="https://img.shields.io/github/v/release/ThorkhArokh/cities-managment?style=for-the-badge" alt="GitHub release" /> 
+<img src="https://img.shields.io/github/v/release/ThorkhArokh/cities-managment?style=for-the-badge" alt="GitHub release" />
+<img src="https://img.shields.io/github/downloads/ThorkhArokh/cities-managment/latest/total?style=for-the-badge" alt="GitHub latest release" />  
 <img src="https://img.shields.io/github/downloads/ThorkhArokh/cities-managment/total?style=for-the-badge" alt="GitHub all releases" />
 <img src="https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Fcities-managment&colorB=4aa94a&style=for-the-badge" alt="Forge Installs" />
 <img src="https://img.shields.io/badge/dynamic/json.svg?url=https%3A%2F%2Fraw.githubusercontent.com%2FThorkhArokh%2Fcities-managment%2Fmain%2Fmodule.json&label=Foundry%20Version&query=$.compatibility.verified&colorB=orange&style=for-the-badge" alt="Foundry Verified Compatible Version"/>
