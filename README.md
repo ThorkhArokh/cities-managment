@@ -193,31 +193,31 @@ Allow to edit with custom values and/or sort cities sizes.
 Manage project : https://github.com/users/ThorkhArokh/projects/1
 
 ### [v1.0.15](https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.0.14)
- - :sparkles: [Add new item and people buttons](#52)
- - :sparkles: [Duplicate city](#8)
- - :sparkles: [Add verification when deleting a city](#53)
+ - :sparkles: [Add new item and people buttons](https://github.com/ThorkhArokh/cities-managment/issues/52)
+ - :sparkles: [Duplicate city](https://github.com/ThorkhArokh/cities-managment/issues/8)
+ - :sparkles: [Add verification when deleting a city](https://github.com/ThorkhArokh/cities-managment/issues/53)
  - :book: Update doc
 
 ### [v1.0.14](https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.0.14)
  - :bug: Fix launch bug
 
 ### [v1.0.13](https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.0.13)
- - :sparkles: [Add cities sizes settings](#15)
+ - :sparkles: [Add cities sizes settings](https://github.com/ThorkhArokh/cities-managment/issues/15)
  - :book: Update doc
 
 ### [v1.0.12](https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.0.12)
- - :sparkles: [FoundryVTT v14 compatibility](#33)
+ - :sparkles: [FoundryVTT v14 compatibility](https://github.com/ThorkhArokh/cities-managment/issues/33)
  - :book: Update doc
  - :gear: Update github actions
 
 ### [v1.0.11](https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.0.11)
- - :sparkles: [Show/hide city's tabs](#34)
- - :sparkles: [Show/hide actors, buildings in tabs for players](#35)
- - :sparkles: [Add owner for buildinds](#32)
+ - :sparkles: [Show/hide city's tabs](https://github.com/ThorkhArokh/cities-managment/issues/34)
+ - :sparkles: [Show/hide actors, buildings in tabs for players](https://github.com/ThorkhArokh/cities-managment/issues/35)
+ - :sparkles: [Add owner for buildinds](https://github.com/ThorkhArokh/cities-managment/issues/32)
 
 ### [v1.0.10](https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.0.10)
  - :gear: Add github actions
- - :gear: [Deploy on FoundryVTT](#14)
+ - :gear: [Deploy on FoundryVTT](https://github.com/ThorkhArokh/cities-managment/issues/14)
  - :book: Update doc
 
 ### [v1.0.0](https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.0.0)
