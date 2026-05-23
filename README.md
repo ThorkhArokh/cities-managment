@@ -192,7 +192,7 @@ Allow to edit with custom values and/or sort cities sizes.
 ## :clipboard: Change log
 Manage project : https://github.com/users/ThorkhArokh/projects/1
 
-### [v1.0.15](https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.0.14)
+### [v1.0.15](https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.0.15)
  - :sparkles: [Add new item and people buttons](https://github.com/ThorkhArokh/cities-managment/issues/52)
  - :sparkles: [Duplicate city](https://github.com/ThorkhArokh/cities-managment/issues/8)
  - :sparkles: [Add verification when deleting a city](https://github.com/ThorkhArokh/cities-managment/issues/53)
