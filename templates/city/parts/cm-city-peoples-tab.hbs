@@ -66,7 +66,7 @@
         </div>
         <!-- role -->
         <div class="flex1 center">
-          <input class="field-value" type="text" name="city.population.peoples.{{@key}}.role" value="{{role}}" {{#unless
+          <input class="field-value" type="text" name="city.population.peoples.{{@key}}.role" value="{{localize role}}" {{#unless
             @root.isEditable}}disabled{{/unless}} />
         </div>
         
@@ -94,6 +94,13 @@
     {{/if}}
   {{/each}}
   {{#if isEditable}}
+  <div class="drop-zone-header no-wrap  gap8 right">
+        <!-- New people button -->
+        <div>
+            <button type="button" data-action="addNewPeople"><i class='fas fa-plus'></i> {{localize
+                "CM.app.city.tab.peoples.new.btn"}}</button>
+        </div>
+  </div>
   <div class="drop-zone" data-drop-peoples="true">
     <span><i class="fas fa-user-plus"></i> {{localize "CM.app.city.tab.peoples.new.help"}}</span>
   </div>

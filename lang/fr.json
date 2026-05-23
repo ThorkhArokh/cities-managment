@@ -66,7 +66,8 @@
     "CM.app.city.options.editmode.label.off": "Mode édition : OFF",
     "CM.app.city.options.goToSettings.label": "Configurations du module",
     "CM.app.city.messages": {
-        "warn.render.permission": "Vous ne pouvez pas afficher les détails de cette ville."
+        "warn.render.permission": "Vous ne pouvez pas afficher les détails de cette ville.",
+        "warn.object.notfound": "L'object ou l'acteur sélectionné n'a pas été trouvé"
     },
     "CM.app.city.tab.header.avatar.tooltip": "Changer l'image",
     "CM.app.city.tab.header.city.desc.placeholder": "Aucune description...",
@@ -128,7 +129,9 @@
     "CM.app.city.tab.peoples": {
         "label": "Population",
         "empty": "Aucun habitant",
+        "new.btn": "Ajouter un nouvel acteur",
         "new.help": "Glisser un acteur ici",
+        "new.role.default": "habitant",
         "population.label": "Population",
         "population.base.label": "Actuelle",
         "population.max.label": "Max",
@@ -146,7 +149,8 @@
         "item.label": "Objet",
         "item.nbr": "Nbr",
         "item.price": "Prix",
-        "toggleHideForPlayers.infos": "Afficher/masquer l'objet pour les joueurs"
+        "toggleHideForPlayers.infos": "Afficher/masquer l'objet pour les joueurs",
+        "new.item.btn": "Ajouter un nouvel objet"
     },
     "CM.app.city.tab.armies": {
         "label": "Armées",

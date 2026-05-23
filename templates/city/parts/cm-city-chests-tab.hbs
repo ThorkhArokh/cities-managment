@@ -84,6 +84,13 @@
     {{/if}}
   {{/each}}
   {{#if isEditable}}
+  <div class="drop-zone-header no-wrap  gap8 right">
+        <!-- New entry button -->
+        <div>
+            <button type="button" data-action="addNewTreasury"><i class='fas fa-plus'></i> {{localize
+                "CM.app.city.tab.chests.new.item.btn"}}</button>
+        </div>
+  </div>
   <div class="drop-zone" data-drop-chests="true">
     <span><i class="fa-solid fa-file-circle-plus"></i> {{localize "CM.app.city.tab.chests.new.help"}}</span>
   </div>
