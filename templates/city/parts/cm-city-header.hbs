@@ -1,19 +1,30 @@
 <section>
     <header class="cm-cities-app-header flexrow no-wrap">
-        <img class="flex0 cm-cities-app-header-avatar" src="{{city.img}}" data-action="editImage" data-field="img"
-            data-edit="city.img" data-tooltip="CM.app.city.tab.header.avatar.tooltip" data-tooltip-direction="UP"/>
+        <div class="flex0 city-avatar">
+            <img class="cm-cities-app-header-avatar" src="{{city.img}}" data-action="editImage" data-field="img" data-edit="city.img" data-tooltip="CM.app.city.tab.header.avatar.tooltip" data-tooltip-direction="UP"/>
+            <span class="update-city-avatar">
+                <i class="fas fa-edit"></i>
+            </span>
+        </div>
         <div>
             <h1 class="cm-cities-app-header-title flexrow gap4">
                 <input type="text" name="city.name" value="{{city.name}}" style="flex:11" {{#unless isEditable}}disabled{{/unless}} />
-                <a {{#if city.map.id}}data-action="showMap" data-uuid="{{city.map.id}}"{{/if}} class="map-img drop-zone {{#unless city.map.img}}drag-over{{/unless}}" data-drop-map="true" style="background-image: url('{{city.map.img}}')"
-                {{#unless city.map.img}}data-tooltip="CM.app.city.tab.header.city.map.tooltip"{{/unless}}></a>
+                {{#if city.map.id}}
+                    <a data-action="showMap" data-uuid="{{city.map.id}}" class="map-img drop-zone {{#unless city.map.img}}drag-over{{/unless}}" data-drop-map="true" style="background-image: url('{{city.map.img}}')">
+                        <span data-action="deleteMap" class="delete-city-map" data-tooltip="CM.app.city.tab.header.map.delete.tooltip" data-tooltip-direction="UP">
+                            <i class="fas fa-times-circle"></i>
+                        </span>
+                    </a>
+                {{else}}
+                    <div style="background-image: url('icons/svg/blind.svg'); opacity:0.6" class="map-img drop-zone drag-over" data-drop-map="true" data-tooltip="CM.app.city.tab.header.map.tooltip" data-tooltip-direction="UP" ></div>
+                {{/if}}
             </h1>
             <div class="flexrow no-wrap gap4">
-                <button class="flex0" type="button" data-action="showJournal"><i class="fas fa-book-open"></i></button>
-                <input class="flex2" type="text" name="city.description" value="{{city.description}}" placeholder="{{localize "CM.app.city.tab.header.city.desc.placeholder"}}"
+                <button class="flex0" type="button" data-action="showJournal" data-tooltip="CM.app.city.tab.header.journal.tooltip" ><i class="fas fa-book-open"></i></button>
+                <input class="flex2" type="text" name="city.description" value="{{city.description}}" placeholder="{{localize "CM.app.city.tab.header.desc.placeholder"}}"
                 {{#unless isEditable}}disabled{{/unless}} />
                 {{#if isEditable}}
-                <select name="city.size" {{#unless isEditable}}disabled{{/unless}} data-tooltip="CM.app.city.select.sizes.tooltip" data-tooltip-direction="UP">
+                <select name="city.size" {{#unless isEditable}}disabled{{/unless}} data-tooltip="CM.app.city.tab.header.select.sizes.tooltip" data-tooltip-direction="UP">
                     {{selectOptions citySizeChoices selected=city.size localize=true}}
                 </select>
                 {{else}}

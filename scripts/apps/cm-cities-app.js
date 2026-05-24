@@ -92,6 +92,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
             removeStat: CmCityApp.#removeStat,
             rollStats: CmCityApp.#rollStats,
             showMap: CmCityApp.#showMap,
+            deleteMap: CmCityApp.#deleteMap,
             sortObjects: CmCityApp.#sortObjects
         }
     };
@@ -330,6 +331,18 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         if (!scene) return;
 
         await scene.view();
+    }
+
+    /**
+     * Remove city map
+     * @param {PointerEvent} event click event
+     * @param {HTMLElement} target click target
+     */
+    static async #deleteMap(event, target) {
+        logger.debug("Cities App | deleteMap", event, target)
+        this.cityDatas.map = {}
+        await CmCitiesJournalDataStore.updateCity(this.city, this.cityDatas);
+        this.render();
     }
 
     // --------------------------------------------------------------------
@@ -1181,7 +1194,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         context.hasNoUnits = Object.keys(sourceCity.armies.units ?? {}).length < 1;
 
         context.citySizeChoices = foundry.utils.deepClone(CONFIG.CM.city.sizes);
-        context.citySizeChoices["0"] = game.i18n.localize("Choose size...");
+        context.citySizeChoices["0"] = game.i18n.localize("CM.app.city.select.sizes.none.label");
         if (Object.hasOwn(CONFIG.CM.city.sizes, context.city.size)) {
             context.selectedCitySizeLabel = CONFIG.CM.city.sizes[context.city.size];
         } else {

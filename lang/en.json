@@ -70,10 +70,14 @@
         "warn.render.permission": "You cannot display the details for this city.",
         "warn.object.notfound": "Selected item or actor not found"
     },
-    "CM.app.city.tab.header.avatar.tooltip": "Change picture",
-    "CM.app.city.tab.header.city.desc.placeholder": "No description...",
-    "CM.app.city.tab.header.city.map.tooltip": "Drop a scene here to link it to the city",
-    "CM.app.city.select.sizes.tooltip": "You can modify or order the values ​​via the module's configuration panel",
+    "CM.app.city.tab.header": {
+        "journal.tooltip": "Show journal",
+        "avatar.tooltip": "Change picture",
+        "desc.placeholder": "No description...",
+        "map.tooltip": "Drop a scene here to link it to the city",
+        "map.delete.tooltip": "Remove scene",
+        "select.sizes.tooltip": "You can modify or order the values ​​via the module's configuration panel"
+    },
     "CM.app.city.select.sizes.none.label": "Choose size...",
     "CM.app.city.tab.stats": {
         "empty": "No stat",

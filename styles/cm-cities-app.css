@@ -151,3 +151,28 @@ hr {
 .directory-item.document[draggable="true"]:active {
     cursor: grabbing;
 }
+
+.delete-city-map {
+    position: absolute;
+    top: 22px;
+    right: 18px;
+    font-size: 15px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.map-img:hover .delete-city-map {
+    opacity: 0.8;
+}
+
+.city-avatar .update-city-avatar {
+    position: absolute;
+    top: 22px;
+    font-size: 15px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.city-avatar:hover .update-city-avatar {
+    opacity: 0.8;
+}
