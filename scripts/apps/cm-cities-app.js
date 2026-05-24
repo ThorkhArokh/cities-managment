@@ -848,14 +848,8 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         logger.debug("IMG field", field)
         const current = foundry.utils.getProperty(this.cityDatas, field)
 
-        /*const isForgeVTT = (typeof ForgeVTT !== "undefined" && ForgeVTT.usingTheForge);
-        const source = isForgeVTT ? "forgevtt" : "public";*/
-
-        //logger.debug("Cities App | onEditImage - isForgeVTT / source / SOURCES", isForgeVTT, source, FilePicker.SOURCES);
-
-        const fp = new FilePicker({
+        new FilePicker({
             type: "image",
-            //activeSource: source,
             current: current,
             callback: (path) => {
                 // Mettre à jour l'aperçu immédiatement
@@ -864,9 +858,7 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
                 // Déclencher un submit si submitOnChange est actif
                 event.target.dispatchEvent(new Event("change", { bubbles: true }));
             }
-        })
-
-        fp.render(true)
+        }).browse(current);
     }
 
     // --------------------------------------------------------------------
