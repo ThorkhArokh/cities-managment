@@ -1,9 +1,6 @@
 name: Auto Tag & Release on Main
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 permissions:
