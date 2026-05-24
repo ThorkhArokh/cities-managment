@@ -18,7 +18,8 @@
   "version": "1.0.16",
   "compatibility": {
     "minimum": "13",
-    "verified": "14"
+    "verified": "14",
+    "maximum": "14"
   },
   "flags": {
     "canUpload": true
