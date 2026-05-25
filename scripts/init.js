@@ -5,6 +5,7 @@ import { registerSystemSettings } from "./common/cm-settings.js"
 import { preloadHandlebarsTemplates } from "./common/cm-templates.js"
 import { registerHandlebarsHelpers } from "./common/cm-helpers.js"
 import { CM_CONFIG } from "./common/cm-config.js";
+import { writeChangeLog } from "./common/cm-changelog.js"
 
 logger.info(`Module ${MODULE_ID} loaded`);
 
@@ -83,7 +84,7 @@ Hooks.on("setup", () => {
   logger.info(`Module ${MODULE_ID} ...Setup done`);
 });
 
-Hooks.on("ready", function () {
+Hooks.on("ready", async function () {
   const mod = game.modules.get(MODULE_ID);
   if (!mod) return;
   logger.info(`Module ${MODULE_ID} Ready...`);
@@ -99,5 +100,10 @@ Hooks.on("ready", function () {
 
   // Render once so the tab initializes (required for this Foundry build)
   ui.citiesmanagment.render(true);
+
+  // Post change log message for GM
+  await writeChangeLog()
+
   logger.info(`Module ${MODULE_ID} ...Ready done`);
 });
+

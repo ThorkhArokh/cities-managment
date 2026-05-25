@@ -69,4 +69,12 @@ export const registerSystemSettings = function () {
         default: false,
         type: Boolean,
     })
+
+    game.settings.register(MODULE_ID, "lastSeenVersion", {
+        name: "Last seen version",
+        scope: "world",      
+        config: false,       
+        type: String,
+        default: "",
+    });
 }

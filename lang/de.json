@@ -1,0 +1,266 @@
+{
+    "CM.settings": {
+        "citySizes.app.title": "Stadtgrößen festlegen",
+        "citySizes.app.label.placeholder": "Bezeichnung eingeben...",
+        "citySizes.app.sort.tooltip": "Zum Sortieren ziehen und ablegen",
+        "citySizes.app.delete.tooltip": "<b>Warnung</b>: Das Entfernen dieser Größe wirkt sich auf alle zugehörigen Städte aus",
+        "citySizes.app.new.size.default.label": "Neue Größe",
+        "citySizes.app.button.add": "Hinzufügen",
+        "citySizes.button.edit": "Bearbeiten",
+        "citySizes.name": "Stadtgrößen bearbeiten",
+        "citySizes.hint": "Ermöglicht die Bearbeitung mit benutzerdefinierten Werten und/oder das Sortieren von Stadtgrößen",
+        "debugMode.name": "Debug-Modus umschalten (für Entwickler)",
+        "debugMode.hint": "Debug-Modus aktivieren, Protokolle in der Browserkonsole anzeigen (F12)",
+        "toggleEdit.name": "Stadtbearbeitung umschalten",
+        "toggleEdit.hint": "Stadtbearbeitung für GM und Spieler mit Eigentumsrechten aktivieren",
+        "tabs": {
+            "stats": {
+                "visible": {
+                    "name": "Statistiken",
+                    "hint": "Den Tab 'Statistiken' anzeigen oder ausblenden."
+                }
+            },
+            "finances": {
+                "visible": {
+                    "name": "Finanzen",
+                    "hint": "Den Tab 'Finanzen' anzeigen oder ausblenden."
+                }
+            },
+            "armies": {
+                "visible": {
+                    "name": "Armeen",
+                    "hint": "Den Tab 'Armeen' anzeigen oder ausblenden."
+                }
+            },
+            "peoples": {
+                "visible": {
+                    "name": "Bevölkerung",
+                    "hint": "Den Tab 'Bevölkerung' anzeigen oder ausblenden."
+                }
+            },
+            "buildings": {
+                "visible": {
+                    "name": "Gebäude",
+                    "hint": "Den Tab 'Gebäude' anzeigen oder ausblenden."
+                }
+            },
+            "chests": {
+                "visible": {
+                    "name": "Schätze",
+                    "hint": "Den Tab 'Schätze' anzeigen oder ausblenden."
+                }
+            }
+        }
+    },
+    "CM.sidebar.button.createCity": "Stadt erstellen",
+    "CM.sidebar.button.createCityFolder": "Ordner erstellen",
+    "CM.city.contextmenu": {
+        "open": "Öffnen",
+        "edit": "Bearbeiten",
+        "delete": "Löschen",
+        "ownership": "Eigentumsrechte konfigurieren",
+        "duplicate": "Duplizieren"
+    },
+    "CM.tab.city-managment": "Städte",
+    "CM.app.city.title": "Stadt",
+    "CM.app.city.options.editmode.label.on": "Bearbeitungsmodus: EIN",
+    "CM.app.city.options.editmode.label.off": "Bearbeitungsmodus: AUS",
+    "CM.app.city.options.goToSettings.label": "Moduleinstellungen",
+    "CM.app.city.messages": {
+        "warn.render.permission": "Sie können die Details dieser Stadt nicht anzeigen.",
+        "warn.object.notfound": "Ausgewähltes Objekt oder Akteur nicht gefunden"
+    },
+    "CM.app.city.tab.header": {
+        "journal.tooltip": "Tagebuch anzeigen",
+        "avatar.tooltip": "Bild ändern",
+        "desc.placeholder": "Keine Beschreibung...",
+        "map.tooltip": "Eine Szene hier ablegen, um sie mit der Stadt zu verknüpfen",
+        "map.delete.tooltip": "Szene entfernen",
+        "select.sizes.tooltip": "Sie können die Werte über das Konfigurationspanel des Moduls ändern oder sortieren"
+    },
+    "CM.app.city.select.sizes.none.label": "Größe auswählen...",
+    "CM.app.city.tab.stats": {
+        "empty": "Keine Statistik",
+        "btn.new.label": "Neue Statistik hinzufügen",
+        "btn.edit.infos": "Statistik bearbeiten",
+        "btn.delete.infos": "Statistik löschen",
+        "label": "Statistiken",
+        "population.label": "Bevölkerung",
+        "diplomacy.label": "Diplomatie",
+        "managment.label": "Verwaltung",
+        "power.label": "Macht",
+        "reputation.label": "Ruf",
+        "production.label": "Produktion",
+        "header.base.label": "Basis",
+        "header.bonus.label": "Bonus",
+        "header.malus.label": "Malus",
+        "header.total.label": "Gesamt",
+        "roll.skill.title": "Fertigkeitsprobe"
+    },
+    "CM.app.city.tab.finances.label": "Finanzen",
+    "CM.app.city.tab.finances.entries.empty": "Kein Eintrag",
+    "CM.app.city.tab.finances.entry.types.income": "Einnahmen",
+    "CM.app.city.tab.finances.entry.types.expense": "Ausgaben",
+    "CM.app.city.tab.finances.entries.new.btn": "Neuen Eintrag hinzufügen",
+    "CM.app.city.tab.finances.entries.new.dialog.title": "Neuen Finanzeintrag hinzufügen",
+    "CM.app.city.tab.finances.entries.new.dialog.add.btn": "Hinzufügen",
+    "CM.app.city.tab.finances.entries.new.dialog.checks.label": "Bezeichnung kann leer sein",
+    "CM.app.city.tab.finances.entries.header.label": "Bezeichnung",
+    "CM.app.city.tab.finances.entries.header.type": "Typ",
+    "CM.app.city.tab.finances.entries.header.value": "Wert",
+    "CM.app.city.tab.finances.total.treasury.label": "Gesamtschatzkammer",
+    "CM.app.city.tab.finances.total.incomes.label": "Gesamteinnahmen",
+    "CM.app.city.tab.finances.total.armies.label": "Gesamtarmeen",
+    "CM.app.city.tab.finances.total.expenses.label": "Gesamtausgaben",
+    "CM.app.city.tab.finances.total.vaults.label": "Gesamttresore",
+    "CM.app.city.tab.finances.total.building.label": "Gesamtgebäude",
+    "CM.app.city.tab.finances.total.label": "Gesamt",
+    "CM.app.city.tab.buildings": {
+        "btn.edit.infos": "Gebäude bearbeiten",
+        "btn.delete.infos": "Gebäude löschen",
+        "label": "Gebäude",
+        "header.name": "Gebäude",
+        "header.nbr": "Anz.",
+        "header.price.label": "Preis",
+        "header.price.infos": "Kaufpreis des Gebäudes",
+        "header.cost.label": "Kosten",
+        "header.cost.infos": "Unterhaltskosten des Gebäudes",
+        "header.owner.label": "Eigentümer",
+        "empty": "Kein Gebäude",
+        "new.help": "Objekt hier ablegen oder neues Gebäude erstellen",
+        "new.btn": "Neues Gebäude hinzufügen",
+        "toggleHideForPlayers.infos": "Gebäude für Spieler anzeigen/ausblenden"
+    },
+    "CM.app.city.tab.peoples": {
+        "label": "Bevölkerung",
+        "empty": "Keine Personen",
+        "new.btn": "Neuen Akteur hinzufügen",
+        "new.help": "Akteur hier ablegen",
+        "new.role.default": "Bürger",
+        "population.label": "Bevölkerung",
+        "population.base.label": "Aktuell",
+        "population.max.label": "Maximum",
+        "header.significant.label": "Bedeutende Personen",
+        "header.role.label": "Rolle",
+        "toggleHideForPlayers.help": "Personen für Spieler anzeigen/ausblenden",
+        "delete.infos": "Person löschen"
+    },
+    "CM.app.city.tab.treasury.label": "Schatzkammer",
+    "CM.app.city.tab.treasury.currencies": "Währungen",
+    "CM.app.city.tab.chests": {
+        "label": "Truhen",
+        "empty": "Nichts in den Truhen",
+        "new.help": "Objekt hier ablegen",
+        "item.label": "Gegenstand",
+        "item.nbr": "Menge",
+        "item.price": "Preis",
+        "toggleHideForPlayers.infos": "Gegenstand für Spieler anzeigen/ausblenden",
+        "new.item.btn": "Neuen Gegenstand hinzufügen"
+    },
+    "CM.app.city.tab.armies": {
+        "label": "Armeen",
+        "units.new.btn": "Neue Einheit hinzufügen",
+        "unites.new.help": "Akteur hier ablegen oder neue Einheit erstellen",
+        "units.empty": "Keine Einheit",
+        "units.btn.edit.infos": "Einheit bearbeiten",
+        "units.btn.delete.infos": "Einheit löschen",
+        "header.unit.name": "Einheit",
+        "header.unit.role": "Typ",
+        "header.unit.nbr": "Anz.",
+        "header.unit.cost": "Kosten"
+    },
+    "CM.app.city.messages.errors": {
+        "render.nopermission": "Sie können die Details dieser Stadt nicht anzeigen."
+    },
+    "CM.dialog": {
+        "field.mandatory": "Pflichtfeld",
+        "save.btn": "Speichern",
+        "cancel.btn": "Abbrechen",
+        "reset.btn": "Zurücksetzen",
+        "newStat": {
+            "title": "Neue Statistik hinzufügen",
+            "emptyLabel": "Die Bezeichnung der Statistik kann leer sein.",
+            "stats.legend": "Statistiken",
+            "name.label": "Bezeichnung",
+            "stats.base.label": "Basis",
+            "stats.bonus.label": "Bonus",
+            "stats.malus.label": "Malus",
+            "name.placeholder": "Neue Bezeichnung...",
+            "roll.formula.label": "Würfelformel",
+            "roll.formula.placeholder": "z.B.: 1d6+1",
+            "roll.formula.tooltip.description": "<i>Optional</i> - Ermöglicht das Hinzufügen eines Wurfs zur Eigenschaft mit einer benutzerdefinierten Formel (Beispiel: '1d6+1')"
+        },
+        "editStat": {
+            "title": "Eigenschaft bearbeiten"
+        },
+        "newUnit": {
+            "title": "Neue Armeeeinheit hinzufügen",
+            "emptyName": "Der Name der Einheit kann leer sein.",
+            "name.label": "Name",
+            "name.default.value": "Neue Einheit",
+            "name.placeholder": "Einheitenname eingeben...",
+            "details.legend": "Details",
+            "role.label": "Typ",
+            "role.default.value": "Soldat",
+            "role.placeholder": "Rolle eingeben...",
+            "nbr.label": "Anzahl",
+            "cost.label": "Einheitenkosten"
+        },
+        "newCity": {
+            "title": "Neue Stadt hinzufügen",
+            "label": "Name",
+            "placeholder": "Stadtname eingeben...",
+            "create": "Stadt erstellen",
+            "emptyName": "Der Stadtname darf nicht leer sein."
+        },
+        "deleteCity": {
+            "title": "Stadt löschen: {name}",
+            "content": "<p>Sind Sie sicher, dass Sie die Stadt <strong>{name}</strong> löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.</p>",
+            "confirm": "Löschen"
+        },
+        "newBuilding": {
+            "title": "Neues Gebäude hinzufügen",
+            "name.label": "Name",
+            "name.placeholder": "Gebäudename eingeben...",
+            "name.default.value": "Neues Gebäude",
+            "details.legend": "Details",
+            "nbr.label": "Anzahl",
+            "price.label": "Kaufpreis",
+            "cost.label": "Unterhaltskosten",
+            "emptyName": "Der Gebäudename darf nicht leer sein.",
+            "owner.legend": "Eigentümer",
+            "owner.placeholder": "Akteur hier ablegen",
+            "owner.invalidDrop": "Ungültige Ablagedaten",
+            "owner.mustBeActor": "Muss ein gültiger Akteur sein"
+        },
+        "editBuilding": {
+            "title": "Gebäude bearbeiten"
+        },
+        "deleteFolder": {
+            "title": "Ordner löschen: ",
+            "content": "<p>Was soll mit dem Inhalt dieses Ordners geschehen?</p>",
+            "btn.deleteAll": "Alles löschen",
+            "btn.keepContent": "Inhalt behalten"
+        }
+    },
+    "CM.currency": {
+        "pp.label": "Platinmünze",
+        "pp.abbrev": "PM",
+        "gp.label": "Goldmünze",
+        "gp.abbrev": "GM",
+        "sp.label": "Silbermünze",
+        "sp.abbrev": "SM",
+        "cp.label": "Kupfermünze",
+        "cp.abbrev": "KM"
+    },
+    "CM.city.size": {
+        "hamlet": "Weiler",
+        "village": "Dorf",
+        "town": "Kleinstadt",
+        "city": "Stadt",
+        "largeCity": "Großstadt",
+        "capital": "Hauptstadt",
+        "metropolis": "Metropole",
+        "megalopolis": "Megalopolis"
+    }
+}
