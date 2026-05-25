@@ -1,11 +1,14 @@
 ## :clipboard: Change log
 Manage project : https://github.com/users/ThorkhArokh/projects/1
 
-### [v1.0.16](https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.0.16)
+### [v1.0.17](https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.0.17)
  - :globe_with_meridians: [Add spanish translation](https://github.com/ThorkhArokh/cities-managment/issues/58)
  - :globe_with_meridians: [Add deutsch translation](https://github.com/ThorkhArokh/cities-managment/issues/57)
  - :bug: Minor bugs fixes
  - :book: Update doc
+
+### [v1.0.16](https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.0.16)
+ - :bug: GitHub tag bug
 
 ### [v1.0.15](https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.0.15)
  - :sparkles: [Add new item and people buttons](https://github.com/ThorkhArokh/cities-managment/issues/52)
