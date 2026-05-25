@@ -13,7 +13,6 @@ import { addStatDialog } from "../dialogs/cm-city-add-stat-dialog.js"
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 const { DragDrop, TextEditor, FormDataExtended } = foundry.applications.ux;
-const { FilePicker } = foundry.applications.apps;
 
 export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
     #dragDrop;
@@ -861,17 +860,19 @@ export class CmCityApp extends HandlebarsApplicationMixin(ApplicationV2) {
         logger.debug("IMG field", field)
         const current = foundry.utils.getProperty(this.cityDatas, field)
 
-        new FilePicker({
+        await new foundry.applications.apps.FilePicker.implementation({
             type: "image",
             current: current,
+            displayMode: "tiles",
             callback: (path) => {
-                // Mettre à jour l'aperçu immédiatement
+                logger.debug("File picker path", path)
+                // Update thumbnail
                 event.target.src = path;
                 foundry.utils.setProperty(this.cityDatas, field, path);
-                // Déclencher un submit si submitOnChange est actif
+                // Trigger submit if submitOnChange is on
                 event.target.dispatchEvent(new Event("change", { bubbles: true }));
             }
-        }).browse(current);
+        }).render();
     }
 
     // --------------------------------------------------------------------

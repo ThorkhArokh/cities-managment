@@ -1,5 +1,8 @@
-## :clipboard: Change log
+# :clipboard: Change log
 Manage project : https://github.com/users/ThorkhArokh/projects/1
+
+### [Unreleased]
+- Nouvelle fonctionnalité à venir
 
 ### [v1.1.0](https://github.com/ThorkhArokh/cities-managment/releases/tag/v1.1.0)
  - :globe_with_meridians: [Add spanish translation](https://github.com/ThorkhArokh/cities-managment/issues/58)
