@@ -191,7 +191,7 @@
             "roll.formula.tooltip.description": "<i>Optional</i> - Allows adding a roll to the characteristic with a custom formula (example: '1d6+1')"
         },
         "editStat": {
-            "title": "Modifier caractéristique"
+            "title": "Edit stat"
         },
         "newUnit": {
             "title": "Add new armies unit",
@@ -247,11 +247,11 @@
         "pp.label": "Platinium pieces",
         "pp.abbrev": "PP",
         "gp.label": "Gold pieces",
-        "gp.abbrev": "PO",
+        "gp.abbrev": "GP",
         "sp.label": "Silver pieces",
-        "sp.abbrev": "PA",
+        "sp.abbrev": "SP",
         "cp.label": "Copper pieces",
-        "cp.abbrev": "PC"
+        "cp.abbrev": "CP"
     },
     "CM.city.size": {
         "hamlet": "Hamlet",

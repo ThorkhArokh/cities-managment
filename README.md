@@ -26,6 +26,7 @@ https://github.com/ThorkhArokh/cities-managment/releases/latest/download/module.
 ## :globe_with_meridians: Supported languages
 - English (en)
 - French (fr)
+- Deutsch (de)
 
 ## :sparkles: Features
  1. [Manage cities with new tab](#manage-cities-with-new-tab)
