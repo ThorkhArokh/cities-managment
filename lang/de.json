@@ -244,14 +244,14 @@
         }
     },
     "CM.currency": {
-        "pp.label": "Platinstücke",
-        "pp.abbrev": "PP",
-        "gp.label": "Goldstücke",
-        "gp.abbrev": "GS",
-        "sp.label": "Silberstücke",
-        "sp.abbrev": "SS",
-        "cp.label": "Kupferstücke",
-        "cp.abbrev": "KS"
+        "pp.label": "Platinmünze",
+        "pp.abbrev": "PM",
+        "gp.label": "Goldmünze",
+        "gp.abbrev": "GM",
+        "sp.label": "Silbermünze",
+        "sp.abbrev": "SM",
+        "cp.label": "Kupfermünze",
+        "cp.abbrev": "KM"
     },
     "CM.city.size": {
         "hamlet": "Weiler",

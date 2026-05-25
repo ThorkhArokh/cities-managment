@@ -245,7 +245,7 @@
     },
     "CM.currency": {
         "pp.label": "Monedas de platino",
-        "pp.abbrev": "PP",
+        "pp.abbrev": "MP",
         "gp.label": "Monedas de oro",
         "gp.abbrev": "MO",
         "sp.label": "Monedas de plata",
