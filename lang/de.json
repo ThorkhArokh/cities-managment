@@ -54,6 +54,7 @@
     },
     "CM.sidebar.button.createCity": "Stadt erstellen",
     "CM.sidebar.button.createCityFolder": "Ordner erstellen",
+    "CM.sidebar.search.placeholder": "Städte suchen",
     "CM.city.contextmenu": {
         "open": "Öffnen",
         "edit": "Bearbeiten",

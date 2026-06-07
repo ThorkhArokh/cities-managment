@@ -54,6 +54,7 @@
     },
     "CM.sidebar.button.createCity": "Créer ville",
     "CM.sidebar.button.createCityFolder": "Créer dossier",
+    "CM.sidebar.search.placeholder": "Rechercher dans les villes",
     "CM.city.contextmenu": {
         "open": "Ouvrir",
         "edit": "Modifier",
